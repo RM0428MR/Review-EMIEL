@@ -1,0 +1,39 @@
+{
+  "version": "2.11",
+  "children": [
+    {
+      "type": "frame",
+      "id": "bi8Au",
+      "x": 0,
+      "y": 0,
+      "name": "Frame",
+      "clip": true,
+      "width": 800,
+      "height": 600,
+      "fill": "#FFFFFF",
+      "layout": "none",
+      "children": [
+        {
+          "type": "rectangle",
+          "id": "CsY5P",
+          "x": 77,
+          "y": 86,
+          "fill": "#CCCCCC",
+          "width": 70,
+          "height": 51
+        },
+        {
+          "type": "text",
+          "id": "VB3Iy",
+          "x": 290,
+          "y": 89,
+          "fill": "#000000",
+          "content": "test",
+          "fontFamily": "Inter",
+          "fontSize": 16,
+          "fontWeight": "normal"
+        }
+      ]
+    }
+  ]
+}

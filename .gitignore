@@ -1,0 +1,35 @@
+# Node / Astro
+node_modules/
+.astro/
+dist/
+build/
+.cache/
+.turbo/
+
+# Env
+.env
+.env.local
+.env.development
+.env.production
+.env.*.local
+
+# Pagefind 出力
+pagefind/
+**/pagefind/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# Claude Code
+.claude/settings.local.json
+
+# その他
+*.log
+.zip
+*.zip
