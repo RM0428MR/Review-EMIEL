@@ -1,0 +1,119 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import ReviewCard from '../../components/ReviewCard.astro';
+import BearDoodle from '../../components/BearDoodle.astro';
+import SpeechBubble from '../../components/SpeechBubble.astro';
+import ReviewFilters from '../../components/react/ReviewFilters.tsx';
+import { listReviews } from '../../lib/microcms.ts';
+
+const { contents: all, totalCount } = await listReviews({ orders: '-date', limit: 100 });
+---
+<BaseLayout title="review" activeTab="review">
+  <Header active="review" />
+  <div class="bc">home <span>›</span> review</div>
+
+  <section class="page-head">
+    <div>
+      <h1>review</h1>
+      <p>これまでに飲んだカルピスたちのレビュー一覧です。</p>
+    </div>
+    <div class="bear-bubble">
+      <SpeechBubble>気になるカルピスを<br />見つけてね♡</SpeechBubble>
+      <BearDoodle size={70} />
+    </div>
+    <div class="count">
+      <div class="lbl">みつけた数</div>
+      <div class="num">{totalCount}</div>
+      <div class="unit">種類</div>
+    </div>
+  </section>
+
+  <section class="main">
+    <aside class="sidebar">
+      <ReviewFilters client:load reviews={all} />
+    </aside>
+    <div class="grid-area">
+      <div class="result-meta" data-result-count>{all.length}件の商品</div>
+      <div class="card-grid" data-card-grid data-view="grid">
+        {all.map((r) => (
+          <div class="card-slot" data-review-slug={r.slug}>
+            <ReviewCard r={r} />
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <Footer variant="review-list" />
+</BaseLayout>
+
+<style>
+.bc { padding: 0 40px 8px; font-size: 11px; color: var(--ink-tertiary-2); }
+.bc span { margin: 0 6px; }
+
+.page-head {
+  padding: 0 40px 20px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.page-head h1 { font-family: var(--font-display); font-size: var(--fs-hero); font-style: italic; color: var(--accent); margin: 0; line-height: 1; }
+.page-head p { font-size: 12px; margin-top: 8px; color: var(--ink-tertiary); }
+.bear-bubble { display: flex; align-items: center; gap: 14px; }
+.count {
+  margin-left: auto;
+  background: var(--bg-card);
+  border: var(--border-card);
+  border-radius: 14px;
+  padding: 12px 24px;
+  text-align: center;
+}
+.count .lbl { font-size: 11px; color: var(--ink-tertiary-2); }
+.count .num { font-size: 36px; font-family: var(--font-display); font-weight: 700; color: var(--accent); line-height: 1; }
+.count .unit { font-size: 10px; color: var(--ink-tertiary-2); }
+
+.main {
+  padding: 0 40px 40px;
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 24px;
+}
+.result-meta { font-size: 13px; color: var(--ink-tertiary); margin-bottom: 14px; }
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+}
+.card-grid[data-view="list"] {
+  grid-template-columns: 1fr;
+  max-width: 720px;
+}
+
+@media (max-width: 768px) {
+  .bc { padding: 0 16px 8px; }
+  .page-head {
+    padding: 0 16px 16px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .page-head h1 { font-size: clamp(36px, 9vw, 56px); }
+  .bear-bubble { display: none; }
+  .count { margin-left: 0; align-self: flex-end; padding: 8px 16px; }
+  .count .num { font-size: 28px; }
+  .main {
+    padding: 0 16px 32px;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .sidebar { order: 2; }
+  .grid-area { order: 1; }
+  .card-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  body { padding-bottom: 64px; }
+}
+</style>
