@@ -1,0 +1,192 @@
+import { useState } from 'react';
+
+interface FormState {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+}
+
+interface Errors {
+  name?: string;
+  email?: string;
+  subject?: string;
+  message?: string;
+}
+
+const FIELDS: Array<{ key: keyof FormState; label: string; placeholder: string; type?: string }> = [
+  { key: 'name', label: 'お名前', placeholder: '例) カルピスだいすき' },
+  { key: 'email', label: 'メールアドレス', placeholder: '例) calpis.love@gmail.com', type: 'email' },
+  { key: 'subject', label: '件名', placeholder: '例) 感想を伝えたいです！' },
+];
+
+export default function ContactForm() {
+  const [form, setForm] = useState<FormState>({ name: '', email: '', subject: '', message: '' });
+  const [errors, setErrors] = useState<Errors>({});
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
+
+  const update = (k: keyof FormState, v: string) => {
+    setForm((s) => ({ ...s, [k]: v }));
+    setErrors((e) => ({ ...e, [k]: undefined }));
+  };
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const er: Errors = {};
+    if (!form.name) er.name = 'お名前を入力してください';
+    if (!form.email || !/.+@.+\..+/.test(form.email)) er.email = '正しいメールアドレスを入力してください';
+    if (!form.subject) er.subject = '件名を入力してください';
+    if (!form.message || form.message.length < 5) er.message = '5文字以上で入力してください';
+    if (Object.keys(er).length) {
+      setErrors(er);
+      return;
+    }
+    setSending(true);
+    setServerError(null);
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...form, company: '' }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error ?? `送信に失敗しました（${res.status}）`);
+      }
+      setSent(true);
+      setForm({ name: '', email: '', subject: '', message: '' });
+    } catch (err) {
+      setServerError((err as Error).message);
+    } finally {
+      setSending(false);
+    }
+  };
+
+  return (
+    <form onSubmit={submit}>
+      {sent && (
+        <div className="banner success" role="status" aria-live="polite">
+          ✓ メッセージを送信しました！ありがとうございます〜♡
+        </div>
+      )}
+      {serverError && (
+        <div className="banner err" role="status" aria-live="polite">
+          {serverError}
+        </div>
+      )}
+
+      {FIELDS.map((f) => (
+        <div key={f.key} className="row">
+          <label htmlFor={f.key}>
+            {f.label} <span className="req" aria-hidden="true">*</span>
+          </label>
+          <div>
+            <input
+              id={f.key}
+              type={f.type ?? 'text'}
+              value={form[f.key]}
+              placeholder={f.placeholder}
+              onChange={(e) => update(f.key, e.target.value)}
+              aria-required="true"
+              aria-invalid={!!errors[f.key]}
+              className={errors[f.key] ? 'err' : ''}
+            />
+            {errors[f.key] && <div className="err-msg">{errors[f.key]}</div>}
+          </div>
+        </div>
+      ))}
+
+      <div className="row">
+        <label htmlFor="message">
+          メッセージ <span className="req" aria-hidden="true">*</span>
+        </label>
+        <div>
+          <textarea
+            id="message"
+            rows={5}
+            value={form.message}
+            placeholder="例) いつもレビューを楽しみにしています！"
+            onChange={(e) => update('message', e.target.value)}
+            aria-required="true"
+            aria-invalid={!!errors.message}
+            className={errors.message ? 'err' : ''}
+          />
+          {errors.message && <div className="err-msg">{errors.message}</div>}
+        </div>
+      </div>
+
+      {/* honeypot */}
+      <input
+        type="text"
+        name="company"
+        tabIndex={-1}
+        autoComplete="off"
+        style={{ position: 'absolute', left: '-9999px' }}
+        aria-hidden="true"
+      />
+
+      <div className="actions">
+        <button type="submit" disabled={sending} aria-busy={sending}>
+          {sending ? '送信中…' : '➤ 送信する'}
+        </button>
+      </div>
+      <p className="note">※ 内容を確認後、できるだけ早くお返事させていただきます。</p>
+
+      <style>{`
+        .banner {
+          padding: 12px;
+          border-radius: 10px;
+          font-size: 12px;
+          margin-bottom: 16px;
+          font-family: var(--font-jp);
+        }
+        .banner.success { background: #eaf4fc; color: var(--accent); }
+        .banner.err { background: #fde0e6; color: var(--pink-text); }
+        .row {
+          display: grid;
+          grid-template-columns: 120px 1fr;
+          gap: 12px;
+          margin-bottom: 12px;
+          align-items: start;
+        }
+        label {
+          font-size: 12px;
+          color: var(--ink-secondary);
+          padding-top: 10px;
+          font-family: var(--font-jp);
+        }
+        .req { color: var(--pink-mid); }
+        input, textarea {
+          width: 100%;
+          padding: 10px 14px;
+          border: 1px solid #dbeaf7;
+          border-radius: 10px;
+          font-size: 12px;
+          font-family: var(--font-jp);
+          background: var(--bg-card-soft);
+          color: var(--ink-primary);
+          outline: none;
+        }
+        input.err, textarea.err { border: 1.5px solid var(--pink-mid); }
+        textarea { resize: vertical; min-height: 100px; }
+        .err-msg { font-size: 10px; color: var(--pink-mid); margin-top: 4px; }
+        .actions { text-align: center; margin-top: 18px; }
+        button {
+          padding: 10px 60px;
+          font-size: 14px;
+          font-family: var(--font-jp);
+          background: linear-gradient(135deg, var(--accent) 0%, var(--accent-mid) 100%);
+          color: #fff;
+          border: none;
+          border-radius: 999px;
+          cursor: pointer;
+          box-shadow: var(--shadow-cta);
+        }
+        button:disabled { opacity: 0.6; cursor: not-allowed; }
+        .note { font-size: 10px; margin-top: 14px; color: var(--ink-tertiary-2); text-align: center; }
+      `}</style>
+    </form>
+  );
+}

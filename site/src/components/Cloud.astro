@@ -1,0 +1,12 @@
+---
+interface Props { width?: number; fill?: string; stroke?: string; style?: string; }
+const { width = 200, fill = '#dbeaf7', stroke, style = '' } = Astro.props;
+---
+<svg viewBox="0 0 200 70" width={width} style={style} aria-hidden="true">
+  <path
+    d="M14 56 Q2 56 6 42 Q-2 30 14 28 Q14 14 30 16 Q38 4 56 14 Q70 4 84 16 Q102 6 114 20 Q132 14 138 28 Q156 22 162 38 Q180 38 178 52 Q190 58 178 64 Q166 68 152 64 Q140 68 126 64 Q112 68 98 64 Q84 68 70 64 Q56 68 42 64 Q28 68 14 56 Z"
+    fill={fill}
+    stroke={stroke || 'none'}
+    stroke-width="1.5"
+  />
+</svg>

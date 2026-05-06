@@ -1,0 +1,49 @@
+---
+interface Props {
+  tail?: 'left' | 'right';
+  color?: string;
+  stroke?: string;
+  dashed?: boolean;
+  style?: string;
+}
+const { tail = 'left', color = '#fff', stroke = 'var(--accent-soft)', dashed = true, style = '' } = Astro.props;
+---
+<div class="bubble" style={style}>
+  <div
+    class="body"
+    style={`background:${color};border:1.5px ${dashed ? 'dashed' : 'solid'} ${stroke};`}
+  >
+    <slot />
+  </div>
+  <svg
+    width="32"
+    height="22"
+    viewBox="0 0 32 22"
+    class={`tail tail-${tail}`}
+  >
+    <path
+      d="M2 2 Q10 14 28 18 Q14 18 6 21"
+      fill={color}
+      stroke={stroke}
+      stroke-width="1.5"
+      stroke-dasharray={dashed ? '3 2' : '0'}
+      stroke-linejoin="round"
+      stroke-linecap="round"
+    />
+  </svg>
+</div>
+<style>
+.bubble { position: relative; display: inline-block; }
+.body {
+  border-radius: 28px;
+  padding: 12px 22px;
+  font-size: 13px;
+  color: var(--ink-primary);
+  line-height: 1.6;
+  font-family: var(--font-jp);
+  box-shadow: var(--shadow-card);
+}
+.tail { position: absolute; bottom: -16px; }
+.tail-left { left: 28px; }
+.tail-right { right: 28px; transform: scaleX(-1); }
+</style>

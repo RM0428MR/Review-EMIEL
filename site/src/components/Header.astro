@@ -1,0 +1,119 @@
+---
+import HandGlass from './HandGlass.astro';
+import Underline from './Underline.astro';
+import NavDrawer from './react/NavDrawer.tsx';
+
+interface Props { active?: string; }
+const { active } = Astro.props;
+const items = [
+  { id: 'home', label: 'home', href: '/' },
+  { id: 'about', label: 'about', href: '/about' },
+  { id: 'review', label: 'review', href: '/reviews' },
+  { id: 'ranking', label: 'ranking', href: '/ranking' },
+  { id: 'archive', label: 'archive', href: '/archive' },
+  { id: 'contact', label: 'contact', href: '/contact' },
+];
+---
+<div class="wrap">
+  <svg class="wave" viewBox="0 0 1280 24" preserveAspectRatio="none" aria-hidden="true">
+    <path
+      d={(() => {
+        const W = 1280;
+        const scallops = 64;
+        const step = W / scallops;
+        const r = step / 2;
+        const amp = 8;
+        let d = `M0 ${amp} `;
+        for (let i = 0; i < scallops; i++) d += `q ${r} ${amp * 1.6} ${step} 0 `;
+        d += `L${W} 0 L0 0 Z`;
+        return d;
+      })()}
+      fill="var(--accent)"
+    />
+  </svg>
+  <header>
+    <a href="/" class="logo">
+      <HandGlass size={42} />
+      <div class="logo-text">
+        <span class="logo-my">my</span>
+        <div class="logo-jp">CALPIS<span> 日誌</span></div>
+        <span class="logo-rev">review</span>
+      </div>
+    </a>
+    <nav class="desktop-nav">
+      {items.map((it) => (
+        <a href={it.href} class={`nav-item ${active === it.id ? 'active' : ''}`}>
+          {it.label}
+          {active === it.id && <Underline width={40} style="position:absolute;left:50%;bottom:0;transform:translateX(-50%);" />}
+        </a>
+      ))}
+    </nav>
+    <div class="right">
+      <NavDrawer client:load />
+    </div>
+  </header>
+</div>
+<style>
+.wrap { position: relative; }
+.wave {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  width: 100%;
+  height: 22px;
+  pointer-events: none;
+}
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 32px 40px 22px;
+  position: relative;
+  z-index: 5;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+}
+.logo-text { display: flex; flex-direction: column; line-height: 1.05; font-family: var(--font-display); }
+.logo-my { font-size: 14px; font-style: italic; color: var(--accent); }
+.logo-jp {
+  font-size: 22px;
+  font-weight: 700;
+  font-family: var(--font-jp);
+  color: var(--ink-primary);
+}
+.logo-jp span { margin-left: 4px; }
+.logo-rev { font-size: 12px; font-style: italic; color: var(--accent); margin-top: 1px; }
+.desktop-nav {
+  display: flex;
+  gap: 32px;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-style: italic;
+}
+.nav-item {
+  color: var(--ink-primary);
+  text-decoration: none;
+  position: relative;
+  font-weight: 400;
+  opacity: 0.7;
+  padding-bottom: 6px;
+}
+.nav-item.active { font-weight: 700; opacity: 1; }
+.right { display: flex; gap: 12px; align-items: center; }
+
+@media (max-width: 768px) {
+  header { padding: 18px 16px 12px; }
+  .wave { height: 12px; }
+  .desktop-nav { display: none; }
+  .logo-jp { font-size: 18px; }
+  .logo-my, .logo-rev { font-size: 11px; }
+}
+</style>

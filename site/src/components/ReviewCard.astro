@@ -1,0 +1,83 @@
+---
+import type { Review } from '../lib/types';
+import HeartsRating from './HeartsRating.astro';
+import ReviewImage from './ReviewImage.astro';
+import LikeButton from './react/LikeButton.tsx';
+
+interface Props { r: Review; }
+const { r } = Astro.props;
+const [yyyy, mm, dd] = r.date.replaceAll('-', '.').split('.');
+---
+<a class="card" href={`/reviews/${r.slug}`}>
+  <div class="img">
+    <ReviewImage r={r} variant="card" height={130} />
+    <div class="date">{yyyy}.{mm}<br /><span>{dd}</span></div>
+    {r.badge && <div class="badge">{r.badge}</div>}
+  </div>
+  <div class="body">
+    <HeartsRating value={r.rating} size={11} />
+    <div class="title">『{r.name}』</div>
+    <div class="oneliner">{r.oneLiner}</div>
+    <div class="row">
+      <div class="tags">
+        {(r.tags ?? []).slice(0, 3).map((t) => (
+          <span>#{t}</span>
+        ))}
+      </div>
+      <LikeButton client:idle slug={r.slug} />
+    </div>
+  </div>
+</a>
+<style>
+.card {
+  display: block;
+  background: var(--bg-card);
+  border: var(--border-card);
+  border-radius: 14px;
+  padding: 8px;
+  position: relative;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.card:hover { transform: translateY(-2px); box-shadow: var(--shadow-card); }
+.img { position: relative; }
+.date {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 6px;
+  padding: 2px 6px;
+  font-size: 10px;
+  color: var(--ink-primary);
+  font-family: var(--font-display);
+  line-height: 1.2;
+}
+.date span { font-size: 9px; }
+.badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: var(--accent);
+  color: #fff;
+  font-size: 9px;
+  padding: 3px 10px;
+  font-family: var(--font-display);
+  font-style: italic;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 8px 100%, 0 70%);
+}
+.body { padding: 8px 4px 4px; }
+.title { font-size: 12px; font-weight: 700; margin-top: 4px; color: var(--ink-primary); }
+.oneliner { font-size: 10px; line-height: 1.5; margin-top: 2px; color: var(--ink-tertiary); }
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 6px;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.tags { display: flex; gap: 4px; flex-wrap: wrap; }
+.tags span { font-size: 9px; color: var(--accent); opacity: 0.75; }
+</style>

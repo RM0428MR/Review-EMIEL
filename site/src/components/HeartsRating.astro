@@ -1,0 +1,18 @@
+---
+import HeartIcon from './HeartIcon.astro';
+
+interface Props { value?: number; max?: number; size?: number; color?: string; showValue?: boolean; }
+const { value = 0, max = 5, size = 16, color = 'var(--accent)', showValue = true } = Astro.props;
+---
+<span class="hr" aria-label={`評価 ${value.toFixed(1)} / ${max}`}>
+  {Array.from({ length: max }).map((_, i) => (
+    <HeartIcon filled={i < Math.round(value)} size={size} color={color} />
+  ))}
+  {showValue && (
+    <span class="val" style={`font-size:${Math.round(size * 0.85)}px;color:${color}`}>{value.toFixed(1)}</span>
+  )}
+</span>
+<style>
+.hr { display: inline-flex; align-items: center; gap: 3px; }
+.val { margin-left: 6px; font-weight: 600; font-family: var(--font-display); }
+</style>

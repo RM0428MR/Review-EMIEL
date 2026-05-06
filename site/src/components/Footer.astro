@@ -1,0 +1,250 @@
+---
+import CloudWave from './CloudWave.astro';
+import HandBottle from './HandBottle.astro';
+import HandGlass from './HandGlass.astro';
+import BearDoodle from './BearDoodle.astro';
+import SocialIcon from './SocialIcon.astro';
+import SpeechBubble from './SpeechBubble.astro';
+
+interface Props {
+  variant?: 'home' | 'review-list' | 'review-detail' | 'ranking' | 'archive' | 'contact';
+}
+const { variant = 'home' } = Astro.props;
+const wave = 'var(--cloud-soft)';
+const items = ['home', 'about', 'review', 'ranking', 'archive', 'contact'];
+const hrefMap: Record<string, string> = {
+  home: '/', about: '/about', review: '/reviews', ranking: '/ranking', archive: '/archive', contact: '/contact',
+};
+---
+{variant === 'review-list' && (
+  <footer class="rl">
+    <BearDoodle size={70} />
+    <HandBottle size={84} />
+  </footer>
+)}
+
+{variant === 'review-detail' && (
+  <footer class="rd"></footer>
+)}
+
+{variant === 'archive' && (
+  <footer class="archive">
+    <CloudWave fill={wave} />
+    <div class="band">
+      <div class="nav-row">
+        {items.map((x, i) => (
+          <>
+            <a href={hrefMap[x]}>{x}</a>
+            {i < items.length - 1 && <span class="sep">|</span>}
+          </>
+        ))}
+      </div>
+      <div class="copy">© my Calpis review site</div>
+    </div>
+  </footer>
+)}
+
+{variant === 'ranking' && (
+  <footer class="ranking">
+    <CloudWave fill={wave} />
+    <div class="band">
+      <div class="ranking-center">
+        <div class="ranking-text">あなたのおすすめも教えてね！<br />SNSでもカルピス愛を発信中☺</div>
+        <div class="socials">
+          <SocialIcon kind="ig" size={36} />
+          <SocialIcon kind="x" size={36} />
+          <SocialIcon kind="note" size={36} />
+        </div>
+      </div>
+      <div class="ranking-bottle">
+        <HandBottle size={110} />
+      </div>
+    </div>
+  </footer>
+)}
+
+{variant === 'contact' && (
+  <footer class="contact">
+    <CloudWave fill={wave} />
+    <div class="band">
+      <div class="contact-row">
+        <HandBottle size={92} />
+        <div class="bubble-pad">
+          <SpeechBubble>いつも見てくれて<br />ありがとう〜！</SpeechBubble>
+        </div>
+        <div class="follow">
+          <div class="follow-title">follow me <span>♡</span></div>
+          <div class="socials">
+            <SocialIcon kind="ig" size={34} />
+            <SocialIcon kind="x" size={34} />
+            <SocialIcon kind="note" size={34} />
+          </div>
+        </div>
+        <BearDoodle size={92} />
+        <div class="mailmag">
+          <div class="mailmag-lead">新着レビューをお届けします！</div>
+          <form class="mailmag-form" method="get" action="#">
+            <input type="email" placeholder="メールマガジンに登録" aria-label="メールアドレス" />
+            <button type="submit" aria-label="登録">→</button>
+          </form>
+        </div>
+        <div class="bubble-pad">
+          <SpeechBubble tail="right">これからも<br />よろしくね！</SpeechBubble>
+        </div>
+        <HandGlass size={70} />
+      </div>
+      <div class="divider"></div>
+      <div class="nav-row">
+        {items.map((x, i) => (
+          <>
+            <a href={hrefMap[x]}>{x}</a>
+            {i < items.length - 1 && <span class="sep">|</span>}
+          </>
+        ))}
+      </div>
+      <div class="copy">© my Calpis review site</div>
+    </div>
+  </footer>
+)}
+
+{variant === 'home' && (
+  <footer class="home">
+    <CloudWave fill={wave} />
+    <div class="band">
+      <div class="grid">
+        <div class="left">
+          <p class="lead"><em>new review</em>やお気に入りを</p>
+          <p class="sub">ゆるっとお届けします。</p>
+          <button class="subscribe">subscribe →</button>
+        </div>
+        <div class="center">
+          <BearDoodle size={94} />
+        </div>
+        <div class="right">
+          <p class="follow-title">follow me <span>→</span></p>
+          <div class="socials">
+            <SocialIcon kind="ig" size={34} />
+            <SocialIcon kind="x" size={34} />
+            <SocialIcon kind="note" size={34} />
+          </div>
+        </div>
+      </div>
+      <div class="floating-bottle">
+        <HandBottle size={100} />
+      </div>
+      <div class="divider"></div>
+      <div class="nav-row">
+        {items.map((x, i) => (
+          <>
+            <a href={hrefMap[x]}>{x}</a>
+            {i < items.length - 1 && <span class="sep">|</span>}
+          </>
+        ))}
+      </div>
+      <div class="copy">© my CALPIS 日誌 review site</div>
+    </div>
+  </footer>
+)}
+
+<style>
+footer { position: relative; margin-top: 24px; }
+footer.rl {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 20px 56px 32px;
+  margin-top: 40px;
+}
+footer.rd { height: 24px; margin-top: 0; }
+.band {
+  background: var(--cloud-soft);
+  padding: 28px 56px 20px;
+  color: var(--ink-primary);
+  font-family: var(--font-jp);
+  position: relative;
+}
+.archive .band { padding: 18px 56px 18px; }
+.ranking .band { padding: 24px 56px 28px; min-height: 90px; }
+.ranking-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 28px;
+  padding-right: 130px;
+}
+.ranking-text { font-size: 13px; line-height: 1.8; text-align: center; }
+.ranking-bottle { position: absolute; right: 40px; bottom: 8px; z-index: 2; }
+.contact .band { padding: 28px 40px 18px; }
+.contact-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px;
+  min-height: 130px;
+  flex-wrap: nowrap;
+}
+.bubble-pad { padding-bottom: 16px; flex-shrink: 0; }
+.follow { display: flex; flex-direction: column; align-items: center; gap: 10px; padding-bottom: 12px; }
+.follow-title { font-family: var(--font-display); font-style: italic; font-size: 20px; line-height: 1; }
+.follow-title span { font-family: var(--font-jp); font-size: 14px; }
+.socials { display: flex; gap: 8px; }
+.mailmag { display: flex; flex-direction: column; gap: 6px; padding-bottom: 16px; }
+.mailmag-lead { font-size: 11px; font-weight: 500; }
+.mailmag-form {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 999px;
+  padding: 5px 6px 5px 18px;
+  border: 1px solid var(--accent);
+  width: 220px;
+}
+.mailmag-form input { font-size: 11px; flex: 1; border: none; outline: none; background: transparent; color: var(--ink-tertiary-2); }
+.mailmag-form button {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: var(--ink-primary);
+  color: #fff;
+  cursor: pointer;
+  font-size: 13px;
+}
+.divider { height: 1px; background: #fff; opacity: 0.4; margin: 14px 0 8px; }
+.nav-row {
+  display: flex;
+  justify-content: center;
+  gap: 22px;
+  font-size: 13px;
+  font-family: var(--font-display);
+  font-style: italic;
+}
+.nav-row a { text-decoration: none; opacity: 0.85; color: inherit; }
+.sep { opacity: 0.35; }
+.copy { text-align: center; font-size: 10px; opacity: 0.65; margin-top: 6px; }
+
+.home .grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: end;
+  gap: 16px;
+  min-height: 120px;
+}
+.home .left .lead { font-family: var(--font-display); font-style: italic; font-size: 16px; opacity: 0.85; }
+.home .left .lead em { font-style: italic; }
+.home .left .sub { font-size: 12px; margin: 0 0 12px; opacity: 0.85; }
+.home .left .subscribe {
+  padding: 6px 18px;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--accent);
+  color: var(--ink-primary);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 14px;
+  cursor: pointer;
+}
+.home .center { display: flex; justify-content: center; align-items: flex-end; }
+.home .right { display: flex; justify-content: center; align-items: flex-end; padding-right: 110px; }
+.home .right .follow-title { font-size: 20px; margin: 0 0 10px; }
+.floating-bottle { position: absolute; right: 32px; bottom: 50px; z-index: 2; }
+</style>

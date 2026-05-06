@@ -1,0 +1,45 @@
+---
+// シード固定散布（SSR safe）
+interface Props {
+  width?: number;
+  height?: number;
+  count?: number;
+  seed?: string | number;
+  colors?: string[];
+  minR?: number;
+  maxR?: number;
+  style?: string;
+}
+const {
+  width = 120,
+  height = 80,
+  count = 7,
+  seed = 'a',
+  colors = ['#9ec6ec', '#bcd9ee', '#7eb4dc'],
+  minR = 3,
+  maxR = 7,
+  style = '',
+} = Astro.props;
+
+let s = 0;
+const sstr = String(seed);
+for (let i = 0; i < sstr.length; i++) s = (s * 31 + sstr.charCodeAt(i)) >>> 0;
+const rand = () => { s = (s * 1664525 + 1013904223) >>> 0; return s / 0xffffffff; };
+
+const dots: Array<{ cx: number; cy: number; r: number; fill: string; opacity: number }> = [];
+for (let i = 0; i < count; i++) {
+  const r = minR + rand() * (maxR - minR);
+  dots.push({
+    cx: r + rand() * (width - r * 2),
+    cy: r + rand() * (height - r * 2),
+    r,
+    fill: colors[Math.floor(rand() * colors.length)],
+    opacity: 0.7 + rand() * 0.3,
+  });
+}
+---
+<svg viewBox={`0 0 ${width} ${height}`} width={width} height={height} style={`pointer-events:none;${style}`} aria-hidden="true">
+  {dots.map((d) => (
+    <circle cx={d.cx} cy={d.cy} r={d.r} fill={d.fill} opacity={d.opacity} />
+  ))}
+</svg>

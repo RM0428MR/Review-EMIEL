@@ -1,0 +1,54 @@
+---
+import type { Review } from '../lib/types';
+
+interface Props {
+  r: Review;
+  variant?: 'card' | 'hero' | 'detail' | 'thumb';
+  height?: number;
+  alt?: string;
+}
+const { r, variant = 'card', height, alt } = Astro.props;
+
+// claude-design ProductPhoto の代替：実画像が無いのでカラーフレーム + ボトル形プレースホルダー。
+// microCMS の heroImage が入ったら <img src> に切替。
+const aspectRatio = variant === 'hero' ? '16 / 9' : variant === 'detail' ? '3 / 4' : '5 / 7';
+const h = height ?? (variant === 'hero' ? 192 : variant === 'detail' ? 280 : variant === 'thumb' ? 56 : 140);
+
+const bg = `linear-gradient(160deg, ${r.tint} 0%, #fff 60%, #fefaf2 100%)`;
+---
+<div
+  class="ri"
+  style={`background:${bg};height:${h}px;aspect-ratio:${aspectRatio};`}
+  aria-label={alt ?? r.name}
+>
+  {r.heroImage?.url ? (
+    <img src={r.heroImage.url} alt={alt ?? r.name} loading="lazy" />
+  ) : (
+    <svg viewBox="0 0 100 150" class="bottle" aria-hidden="true">
+      <rect x="40" y="2" width="20" height="9" fill="#cbd5e0" rx="1.5" />
+      <path
+        d="M 38 11 L 62 11 L 64 22 Q 68 32 66 44 L 66 134 Q 66 144 56 144 L 44 144 Q 34 144 34 134 L 34 44 Q 32 32 36 22 Z"
+        fill={r.tint}
+        stroke="#9aaab8"
+        stroke-width="0.6"
+      />
+      <rect x="36" y="48" width="28" height="62" fill="#fff" stroke={r.accent} stroke-width="0.5" />
+      <rect x="36" y="68" width="28" height="14" fill={r.accent} opacity="0.85" />
+      <text x="50" y="78" font-size="6.5" fill="#fff" text-anchor="middle" font-weight="700" font-family="sans-serif">CALPIS</text>
+      <text x="50" y="92" font-size="3.5" fill={r.accent} text-anchor="middle" font-family="sans-serif">{r.name}</text>
+    </svg>
+  )}
+</div>
+<style>
+.ri {
+  border-radius: 14px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 8px;
+}
+.ri img { width: 100%; height: 100%; object-fit: cover; }
+.bottle { height: 80%; max-height: 110px; }
+</style>
