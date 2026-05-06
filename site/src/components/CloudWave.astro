@@ -1,0 +1,35 @@
+---
+interface Props { fill?: string; }
+const { fill = 'var(--cloud-soft)' } = Astro.props;
+
+const W = 1280;
+const baseY = 80;
+const baseStep = 90;
+const baseLift = 60;
+const stepJ = [0, -8, 6, -4, 10, -6, 4, -10, 8, -2, 6, -8, 4, 10, -6, 2];
+const liftJ = [0, 14, -10, 8, -16, 12, -6, 18, -12, 6, -14, 10, -8, 16, -10, 4];
+let x = -20;
+let d = `M ${x} ${baseY}`;
+let i = 0;
+while (x < W + 20) {
+  const step = baseStep + stepJ[i % stepJ.length];
+  const lift = baseLift + liftJ[i % liftJ.length];
+  const cx = x + step / 2;
+  const cy = baseY - lift;
+  const nx = x + step;
+  d += ` Q ${cx} ${cy} ${nx} ${baseY}`;
+  x = nx;
+  i++;
+}
+d += ` L ${x} 200 L -20 200 Z`;
+---
+<svg
+  viewBox="0 0 1280 200"
+  preserveAspectRatio="none"
+  width="100%"
+  height="120"
+  style="display:block;position:relative;z-index:1;margin-bottom:-1px;"
+  aria-hidden="true"
+>
+  <path d={d} fill={fill} />
+</svg>
