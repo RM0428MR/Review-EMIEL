@@ -1,0 +1,8 @@
+---
+interface Props { width?: number; color?: string; rotate?: number; style?: string; }
+const { width = 80, color = 'var(--accent-soft)', rotate = 0, style = '' } = Astro.props;
+const dest = `repeating-linear-gradient(45deg, ${color} 0 6px, ${color}88 6px 12px)`;
+---
+<div
+  style={`width:${width}px;height:24px;background:${dest};opacity:0.65;box-shadow:0 1px 4px rgba(0,0,0,0.08);transform:rotate(${rotate}deg);clip-path:polygon(2% 5%, 98% 0%, 100% 95%, 0% 100%);${style}`}
+></div>
