@@ -1,0 +1,195 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import BearDoodle from '../components/BearDoodle.astro';
+import SpeechBubble from '../components/SpeechBubble.astro';
+import WashiTape from '../components/WashiTape.astro';
+import Underline from '../components/Underline.astro';
+import HandGlass from '../components/HandGlass.astro';
+import Cloud from '../components/Cloud.astro';
+import { getEntry } from 'astro:content';
+
+const about = await getEntry('site', 'about');
+const data = about?.data;
+const topics = data?.topics ?? [];
+const { Content } = await about!.render();
+---
+<BaseLayout title="about">
+  <Header active="about" />
+
+  <section class="head">
+    <div class="head-l">
+      <BearDoodle size={92} />
+      <div>
+        <h1>about</h1>
+        <div class="sub">このサイトと運営者について</div>
+      </div>
+    </div>
+    <div class="about-card">
+      <WashiTape width={60} rotate={-4} style="position:absolute;top:-12px;left:20px;" />
+      <div class="row">
+        <div class="avatar"><BearDoodle size={60} /></div>
+        <div class="chip">about me</div>
+      </div>
+      <div class="catch">{data?.catch}</div>
+      <p class="intro">{data?.intro}</p>
+    </div>
+  </section>
+
+  <section class="lead">
+    <h2>このサイトについて <Underline width={60} style="vertical-align:middle;margin-left:4px;" /></h2>
+    <div class="lead-body">
+      <Content />
+    </div>
+    <div class="lead-deco-r"><WashiTape width={70} rotate={4} /></div>
+    <div class="lead-deco-l"><HandGlass size={56} opacity={0.7} /></div>
+  </section>
+
+  <section class="topics">
+    <h2>もう少し詳しく</h2>
+    <div class="grid">
+      {topics.map((t, i) => (
+        <article class="card">
+          <WashiTape width={50} rotate={i % 2 === 0 ? -3 : 4} style="position:absolute;top:-10px;left:18px;" />
+          <h3>{t.title}</h3>
+          <p>{t.body}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="cloud-deco"><Cloud width={120} fill="rgba(255,255,255,0.5)" /></div>
+    <BearDoodle size={70} />
+    <SpeechBubble>お気に入りや感想を<br />教えてね♡</SpeechBubble>
+    <a class="cta-btn" href="/contact">contact →</a>
+  </section>
+
+  <Footer variant="home" />
+</BaseLayout>
+
+<style>
+.head {
+  padding: 0 40px 30px;
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 28px;
+  align-items: center;
+}
+.head-l { display: flex; align-items: center; gap: 16px; }
+.head h1 { font-family: var(--font-display); font-style: italic; font-size: var(--fs-hero); color: var(--accent); margin: 0; line-height: 1; }
+.head .sub { font-size: 14px; margin-top: 8px; color: var(--ink-tertiary); }
+
+.about-card {
+  background: var(--bg-card);
+  border: var(--border-card);
+  border-radius: 20px;
+  padding: 22px;
+  position: relative;
+}
+.about-card .row { display: flex; align-items: center; gap: 12px; }
+.avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--pink-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--pink-deep);
+}
+.about-card .chip {
+  background: var(--accent);
+  color: #fff;
+  font-size: 11px;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-family: var(--font-display);
+  font-style: italic;
+}
+.about-card .catch {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-primary);
+  margin-top: 12px;
+}
+.about-card .intro {
+  font-size: 11px;
+  line-height: 1.7;
+  margin-top: 10px;
+  color: var(--ink-tertiary);
+}
+
+.lead {
+  position: relative;
+  padding: 0 40px 30px;
+}
+.lead h2 { font-family: var(--font-jp); font-size: 24px; color: var(--ink-primary); margin: 0 0 16px; }
+.lead-body { max-width: 720px; font-size: 13px; line-height: 2; color: var(--ink-secondary); }
+.lead-deco-r { position: absolute; top: -8px; right: 60px; }
+.lead-deco-l { position: absolute; bottom: 12px; right: 80px; opacity: 0.7; }
+
+.topics {
+  padding: 0 40px 40px;
+}
+.topics h2 { font-family: var(--font-jp); font-size: 22px; color: var(--accent); margin: 0 0 16px; }
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.card {
+  position: relative;
+  background: var(--bg-card);
+  border: var(--border-card);
+  border-radius: 18px;
+  padding: 20px;
+}
+.card h3 { font-size: 14px; color: var(--accent); margin: 0 0 8px; }
+.card p { font-size: 12px; line-height: 1.8; color: var(--ink-secondary); white-space: pre-line; }
+
+.cta {
+  margin: 0 40px 40px;
+  padding: 30px 32px;
+  background: linear-gradient(135deg, #c8e0f3 0%, #eaf4fc 100%);
+  border-radius: 24px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.cloud-deco { position: absolute; top: 0; right: 0; }
+.cta-btn {
+  margin-left: auto;
+  padding: 12px 32px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  text-decoration: none;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 18px;
+}
+
+@media (max-width: 768px) {
+  .head {
+    padding: 0 16px 24px;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .head-l { flex-direction: column; align-items: flex-start; }
+  .head h1 { font-size: clamp(36px, 9vw, 56px); }
+  .lead { padding: 0 16px 24px; }
+  .lead-deco-r, .lead-deco-l { display: none; }
+  .topics { padding: 0 16px 32px; }
+  .topics .grid { grid-template-columns: 1fr; gap: 14px; }
+  .card { padding: 16px; }
+  .cta {
+    margin: 0 16px 32px;
+    padding: 20px 16px;
+    flex-direction: column;
+    gap: 14px;
+    align-items: center;
+    text-align: center;
+  }
+  .cta-btn { margin-left: 0; }
+  body { padding-bottom: 64px; }
+}
+</style>
