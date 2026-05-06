@@ -1,0 +1,225 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ReviewImage from '../components/ReviewImage.astro';
+import BearDoodle from '../components/BearDoodle.astro';
+import SpeechBubble from '../components/SpeechBubble.astro';
+import { listReviews } from '../lib/microcms.ts';
+import { getMonth, archiveYearBucket } from '../lib/format.ts';
+
+const { contents: all, totalCount } = await listReviews({ orders: '-date', limit: 100 });
+
+// year buckets
+const buckets = new Map<string, typeof all>();
+for (const r of all) {
+  const b = archiveYearBucket(r.date);
+  if (!buckets.has(b)) buckets.set(b, []);
+  buckets.get(b)!.push(r);
+}
+const yearOrder = Array.from(buckets.keys()).sort((a, b) => {
+  if (a === 'それ以前') return 1;
+  if (b === 'それ以前') return -1;
+  return parseInt(b) - parseInt(a);
+});
+
+const yearList = ['すべての年代', '2024年', '2023年', '2022年', '2021年', '2020年', 'それ以前'];
+const yearCount = (y: string) => (y === 'すべての年代' ? all.length : buckets.get(y)?.length ?? 0);
+---
+<BaseLayout title="archive" activeTab="archive">
+  <Header active="archive" />
+
+  <section class="head">
+    <div class="head-l">
+      <h1>archive</h1>
+      <p>これまでにレビューしたカルピスたちを<br />月ごと・年ごとにまとめています。</p>
+      <div class="head-bear"><BearDoodle size={50} /></div>
+    </div>
+    <div class="head-c">
+      <div class="toggle">
+        <a href="/archive" class="on">年別で見る</a>
+        <a href="/archive?mode=month">月別で見る</a>
+      </div>
+      <SpeechBubble>いろんなカルピスとの<br />思い出がいっぱい…！</SpeechBubble>
+    </div>
+    <div class="count">
+      <div class="lbl">レビューした数</div>
+      <div class="num">{totalCount}</div>
+      <div class="unit">種類</div>
+    </div>
+  </section>
+
+  <section class="body">
+    <aside class="sidebar">
+      {yearList.map((y) => (
+        <a class={`yrow ${y === '2024年' ? 'on' : ''}`} href={`/archive?year=${encodeURIComponent(y)}`}>
+          <span>{y}</span><span class="cnt">{yearCount(y)}</span>
+        </a>
+      ))}
+      <div class="bear-pad">
+        <BearDoodle size={50} />
+        <div>気になる年を<br />えらんでね♡</div>
+      </div>
+    </aside>
+
+    <div class="content">
+      {yearOrder.map((y) => (
+        <div class="ysec">
+          <div class="ysec-head">
+            <h3>{y} 〜</h3>
+            <span class="ycnt">{(buckets.get(y) ?? []).length}件のレビュー</span>
+          </div>
+          <div class="ygrid">
+            {(buckets.get(y) ?? []).slice(0, 12).map((r) => (
+              <a class="acard" href={`/reviews/${r.slug}`}>
+                <div class="mbadge">{getMonth(r.date)}月</div>
+                <ReviewImage r={r} variant="card" height={70} />
+                <div class="aname">カルピス {r.name}</div>
+                <div class="ameta">
+                  <span>{r.date}</span>
+                  <span>♡ 1件</span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <Footer variant="archive" />
+</BaseLayout>
+
+<style>
+.head {
+  padding: 0 40px 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+  align-items: center;
+}
+.head-l { position: relative; }
+.head h1 { font-family: var(--font-display); font-style: italic; font-size: var(--fs-hero); color: var(--accent); margin: 0; line-height: 1; }
+.head p { font-size: 12px; margin-top: 8px; color: var(--ink-tertiary); }
+.head-bear { position: absolute; top: 4px; left: 200px; }
+.head-c { display: flex; align-items: center; justify-content: center; gap: 12px; }
+.toggle {
+  display: inline-flex;
+  background: var(--bg-card);
+  border: var(--border-card);
+  border-radius: 999px;
+  padding: 4px;
+}
+.toggle a {
+  padding: 6px 18px;
+  font-size: 12px;
+  border-radius: 999px;
+  text-decoration: none;
+  color: var(--ink-tertiary);
+  font-family: var(--font-jp);
+}
+.toggle a.on { background: var(--accent); color: #fff; }
+.count {
+  background: var(--bg-card);
+  border: var(--border-card);
+  border-radius: 14px;
+  padding: 12px 24px;
+  text-align: center;
+  justify-self: end;
+}
+.count .lbl { font-size: 11px; color: var(--ink-tertiary-2); }
+.count .num { font-size: 36px; font-family: var(--font-display); font-weight: 700; color: var(--accent); line-height: 1; }
+.count .unit { font-size: 10px; color: var(--ink-tertiary-2); }
+
+.body {
+  padding: 0 40px 40px;
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 24px;
+}
+.sidebar {
+  background: var(--bg-card);
+  border: var(--border-card);
+  border-radius: 14px;
+  padding: 14px;
+  align-self: start;
+}
+.yrow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  font-size: 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--ink-secondary);
+  font-family: var(--font-jp);
+  margin-bottom: 2px;
+}
+.yrow.on { background: var(--accent); color: #fff; }
+.yrow .cnt { font-size: 10px; opacity: 0.8; }
+.bear-pad { margin-top: 14px; text-align: center; padding: 10px; font-size: 10px; color: var(--ink-tertiary-2); }
+
+.content { display: flex; flex-direction: column; gap: 30px; }
+.ysec-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 12px; }
+.ysec-head h3 { font-size: 22px; font-weight: 600; color: var(--ink-primary); margin: 0; font-family: var(--font-display); }
+.ycnt { font-size: 11px; color: var(--accent); }
+.ygrid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
+.acard {
+  background: var(--bg-card);
+  border: var(--border-card);
+  border-radius: 10px;
+  padding: 6px;
+  position: relative;
+  text-decoration: none;
+  color: inherit;
+}
+.mbadge {
+  position: absolute;
+  top: -6px;
+  left: 6px;
+  background: var(--badge-bg);
+  color: var(--accent);
+  font-size: 10px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  font-family: var(--font-jp);
+  font-weight: 600;
+}
+.aname { font-size: 10px; font-weight: 600; margin-top: 4px; color: var(--ink-primary); }
+.ameta { display: flex; justify-content: space-between; font-size: 9px; color: var(--ink-tertiary-2); margin-top: 2px; }
+
+@media (max-width: 768px) {
+  .head {
+    padding: 0 16px 20px;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .head h1 { font-size: clamp(36px, 9vw, 56px); }
+  .head-bear { display: none; }
+  .head-c { justify-content: flex-start; }
+  .count { justify-self: flex-start; padding: 8px 16px; }
+  .count .num { font-size: 28px; }
+  .body {
+    padding: 0 16px 32px;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .sidebar {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    padding: 8px;
+    gap: 4px;
+  }
+  .yrow {
+    flex-shrink: 0;
+    padding: 6px 14px;
+    border-radius: 999px;
+  }
+  .yrow .cnt { display: none; }
+  .bear-pad { display: none; }
+  .ygrid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  body { padding-bottom: 64px; }
+}
+</style>
