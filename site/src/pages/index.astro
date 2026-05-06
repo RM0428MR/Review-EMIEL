@@ -1,13 +1,334 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ReviewCard from '../components/ReviewCard.astro';
+import ReviewImage from '../components/ReviewImage.astro';
+import HeartsRating from '../components/HeartsRating.astro';
+import BearDoodle from '../components/BearDoodle.astro';
+import SpeechBubble from '../components/SpeechBubble.astro';
+import WashiTape from '../components/WashiTape.astro';
+import Underline from '../components/Underline.astro';
+import { listReviews } from '../lib/microcms.ts';
+import { CATEGORIES } from '../data/reviews.ts';
+
+const { contents: newReviews } = await listReviews({ orders: '-date', limit: 5 });
+const { contents: top3 } = await listReviews({ orders: '-rating,-date', limit: 3 });
+const { contents: archive } = await listReviews({ orders: '-date', limit: 6 });
+const myFavorite = top3[0];
+
+const yearChips = ['すべて', '2024', '2023', '2022', '2021', '2020', 'それ以前'];
+const monthChips = ['すべて', '1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
 ---
-<BaseLayout title="home" activeTab="home">
-  <main style="padding: 60px 40px; text-align: center;">
-    <h1 style="font-family: var(--font-display); font-size: 56px; color: var(--accent);">
-      Review-Calpis
-    </h1>
-    <p style="margin-top: 12px; color: var(--ink-secondary);">
-      Astro 初期化完了。次の PR で共通コンポーネントを追加します。
-    </p>
-  </main>
+<BaseLayout title="home" description="カルピスを愛しすぎている個人ファンが運営する架空のレビュー日誌サイト" activeTab="home">
+  <Header active="home" />
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-l">
+      <div class="hero-my">my</div>
+      <div class="hero-jp">カルピス</div>
+      <div class="hero-rev">review</div>
+      <Underline width={140} style="margin-top:8px;" />
+      <p class="hero-lead">
+        カルピスがだいすきなぼくの<br />
+        カルピスレビュー記録サイト
+      </p>
+    </div>
+    <div class="hero-c">
+      <WashiTape width={70} rotate={-8} style="position:absolute;top:-10px;left:40px;z-index:2;" />
+      <WashiTape width={70} rotate={6} style="position:absolute;top:-10px;right:40px;z-index:2;" />
+      <div class="hero-photo">
+        {myFavorite && <ReviewImage r={myFavorite} variant="hero" height={192} />}
+        <div class="hero-bubble">
+          <SpeechBubble>
+            シュワッと、やさしく。<br />しあわせな味。<br />
+            <span class="hero-bubble-sub">やっぱり定番がいちばん好き♡</span>
+          </SpeechBubble>
+        </div>
+        <div class="hero-bear"><BearDoodle size={70} /></div>
+      </div>
+    </div>
+    <div class="hero-r">
+      <WashiTape width={50} rotate={-4} style="position:absolute;top:-10px;left:20px;" />
+      <div class="about-row">
+        <div class="about-avatar"><BearDoodle size={36} /></div>
+        <div class="about-chip">about me</div>
+      </div>
+      <p class="about-body">
+        カルピスがだいすきな<br />
+        ごく普通のサラリーマン。<br />
+        新商品から期間限定まで、<br />
+        いろんなカルピスを飲んで<br />
+        正直レビューしてます☺
+      </p>
+      <a href="/about" class="about-cta">view more →</a>
+    </div>
+  </section>
+
+  <!-- NEW REVIEW -->
+  <section class="new-review">
+    <div class="section-head">
+      <h2>new review <Underline width={50} style="vertical-align:middle;margin-left:4px;" /></h2>
+      <div class="chips">
+        {CATEGORIES.map((c, i) => (
+          <a href={i === 0 ? '/reviews' : `/reviews?cat=${encodeURIComponent(c)}`} class={`chip ${i === 0 ? 'active' : ''}`}>{c}</a>
+        ))}
+      </div>
+      <a class="more" href="/archive">review archive →</a>
+    </div>
+    <div class="card-grid-5">
+      {newReviews.map((r) => <ReviewCard r={r} />)}
+    </div>
+  </section>
+
+  <!-- RANKING -->
+  <section class="ranking">
+    <div class="ranking-l">
+      <h2>ranking <span>♔</span></h2>
+      <div class="rank-grid">
+        {top3.map((r, i) => (
+          <div class="rank-card">
+            <div class="rank-no">No.{i + 1}</div>
+            <ReviewImage r={r} variant="card" height={120} />
+            <div class="rank-rating"><HeartsRating value={r.rating} size={11} /></div>
+            <p class="rank-oneliner">{r.oneLiner}</p>
+            <div class="rank-tags">
+              {(r.tags ?? []).slice(0, 3).map((t) => (<span>#{t}</span>))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+    <aside class="fav">
+      <div class="fav-chip">my favorite</div>
+      {myFavorite && <ReviewImage r={myFavorite} variant="card" height={120} />}
+      <p class="fav-body">
+        やっぱり定番のカルピスがいちばん！どんなときも やさしくしてくれる最高の味です。
+      </p>
+      <div class="fav-bear"><BearDoodle size={50} /></div>
+    </aside>
+  </section>
+
+  <!-- ARCHIVE strip -->
+  <section class="arch-strip">
+    <h2>review archive</h2>
+    <div class="chips">
+      {yearChips.map((y, i) => (
+        <a href={i === 0 ? '/archive' : `/archive?year=${encodeURIComponent(y)}`} class={`chip ${i === 0 ? 'active' : ''}`}>{y}</a>
+      ))}
+    </div>
+    <div class="month-chips">
+      {monthChips.map((m, i) => (
+        <a href={i === 0 ? '/archive' : `/archive?month=${i}`} class={`mchip ${i === 0 ? 'mactive' : ''}`}>{m}</a>
+      ))}
+    </div>
+    <div class="card-grid-6">
+      {archive.map((r) => (
+        <a href={`/reviews/${r.slug}`} class="strip-card">
+          <ReviewImage r={r} variant="card" height={140} />
+          <div class="strip-meta">
+            <div class="strip-date">{r.date}</div>
+            <div class="strip-name">『{r.name}』</div>
+            <div class="strip-one">{r.oneLiner}</div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <Footer variant="home" />
 </BaseLayout>
+
+<style>
+section { padding: 0 40px 40px; }
+.hero {
+  padding: 20px 40px 40px;
+  display: grid;
+  grid-template-columns: 220px 1fr 240px;
+  gap: 24px;
+  align-items: start;
+}
+.hero-l { font-family: var(--font-display); }
+.hero-my { font-size: var(--fs-hero-script); font-style: italic; color: var(--accent); line-height: 1; margin-left: 14px; }
+.hero-jp {
+  font-family: var(--font-logo);
+  font-size: 52px;
+  letter-spacing: -1px;
+  color: var(--accent-deeper);
+  line-height: 1;
+  margin-top: 6px;
+}
+.hero-rev { font-size: var(--fs-hero-script); font-style: italic; color: var(--accent); line-height: 1; margin-top: 10px; margin-left: 14px; }
+.hero-lead { font-size: 12px; margin-top: 16px; line-height: 1.8; color: var(--ink-tertiary); font-family: var(--font-jp); }
+
+.hero-c { position: relative; }
+.hero-photo {
+  background: linear-gradient(135deg, #fefdfb 0%, #f0f6fc 100%);
+  border: var(--border-card);
+  border-radius: 24px;
+  padding: 24px;
+  height: 240px;
+  position: relative;
+}
+.hero-bubble { position: absolute; right: 30px; top: 50px; }
+.hero-bubble-sub { font-size: 11px; color: var(--accent); }
+.hero-bear { position: absolute; bottom: -10px; right: 100px; }
+
+.hero-r {
+  background: var(--bg-card);
+  border: var(--border-card);
+  border-radius: 20px;
+  padding: 18px;
+  position: relative;
+}
+.about-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.about-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--pink-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--pink-deep);
+}
+.about-chip {
+  background: var(--accent);
+  color: #fff;
+  font-size: 11px;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-family: var(--font-display);
+}
+.about-body { font-size: 11px; line-height: 1.8; color: var(--ink-tertiary); }
+.about-cta {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 6px 14px;
+  font-size: 11px;
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  border-radius: 999px;
+  font-family: var(--font-display);
+  text-decoration: none;
+}
+
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  gap: 16px;
+}
+.section-head h2 { font-family: var(--font-display); font-size: var(--fs-section); color: var(--accent); font-style: italic; margin: 0; }
+.chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip {
+  font-size: 11px;
+  padding: 5px 14px;
+  border-radius: 999px;
+  border: 1px solid #cfe0f0;
+  background: transparent;
+  color: var(--ink-tertiary);
+  cursor: pointer;
+  font-family: var(--font-jp);
+  text-decoration: none;
+}
+.chip.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+.more { font-size: 12px; color: var(--accent); font-family: var(--font-display); text-decoration: none; }
+
+.card-grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+
+.ranking { padding: 20px 40px 40px; display: grid; grid-template-columns: 1fr 280px; gap: 24px; }
+.ranking-l h2 { font-family: var(--font-display); font-size: var(--fs-section); color: var(--accent); font-style: italic; margin: 0 0 16px; }
+.ranking-l h2 span { font-size: 16px; }
+.rank-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.rank-card {
+  position: relative;
+  background: var(--bg-card);
+  border: var(--border-card);
+  border-radius: 18px;
+  padding: 14px;
+  overflow: visible;
+}
+.rank-no {
+  position: absolute;
+  top: -22px;
+  left: 10px;
+  z-index: 5;
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-style: italic;
+  color: var(--accent);
+  font-weight: 700;
+  line-height: 1;
+  pointer-events: none;
+}
+.rank-rating { margin-top: 8px; }
+.rank-oneliner { font-size: 11px; line-height: 1.6; margin-top: 6px; color: var(--ink-secondary); }
+.rank-tags { display: flex; gap: 4px; margin-top: 6px; flex-wrap: wrap; }
+.rank-tags span { font-size: 9px; color: var(--accent); opacity: 0.8; }
+
+.fav { background: var(--bg-card); border: var(--border-card); border-radius: 20px; padding: 18px; position: relative; }
+.fav-chip {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-style: italic;
+  padding: 4px 14px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
+.fav-body { font-size: 11px; line-height: 1.7; margin-top: 10px; color: var(--ink-tertiary); }
+.fav-bear { position: absolute; bottom: 8px; right: 8px; opacity: 0.6; }
+
+.arch-strip h2 { font-family: var(--font-display); font-size: var(--fs-section); color: var(--accent); font-style: italic; margin: 0 0 12px; }
+.month-chips { display: flex; gap: 6px; margin: 14px 0; flex-wrap: wrap; }
+.mchip {
+  font-size: 10px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: transparent;
+  border: 1px solid #dbeaf7;
+  color: var(--ink-tertiary);
+  font-family: var(--font-jp);
+  text-decoration: none;
+}
+.mchip.mactive { background: var(--badge-bg); }
+
+.card-grid-6 { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+.strip-card { display: block; border-radius: 12px; overflow: hidden; text-decoration: none; color: inherit; }
+.strip-meta { padding: 6px 4px; }
+.strip-date { font-size: 10px; color: var(--ink-tertiary-2); }
+.strip-name { font-size: 11px; font-weight: 600; margin-top: 2px; color: var(--ink-primary); }
+.strip-one { font-size: 10px; color: var(--ink-tertiary-2); margin-top: 1px; line-height: 1.4; }
+
+@media (max-width: 768px) {
+  section { padding: 0 16px 32px; }
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 16px 16px 32px;
+  }
+  .hero-l { text-align: center; }
+  .hero-my, .hero-rev { font-size: 32px; margin-left: 0; }
+  .hero-jp { font-size: clamp(36px, 9vw, 52px); }
+  .hero-photo { height: 200px; }
+  .hero-bubble { right: 16px; top: 30px; }
+  .hero-bear { right: 70px; }
+  .section-head { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .chips { overflow-x: auto; flex-wrap: nowrap; max-width: 100%; padding-bottom: 4px; }
+  .chip { white-space: nowrap; flex-shrink: 0; }
+  .card-grid-5 { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .ranking { grid-template-columns: 1fr; gap: 16px; padding: 16px 16px 32px; }
+  .rank-grid { grid-template-columns: 1fr; }
+  .arch-strip h2 { font-size: 22px; }
+  .month-chips { overflow-x: auto; flex-wrap: nowrap; }
+  .mchip { white-space: nowrap; flex-shrink: 0; }
+  .card-grid-6 { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  body { padding-bottom: 64px; }
+}
+</style>
