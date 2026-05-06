@@ -1,0 +1,20 @@
+@import './reset.css';
+@import './tokens.css';
+
+html {
+  background: var(--bg-paper);
+  color: var(--ink-primary);
+  font-family: var(--font-jp);
+}
+
+body {
+  font-family: var(--font-jp);
+  font-size: var(--fs-body);
+  color: var(--ink-primary);
+  background: #ffffff;
+}
+
+/* グローバルなセクション横padding */
+.section {
+  padding: 0 var(--space-10);
+}
