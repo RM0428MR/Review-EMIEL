@@ -1,0 +1,298 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import ReviewImage from '../../components/ReviewImage.astro';
+import HeartsRating from '../../components/HeartsRating.astro';
+import BearDoodle from '../../components/BearDoodle.astro';
+import SpeechBubble from '../../components/SpeechBubble.astro';
+import WashiTape from '../../components/WashiTape.astro';
+import DrinkMethodPicker from '../../components/react/DrinkMethodPicker.tsx';
+import FavoriteButton from '../../components/react/FavoriteButton.tsx';
+import { listReviews } from '../../lib/microcms.ts';
+import { getSimilarReviews } from '../../lib/similar.ts';
+import { visibleSubRatings } from '../../lib/types.ts';
+
+export async function getStaticPaths() {
+  const { contents } = await listReviews({ limit: 100 });
+  return contents.map((r) => ({ params: { slug: r.slug }, props: { review: r, all: contents } }));
+}
+
+const { review: r, all } = Astro.props as { review: any; all: any[] };
+const similar = getSimilarReviews(r, all, 3);
+const subs = visibleSubRatings(r);
+const info = [
+  ['発売日', r.infoReleased],
+  ['内容量', r.infoVolume],
+  ['タイプ', r.infoType],
+].filter(([, v]) => !!v) as Array<[string, string]>;
+---
+<BaseLayout title={`カルピス ${r.name}`} description={r.oneLiner} activeTab="review">
+  <Header active="review" />
+  <div class="bc">home <span>›</span> <a href="/reviews">review</a> <span>›</span> {r.name}</div>
+
+  <section class="main">
+    <!-- IMAGE COL -->
+    <div class="img-col">
+      <div class="img-frame">
+        {r.badge && <div class="badge">{r.badge}</div>}
+        <ReviewImage r={r} variant="detail" height={280} />
+        <div class="img-bubble">
+          <SpeechBubble>{r.oneLiner}</SpeechBubble>
+        </div>
+        <div class="img-bear"><BearDoodle size={60} /></div>
+      </div>
+      <div class="thumbs">
+        {[0, 1, 2, 3].map((i) => (
+          <button class={i === 0 ? 'on' : ''}>
+            <ReviewImage r={r} variant="thumb" height={56} />
+          </button>
+        ))}
+      </div>
+      <div class="oneline">
+        <SpeechBubble>
+          <span class="oneline-lbl">一言まとめ</span><br />
+          <strong>{r.oneLiner}</strong>
+        </SpeechBubble>
+      </div>
+    </div>
+
+    <!-- CENTER -->
+    <div class="center-col">
+      <div class="date">{r.date}</div>
+      <h1>カルピス {r.name}</h1>
+      <HeartsRating value={r.rating} size={20} />
+      <h2 class="oneliner">{r.oneLiner}</h2>
+      {r.body && <p class="body" set:html={r.body}></p>}
+
+      <div class="sub-and-method">
+        {subs.length > 0 && (
+          <div class="sub-block">
+            {subs.map((s) => (
+              <div class="sub-row">
+                <span class="sub-lbl">{s.label}</span>
+                <span><HeartsRating value={s.value} size={12} showValue={false} /></span>
+                <span class="sub-val">{s.value.toFixed(1)}</span>
+              </div>
+            ))}
+          </div>
+        )}
+        <div class="method-block">
+          <h3>おすすめの飲み方</h3>
+          <DrinkMethodPicker client:idle />
+        </div>
+      </div>
+
+      {similar.length > 0 && (
+        <>
+          <h3 class="similar-h">似ているかも？？</h3>
+          <div class="similar-grid">
+            {similar.map((s) => (
+              <a href={`/reviews/${s.slug}`} class="similar-card">
+                <ReviewImage r={s} variant="card" height={90} />
+                <div class="sname">カルピス {s.name}</div>
+                <div class="sone">{s.oneLiner}</div>
+                <HeartsRating value={s.rating} size={10} />
+              </a>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+
+    <!-- RIGHT -->
+    <aside class="info-aside">
+      <WashiTape width={50} rotate={-4} style="position:absolute;top:-10px;left:20px;" />
+      <h3>Product Info</h3>
+      <div class="info-photo"><ReviewImage r={r} variant="card" height={120} /></div>
+      {info.map(([k, v]) => (
+        <div class="info-row">
+          <span>{k}</span><span>{v}</span>
+        </div>
+      ))}
+      {r.officialUrl && <a href={r.officialUrl} class="official">公式サイト →</a>}
+      {(r.tags?.length ?? 0) > 0 && (
+        <div class="tags-block">
+          <div class="tags-lbl">タグ</div>
+          <div class="tags">
+            {r.tags.map((t: string) => <span>#{t}</span>)}
+          </div>
+        </div>
+      )}
+      <FavoriteButton client:idle slug={r.slug} />
+    </aside>
+  </section>
+
+  <div class="back-row">
+    <a href="/reviews">← 一覧に戻る</a>
+    <SpeechBubble>みつけてくれてありがとう〜！</SpeechBubble>
+  </div>
+
+  <Footer variant="review-detail" />
+</BaseLayout>
+
+<style>
+.bc { padding: 0 40px 8px; font-size: 11px; color: var(--ink-tertiary-2); }
+.bc span { margin: 0 6px; }
+.bc a { color: inherit; text-decoration: underline; }
+
+.main {
+  padding: 0 40px 40px;
+  display: grid;
+  grid-template-columns: 380px 1fr 280px;
+  gap: 28px;
+  align-items: start;
+}
+
+.img-col { }
+.img-frame {
+  position: relative;
+  background: var(--bg-card);
+  border: var(--border-card);
+  border-radius: 18px;
+  padding: 20px;
+}
+.badge {
+  position: absolute;
+  top: 14px;
+  left: -6px;
+  background: var(--accent);
+  color: #fff;
+  padding: 4px 14px;
+  font-size: 11px;
+  font-family: var(--font-display);
+  font-style: italic;
+  clip-path: polygon(0 0, 100% 0, 92% 50%, 100% 100%, 0 100%);
+  z-index: 2;
+}
+.img-bubble { position: absolute; top: 30px; right: 20px; font-size: 11px; }
+.img-bear { position: absolute; bottom: 0; left: 10px; }
+
+.thumbs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 12px; }
+.thumbs button {
+  padding: 0;
+  border: 1px solid #e0e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+  background: transparent;
+  cursor: pointer;
+}
+.thumbs button.on { border: 2px solid var(--accent); }
+
+.oneline { margin-top: 14px; }
+.oneline-lbl { font-size: 12px; }
+
+.center-col .date { font-size: 11px; color: var(--ink-tertiary-2); }
+.center-col h1 { font-size: 36px; font-weight: 700; color: var(--ink-primary); margin: 8px 0 12px; font-family: var(--font-jp); }
+.center-col .oneliner { font-size: 22px; color: var(--accent); margin-top: 18px; font-family: var(--font-jp); }
+.center-col .body { font-size: 13px; line-height: 2; color: var(--ink-secondary); margin-top: 14px; }
+
+.sub-and-method {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 24px;
+  align-items: start;
+}
+.sub-block { border-top: 1px dashed var(--accent); padding-top: 14px; }
+.sub-row {
+  display: grid;
+  grid-template-columns: 70px 1fr 30px;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.sub-lbl { font-size: 11px; color: var(--ink-secondary); }
+.sub-val { font-size: 11px; color: var(--accent); font-family: var(--font-display); }
+.method-block h3 { font-size: 12px; font-weight: 600; color: var(--ink-primary); margin-bottom: 10px; }
+
+.similar-h { font-size: 14px; font-weight: 600; margin-top: 32px; color: var(--ink-primary); }
+.similar-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 10px; }
+.similar-card {
+  background: var(--bg-card);
+  border: var(--border-card);
+  border-radius: 12px;
+  padding: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+.sname { font-size: 11px; font-weight: 600; margin-top: 6px; color: var(--ink-primary); }
+.sone { font-size: 10px; color: var(--ink-tertiary-2); margin-top: 2px; }
+
+.info-aside {
+  background: var(--bg-card);
+  border: var(--border-card);
+  border-radius: 18px;
+  padding: 18px;
+  position: relative;
+}
+.info-aside h3 { font-family: var(--font-display); font-style: italic; font-size: 16px; color: var(--accent); margin: 0 0 12px; }
+.info-photo {
+  border-radius: 12px;
+  background: #f4faff;
+  padding: 14px;
+  margin-bottom: 14px;
+}
+.info-row {
+  display: grid;
+  grid-template-columns: 70px 1fr;
+  font-size: 11px;
+  padding: 6px 0;
+  border-bottom: 1px dashed rgba(168, 200, 232, 0.3);
+}
+.info-row span:first-child { color: var(--ink-tertiary-2); }
+.info-row span:last-child { color: var(--ink-primary); }
+.official {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  margin-top: 12px;
+  padding: 6px 12px;
+  font-size: 11px;
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  border-radius: 999px;
+  font-family: var(--font-display);
+  text-decoration: none;
+}
+.tags-block { margin-top: 14px; }
+.tags-lbl { font-size: 10px; color: var(--ink-tertiary-2); margin-bottom: 6px; }
+.tags { display: flex; flex-wrap: wrap; gap: 5px; }
+.tags span {
+  font-size: 10px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--list-active);
+  color: var(--accent);
+}
+
+.back-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 40px 30px;
+}
+.back-row a { font-size: 13px; color: var(--accent); text-decoration: none; }
+
+@media (max-width: 768px) {
+  .bc { padding: 0 16px 8px; }
+  .main {
+    padding: 0 16px 32px;
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .img-frame { padding: 14px; }
+  .center-col h1 { font-size: 26px; }
+  .sub-and-method { grid-template-columns: 1fr; gap: 18px; }
+  .similar-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .info-aside { padding: 14px; }
+  .back-row { padding: 0 16px 24px; }
+  body { padding-bottom: 64px; }
+}
+</style>
