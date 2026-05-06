@@ -1,0 +1,25 @@
+name: 🛠 作業
+description: リファクタ・調査・ドキュメント・依存更新など、機能追加でも不具合でもないタスク
+title: "<type>(<scope>): "
+labels: ["type:chore"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: やること
+      description: 何をするか
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: なぜやるか
+      description: 1〜2 行
+    validations:
+      required: true
+  - type: textarea
+    id: done
+    attributes:
+      label: 完了条件
+      value: |
+        - [ ]

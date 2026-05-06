@@ -1,0 +1,40 @@
+name: ✨ 機能追加
+description: 新しい機能・画面・セクションを追加したい
+title: "feat(<scope>): "
+labels: ["type:feat"]
+body:
+  - type: textarea
+    id: motivation
+    attributes:
+      label: 目的・背景
+      description: なぜこの機能が必要か
+    validations:
+      required: true
+  - type: textarea
+    id: spec
+    attributes:
+      label: 仕様
+      description: どう動くか・どう見えるか。設計書のリンクがあれば貼る
+      placeholder: |
+        - 画面: /reviews
+        - 設計書: FE/デザイン/画面別詳細設計/Review一覧/詳細設計.md
+        - 振る舞い: ...
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: 完了条件
+      description: チェックリスト形式で
+      value: |
+        - [ ] 設計書通りのレイアウトで表示される
+        - [ ] モバイル幅でも崩れない
+        - [ ] 関連 ADR があれば書かれている
+        - [ ] DevLog に進捗を残した
+    validations:
+      required: true
+  - type: input
+    id: phase
+    attributes:
+      label: マイルストーン（Phase）
+      placeholder: "Phase 3 実装"
