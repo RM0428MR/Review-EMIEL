@@ -1,0 +1,5 @@
+[
+  { "kind": "ig", "url": "https://instagram.com/", "label": "Instagram" },
+  { "kind": "x", "url": "https://x.com/", "label": "X (旧Twitter)" },
+  { "kind": "note", "url": "https://note.com/", "label": "Drink Log" }
+]

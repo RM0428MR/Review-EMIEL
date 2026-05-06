@@ -1,0 +1,84 @@
+/* tokens.css — FE/デザイン/共通/02_デザイントークン.md と同期 */
+
+:root {
+  /* ── ベース ── */
+  --bg-paper: #f0eee9;
+  --bg-card: #ffffff;
+  --bg-card-soft: #fafdff;
+
+  /* ── アクセント水色 ── */
+  --accent: #7aa9d9;
+  --accent-soft: #a8c8e8;
+  --accent-mid: #5a89b9;
+  --accent-dark: #3a5a82;
+  --accent-deeper: #1f5fa8;
+
+  /* ── テキスト ── */
+  --ink-primary: #3a5a82;
+  --ink-secondary: #5a7a98;
+  --ink-tertiary: #6a8aa8;
+  --ink-tertiary-2: #7a98b8;
+  --ink-muted: #a8b5c8;
+  --ink-muted-2: #a8b8c8;
+
+  /* ── ピンク ── */
+  --pink-soft: #fde0e6;
+  --pink-mid: #e88aa8;
+  --pink-deep: #d878a0;
+  --pink-text: #c97a7a;
+
+  /* ── 雲 / 帯 ── */
+  --cloud-soft: #cfe3f2;
+  --cloud-deeper: #dceaf6;
+  --badge-bg: #dbeaf7;
+  --list-hover: #eaf2f9;
+  --list-active: #eaf4fc;
+
+  /* ── ボーダー ── */
+  --border-card: 1px solid rgba(168, 200, 232, 0.4);
+  --border-card-soft: 1px solid rgba(168, 200, 232, 0.3);
+  --border-divider: 1px dashed rgba(168, 200, 232, 0.3);
+
+  /* ── フォント ── */
+  --font-jp: 'Klee One', 'Hiragino Maru Gothic ProN', system-ui, sans-serif;
+  --font-display: 'Caveat', cursive;
+  --font-aux: 'Yusei Magic', sans-serif;
+  --font-logo: 'RocknRoll One', 'M PLUS Rounded 1c', sans-serif;
+
+  /* ── タイポスケール ── */
+  --fs-hero: 56px;
+  --fs-hero-script: 44px;
+  --fs-h1: 48px;
+  --fs-h2: 32px;
+  --fs-section: 22px;
+  --fs-card-title: 16px;
+  --fs-lead: 14px;
+  --fs-body: 13px;
+  --fs-body-sm: 12px;
+  --fs-meta: 11px;
+  --fs-caption: 10px;
+  --fs-mini: 9px;
+
+  /* ── 余白 ── */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  /* ── 角丸 ── */
+  --radius-pill: 999px;
+  --radius-card: 14px;
+  --radius-card-lg: 18px;
+  --radius-card-xl: 20px;
+  --radius-input: 10px;
+
+  /* ── 影 ── */
+  --shadow-card: 0 2px 8px rgba(122, 169, 217, 0.06);
+  --shadow-button: 0 2px 4px rgba(60, 90, 130, 0.08);
+  --shadow-cta: 0 4px 12px rgba(122, 169, 217, 0.3);
+}
