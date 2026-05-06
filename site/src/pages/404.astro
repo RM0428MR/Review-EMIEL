@@ -1,0 +1,118 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import BearDoodle from '../components/BearDoodle.astro';
+import SpeechBubble from '../components/SpeechBubble.astro';
+import Cloud from '../components/Cloud.astro';
+import HandBottle from '../components/HandBottle.astro';
+import HandGlass from '../components/HandGlass.astro';
+
+const links = [
+  { label: 'Home', desc: '最新のレビューへ', href: '/', kind: 'glass' },
+  { label: 'Review', desc: 'レビュー一覧', href: '/reviews', kind: 'bottle' },
+  { label: 'Ranking', desc: '人気ランキング', href: '/ranking', kind: 'crown' },
+  { label: 'Archive', desc: '年月のアーカイブ', href: '/archive', kind: 'cloud' },
+];
+---
+<BaseLayout title="404 not found">
+  <Header />
+
+  <section class="center">
+    <div class="cloud-l"><Cloud width={140} fill="rgba(168,200,232,0.4)" /></div>
+    <div class="bubble-r">
+      <SpeechBubble>そのページは<br />みつからなかったよ〜</SpeechBubble>
+    </div>
+    <h1>404</h1>
+    <p class="sub">迷子になっちゃった…！</p>
+    <BearDoodle size={120} />
+    <p class="lead">URL が間違っているか、削除された記事かもしれません。<br />下のリンクから探してみてね。</p>
+    <a href="/" class="back">← ホームに戻る</a>
+  </section>
+
+  <section class="grid">
+    <h2>ここから探してみてね</h2>
+    <nav>
+      {links.map((l) => (
+        <a href={l.href} class="lcard">
+          <div class="ico">
+            {l.kind === 'glass' && <HandGlass size={48} />}
+            {l.kind === 'bottle' && <HandBottle size={56} />}
+            {l.kind === 'crown' && <span class="crown">♔</span>}
+            {l.kind === 'cloud' && <Cloud width={56} fill="var(--accent-soft)" />}
+          </div>
+          <h3>{l.label}</h3>
+          <p>{l.desc}</p>
+        </a>
+      ))}
+    </nav>
+  </section>
+
+  <Footer variant="archive" />
+</BaseLayout>
+
+<style>
+.center {
+  padding: 60px 40px 40px;
+  text-align: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+.cloud-l { position: absolute; left: 18%; top: 40px; }
+.bubble-r { position: absolute; right: 20%; top: 60px; }
+.center h1 {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 160px;
+  color: var(--accent);
+  line-height: 1;
+  letter-spacing: -4px;
+  margin: 0;
+}
+.sub { font-size: 16px; color: var(--ink-primary); margin-top: 12px; }
+.lead { font-size: 12px; color: var(--ink-tertiary); }
+.back {
+  padding: 10px 24px;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 999px;
+  text-decoration: none;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 14px;
+}
+
+.grid { padding: 20px 40px 60px; }
+.grid h2 { text-align: center; font-family: var(--font-jp); font-size: 18px; color: var(--ink-secondary); margin-bottom: 16px; }
+nav { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.lcard {
+  background: var(--bg-card);
+  border: var(--border-card);
+  border-radius: 14px;
+  padding: 16px;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.ico { display: flex; align-items: center; justify-content: center; height: 60px; }
+.crown { font-size: 40px; color: var(--accent); }
+.lcard h3 { font-size: 13px; margin: 0; color: var(--ink-primary); }
+.lcard p { font-size: 11px; color: var(--ink-tertiary); margin: 0; }
+
+@media (max-width: 768px) {
+  .center { padding: 32px 16px 24px; }
+  .center h1 { font-size: clamp(96px, 24vw, 160px); }
+  .cloud-l, .bubble-r { display: none; }
+  .grid { padding: 16px 16px 48px; }
+  nav { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .lcard { padding: 14px; }
+  body { padding-bottom: 64px; }
+}
+</style>
