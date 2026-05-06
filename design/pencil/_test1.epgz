@@ -1,0 +1,59 @@
+{
+  "version": "2.11",
+  "children": [
+    {
+      "type": "frame",
+      "id": "tQa9R",
+      "x": 0,
+      "y": 0,
+      "name": "Frame",
+      "clip": true,
+      "width": 800,
+      "height": 600,
+      "fill": "#FFFFFF",
+      "layout": "none",
+      "children": [
+        {
+          "type": "rectangle",
+          "id": "rEc01",
+          "x": 100,
+          "y": 100,
+          "fill": "#A8C8E8",
+          "width": 200,
+          "height": 80
+        },
+        {
+          "type": "ellipse",
+          "id": "elP02",
+          "x": 100,
+          "y": 220,
+          "fill": "#F5E8D8",
+          "width": 80,
+          "height": 80
+        },
+        {
+          "type": "text",
+          "id": "tXt03",
+          "x": 100,
+          "y": 350,
+          "fill": "#3B5C7E",
+          "content": "Calpis Review",
+          "fontFamily": "Inter",
+          "fontSize": 24,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "text",
+          "id": "tXt04",
+          "x": 100,
+          "y": 400,
+          "fill": "#5C7E9C",
+          "content": "テスト用ファイル",
+          "fontFamily": "Inter",
+          "fontSize": 16,
+          "fontWeight": "normal"
+        }
+      ]
+    }
+  ]
+}

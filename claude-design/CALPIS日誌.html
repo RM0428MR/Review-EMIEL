@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<title>CALPIS日誌 — my review site</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Klee+One:wght@400;600&family=M+PLUS+Rounded+1c:wght@400;500;700&family=Mochiy+Pop+One&family=RocknRoll+One&family=Reggae+One&family=Shippori+Mincho:wght@400;700&family=Yusei+Magic&display=swap" />
+<style>
+  html, body, #root { margin: 0; padding: 0; height: 100%; background: #f0eee9; }
+  body {
+    font-family: "Klee One", "Yusei Magic", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --font-jp: "Klee One","Yusei Magic",ui-sans-serif,sans-serif;
+    --font-display: "Caveat","Klee One",cursive;
+    --accent: #7aa9d9;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  * { box-sizing: border-box; }
+</style>
+<template id="__bundler_thumbnail">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+    <rect width="100" height="100" fill="#eaf4fc"/>
+    <circle cx="20" cy="20" r="2" fill="#a8c8e8"/>
+    <circle cx="80" cy="30" r="2" fill="#a8c8e8"/>
+    <circle cx="30" cy="80" r="2" fill="#a8c8e8"/>
+    <circle cx="75" cy="75" r="2" fill="#a8c8e8"/>
+    <path d="M40 30 L60 30 L62 35 L60 78 Q60 82 50 82 Q40 82 40 78 L38 35 Z" fill="#fff" stroke="#7aa9d9" stroke-width="1.5"/>
+    <rect x="42" y="42" width="16" height="28" fill="#fff" stroke="#7aa9d9" stroke-width="0.6"/>
+    <text x="50" y="55" font-size="5" fill="#7aa9d9" text-anchor="middle" font-weight="700" font-family="sans-serif">CALPIS</text>
+    <text x="50" y="63" font-size="3.5" fill="#7aa9d9" text-anchor="middle" font-family="sans-serif">日誌</text>
+    <path d="M30 88 q-3 -3 -5 0 q-2 2 5 6 q7 -4 5 -6 q-2 -3 -5 0" fill="#a8c8e8"/>
+  </svg>
+</template>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="parts.jsx"></script>
+<script type="text/babel" src="stickers.jsx"></script>
+<script type="text/babel" src="data.jsx"></script>
+<script type="text/babel" src="pages-1.jsx"></script>
+<script type="text/babel" src="pages-2.jsx"></script>
+<script type="text/babel" src="ios-frame.jsx"></script>
+<script type="text/babel" src="pages-mobile.jsx"></script>
+<script type="text/babel" src="app.jsx"></script>
+</body>
+</html>
