@@ -1,0 +1,174 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import BearDoodle from '../components/BearDoodle.astro';
+import SpeechBubble from '../components/SpeechBubble.astro';
+import WashiTape from '../components/WashiTape.astro';
+import Underline from '../components/Underline.astro';
+import ContactForm from '../components/react/ContactForm.tsx';
+
+const tips = [
+  { icon: '♡', label: 'レビューの感想や\nリクエスト', color: '#e88aa8' },
+  { icon: '🥤', label: 'おすすめのカルピス\n情報', color: '#7aa9d9' },
+  { icon: '✉', label: 'お仕事のご依頼・\nコラボのご相談', color: '#88b878' },
+  { icon: '◌', label: 'その他なんでもOK！', color: '#c8a878' },
+];
+---
+<BaseLayout title="contact" activeTab="contact">
+  <Header active="contact" />
+
+  <section class="head">
+    <div class="head-l">
+      <BearDoodle size={80} />
+      <div>
+        <h1>contact</h1>
+        <p>お問い合わせ・ご感想・お仕事のご依頼など<br />こちらからお気軽にどうぞ！</p>
+      </div>
+    </div>
+    <div class="head-c">
+      <SpeechBubble>メッセージ、<br />とってもうれしいです！<br />待ってるよ〜</SpeechBubble>
+    </div>
+    <div class="about-card">
+      <WashiTape width={50} rotate={-4} style="position:absolute;top:-10px;left:20px;" />
+      <div class="about-chip">about me</div>
+      <div class="about-row">
+        <div class="avatar"><BearDoodle size={50} /></div>
+        <div class="about-name">カルピスが大すきな<br />ごく普通のサラリーマン。</div>
+      </div>
+      <p class="about-body">
+        新商品から期間限定まで、<br />いろんなカルピスを飲んで<br />正直レビューしてます☺
+      </p>
+    </div>
+  </section>
+
+  <section class="body">
+    <div class="form-wrap">
+      <div class="form-head">
+        <span class="ico">✉</span>
+        <h3>メッセージを送る</h3>
+      </div>
+      <Underline width={120} style="margin-bottom:16px;" />
+      <ContactForm client:load />
+    </div>
+
+    <aside class="tip">
+      <div class="tip-h">こんなメッセージも<br />待ってます！</div>
+      {tips.map((it, i) => (
+        <div class={`tip-row ${i < 3 ? 'div' : ''}`}>
+          <span class="tip-icon" style={`background:${it.color};`}>{it.icon}</span>
+          <span class="tip-label">{it.label}</span>
+        </div>
+      ))}
+    </aside>
+  </section>
+
+  <Footer variant="contact" />
+</BaseLayout>
+
+<style>
+.head {
+  padding: 0 40px 30px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+  align-items: center;
+}
+.head-l { display: flex; align-items: center; gap: 14px; }
+.head h1 { font-family: var(--font-display); font-style: italic; font-size: var(--fs-h1); color: var(--accent); margin: 0; line-height: 1; }
+.head p { font-size: 12px; margin-top: 8px; color: var(--ink-tertiary); }
+.head-c { text-align: center; }
+.about-card {
+  background: var(--bg-card);
+  border: var(--border-card);
+  border-radius: 18px;
+  padding: 16px;
+  position: relative;
+}
+.about-chip {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 12px;
+  padding: 4px 14px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
+.about-row { display: flex; align-items: center; gap: 12px; }
+.avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--pink-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--pink-deep);
+}
+.about-name { font-size: 13px; color: var(--ink-primary); font-weight: 600; }
+.about-body { font-size: 11px; line-height: 1.7; margin-top: 10px; color: var(--ink-tertiary); }
+
+.body {
+  padding: 0 40px 30px;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 24px;
+}
+.form-wrap {
+  background: var(--bg-card);
+  border: var(--border-card);
+  border-radius: 18px;
+  padding: 22px;
+  position: relative;
+}
+.form-head { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+.form-head .ico { font-size: 18px; color: var(--accent); }
+.form-head h3 { font-family: var(--font-display); font-style: italic; font-size: 16px; color: var(--ink-primary); margin: 0; }
+
+.tip {
+  background: var(--bg-card);
+  border: var(--border-card);
+  border-radius: 18px;
+  padding: 18px;
+}
+.tip-h { font-size: 13px; font-weight: 600; color: var(--ink-primary); margin-bottom: 12px; font-family: var(--font-jp); }
+.tip-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 0;
+}
+.tip-row.div { border-bottom: 1px dashed rgba(168, 200, 232, 0.3); }
+.tip-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  flex-shrink: 0;
+}
+.tip-label { font-size: 11px; color: var(--ink-secondary); white-space: pre-line; font-family: var(--font-jp); line-height: 1.6; }
+
+@media (max-width: 768px) {
+  .head {
+    padding: 0 16px 20px;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .head-l { flex-direction: column; align-items: flex-start; }
+  .head h1 { font-size: 36px; }
+  .head-c { display: none; }
+  .body {
+    padding: 0 16px 32px;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .form-wrap { padding: 18px; }
+  body { padding-bottom: 64px; }
+}
+</style>
