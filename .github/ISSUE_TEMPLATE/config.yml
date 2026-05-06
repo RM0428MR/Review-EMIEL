@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 設計書を見る
+    url: https://github.com/RM0428MR/Review-Calpis/tree/main/FE/デザイン
+    about: 既存の画面設計書を確認したい場合
+  - name: ADR を見る
+    url: https://github.com/RM0428MR/Review-Calpis/tree/main/ADR
+    about: 設計判断の経緯を確認したい場合
