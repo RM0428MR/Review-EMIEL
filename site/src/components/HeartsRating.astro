@@ -3,16 +3,23 @@ import HeartIcon from './HeartIcon.astro';
 
 interface Props { value?: number; max?: number; size?: number; color?: string; showValue?: boolean; }
 const { value = 0, max = 5, size = 16, color = 'var(--accent)', showValue = true } = Astro.props;
+
+function fillFor(i: number, v: number): 'full' | 'half' | 'none' {
+  const diff = v - i;
+  if (diff >= 0.75) return 'full';
+  if (diff >= 0.25) return 'half';
+  return 'none';
+}
 ---
 <span class="hr" aria-label={`評価 ${value.toFixed(1)} / ${max}`}>
   {Array.from({ length: max }).map((_, i) => (
-    <HeartIcon filled={i < Math.round(value)} size={size} color={color} />
+    <HeartIcon fill={fillFor(i, value)} size={size} color={color} />
   ))}
   {showValue && (
-    <span class="val" style={`font-size:${Math.round(size * 0.85)}px;color:${color}`}>{value.toFixed(1)}</span>
+    <span class="val" style={`font-size:${Math.round(size * 0.95)}px`}>{value.toFixed(1)}</span>
   )}
 </span>
 <style>
 .hr { display: inline-flex; align-items: center; gap: 3px; }
-.val { margin-left: 6px; font-weight: 600; font-family: var(--font-display); }
+.val { margin-left: 6px; font-weight: 700; font-family: var(--font-display); letter-spacing: 0.5px; color: var(--ink-primary); }
 </style>

@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
+    "dev:toolbar": "ASTRO_DEV_TOOLBAR=1 astro dev",
     "start": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",

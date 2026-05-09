@@ -7,10 +7,10 @@ interface Props { active?: string; }
 const { active } = Astro.props;
 const items = [
   { id: 'home', label: 'home', href: '/' },
-  { id: 'about', label: 'about', href: '/about' },
   { id: 'review', label: 'review', href: '/reviews' },
   { id: 'ranking', label: 'ranking', href: '/ranking' },
   { id: 'archive', label: 'archive', href: '/archive' },
+  { id: 'about', label: 'about', href: '/about' },
   { id: 'contact', label: 'contact', href: '/contact' },
 ];
 ---
@@ -36,7 +36,7 @@ const items = [
       <HandGlass size={42} />
       <div class="logo-text">
         <span class="logo-my">my</span>
-        <div class="logo-jp">CALPIS<span> 日誌</span></div>
+        <div class="logo-jp">EMIEL<span> diary</span></div>
         <span class="logo-rev">review</span>
       </div>
     </a>
@@ -70,7 +70,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 32px 40px 22px;
+  padding: 28px 40px 14px;
   position: relative;
   z-index: 5;
 }
@@ -85,32 +85,45 @@ header {
 .logo-my { font-size: 14px; font-style: italic; color: var(--accent); }
 .logo-jp {
   font-size: 22px;
-  font-weight: 700;
-  font-family: var(--font-jp);
-  color: var(--ink-primary);
+  font-weight: 800;
+  font-family: 'M PLUS Rounded 1c', 'Hiragino Maru Gothic ProN', sans-serif;
+  color: var(--accent-deeper);
+  letter-spacing: 0.6px;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
 }
-.logo-jp span { margin-left: 4px; }
+.logo-jp span {
+  font-family: 'Klee One', 'M PLUS Rounded 1c', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--ink-primary);
+  letter-spacing: 0;
+}
 .logo-rev { font-size: 12px; font-style: italic; color: var(--accent); margin-top: 1px; }
 .desktop-nav {
   display: flex;
-  gap: 32px;
+  gap: 40px;
   font-family: var(--font-display);
-  font-size: 16px;
+  font-size: 22px;
   font-style: italic;
 }
 .nav-item {
   color: var(--ink-primary);
   text-decoration: none;
   position: relative;
-  font-weight: 400;
-  opacity: 0.7;
-  padding-bottom: 6px;
+  font-weight: 500;
+  opacity: 0.75;
+  padding-bottom: 8px;
+  letter-spacing: 0.3px;
+  transition: opacity 0.15s, transform 0.15s;
 }
+.nav-item:hover { opacity: 1; transform: translateY(-1px); }
 .nav-item.active { font-weight: 700; opacity: 1; }
 .right { display: flex; gap: 12px; align-items: center; }
 
 @media (max-width: 768px) {
-  header { padding: 18px 16px 12px; }
+  header { padding: 16px 16px 8px; }
   .wave { height: 12px; }
   .desktop-nav { display: none; }
   .logo-jp { font-size: 18px; }

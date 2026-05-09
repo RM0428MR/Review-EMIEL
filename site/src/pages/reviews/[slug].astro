@@ -5,7 +5,6 @@ import Footer from '../../components/Footer.astro';
 import ReviewImage from '../../components/ReviewImage.astro';
 import HeartsRating from '../../components/HeartsRating.astro';
 import BearDoodle from '../../components/BearDoodle.astro';
-import SpeechBubble from '../../components/SpeechBubble.astro';
 import WashiTape from '../../components/WashiTape.astro';
 import DrinkMethodPicker from '../../components/react/DrinkMethodPicker.tsx';
 import FavoriteButton from '../../components/react/FavoriteButton.tsx';
@@ -22,111 +21,123 @@ const { review: r, all } = Astro.props as { review: any; all: any[] };
 const similar = getSimilarReviews(r, all, 3);
 const subs = visibleSubRatings(r);
 const info = [
+  ['商品名', `エミエル ${r.name}`],
   ['発売日', r.infoReleased],
   ['内容量', r.infoVolume],
   ['タイプ', r.infoType],
 ].filter(([, v]) => !!v) as Array<[string, string]>;
 ---
-<BaseLayout title={`カルピス ${r.name}`} description={r.oneLiner} activeTab="review">
+<BaseLayout title={`エミエル ${r.name}`} description={r.oneLiner} activeTab="review">
   <Header active="review" />
   <div class="bc">home <span>›</span> <a href="/reviews">review</a> <span>›</span> {r.name}</div>
 
   <section class="main">
-    <!-- IMAGE COL -->
-    <div class="img-col">
-      <div class="img-frame">
-        {r.badge && <div class="badge">{r.badge}</div>}
-        <ReviewImage r={r} variant="detail" height={280} />
-        <div class="img-bubble">
-          <SpeechBubble>{r.oneLiner}</SpeechBubble>
-        </div>
-        <div class="img-bear"><BearDoodle size={60} /></div>
-      </div>
-      <div class="thumbs">
-        {[0, 1, 2, 3].map((i) => (
-          <button class={i === 0 ? 'on' : ''}>
-            <ReviewImage r={r} variant="thumb" height={56} />
-          </button>
-        ))}
-      </div>
-      <div class="oneline">
-        <SpeechBubble>
-          <span class="oneline-lbl">一言まとめ</span><br />
-          <strong>{r.oneLiner}</strong>
-        </SpeechBubble>
-      </div>
-    </div>
-
-    <!-- CENTER -->
-    <div class="center-col">
-      <div class="date">{r.date}</div>
-      <h1>カルピス {r.name}</h1>
-      <HeartsRating value={r.rating} size={20} />
-      <h2 class="oneliner">{r.oneLiner}</h2>
-      {r.body && <p class="body" set:html={r.body}></p>}
-
-      <div class="sub-and-method">
-        {subs.length > 0 && (
-          <div class="sub-block">
-            {subs.map((s) => (
-              <div class="sub-row">
-                <span class="sub-lbl">{s.label}</span>
-                <span><HeartsRating value={s.value} size={12} showValue={false} /></span>
-                <span class="sub-val">{s.value.toFixed(1)}</span>
+    <div class="top-row">
+      <!-- IMAGE COL -->
+      <div class="img-col">
+        <div class="img-frame">
+          {r.badge && <div class="badge">{r.badge}</div>}
+          <div class="hero-stack">
+            {[0, 1, 2].map((i) => (
+              <div class={`hero-slide${i === 0 ? ' is-on' : ''}`} data-slide={i}>
+                <ReviewImage r={r} variant="detail" height={420} />
               </div>
             ))}
           </div>
-        )}
-        <div class="method-block">
-          <h3>おすすめの飲み方</h3>
-          <DrinkMethodPicker client:idle />
+          <div class="img-bear"><BearDoodle size={60} /></div>
+        </div>
+        <div class="thumbs">
+          {[0, 1, 2].map((i) => (
+            <button class={i === 0 ? 'on' : ''} data-thumb={i} type="button">
+              <ReviewImage r={r} variant="thumb" height={80} />
+            </button>
+          ))}
         </div>
       </div>
 
-      {similar.length > 0 && (
-        <>
-          <h3 class="similar-h">似ているかも？？</h3>
-          <div class="similar-grid">
-            {similar.map((s) => (
-              <a href={`/reviews/${s.slug}`} class="similar-card">
-                <ReviewImage r={s} variant="card" height={90} />
-                <div class="sname">カルピス {s.name}</div>
-                <div class="sone">{s.oneLiner}</div>
-                <HeartsRating value={s.rating} size={10} />
-              </a>
-            ))}
+      <!-- CENTER -->
+      <div class="center-col">
+        <div class="center-text">
+          <div class="date">{r.date}</div>
+          <h1>エミエル {r.name}</h1>
+          <HeartsRating value={r.rating} size={20} />
+          <h2 class="oneliner">{r.oneLiner}</h2>
+          {r.body && <p class="body" set:html={r.body}></p>}
+        </div>
+
+        <div class="center-bottom">
+          <hr class="section-divider" />
+          <div class="sub-and-method">
+            {subs.length > 0 && (
+              <div class="sub-block">
+                {subs.map((s) => (
+                  <div class="sub-row">
+                    <span class="sub-lbl">{s.label}</span>
+                    <span><HeartsRating value={s.value} size={12} showValue={false} /></span>
+                    <span class="sub-val">{s.value.toFixed(1)}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+            <div class="method-block">
+              <h3>おすすめの飲み方</h3>
+              <DrinkMethodPicker picked={r.recommendedDrink ?? 'そのまま'} note={r.recommendedDrinkNote} />
+            </div>
           </div>
-        </>
-      )}
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <aside class="info-aside">
+        <WashiTape width={50} rotate={-4} style="position:absolute;top:-10px;left:20px;" />
+        <h3>Product Info</h3>
+        <div class="info-photo"><ReviewImage r={r} variant="card" height={120} /></div>
+        {info.map(([k, v]) => (
+          <div class="info-row">
+            <span>{k}</span><span>{v}</span>
+          </div>
+        ))}
+        {r.officialUrl && <a href={r.officialUrl} class="official">公式サイト →</a>}
+        {(r.tags?.length ?? 0) > 0 && (
+          <div class="tags-block">
+            <div class="tags-lbl">タグ</div>
+            <div class="tags">
+              {r.tags.map((t: string) => <span>#{t}</span>)}
+            </div>
+          </div>
+        )}
+        <hr class="fav-divider" />
+        <FavoriteButton client:idle slug={r.slug} />
+      </aside>
     </div>
 
-    <!-- RIGHT -->
-    <aside class="info-aside">
-      <WashiTape width={50} rotate={-4} style="position:absolute;top:-10px;left:20px;" />
-      <h3>Product Info</h3>
-      <div class="info-photo"><ReviewImage r={r} variant="card" height={120} /></div>
-      {info.map(([k, v]) => (
-        <div class="info-row">
-          <span>{k}</span><span>{v}</span>
+    <div class="bottom-row">
+      <div class="similar-area">
+        {similar.length > 0 && (
+          <>
+            <h3 class="similar-h">似ているかも？？</h3>
+            <div class="similar-grid">
+              {similar.map((s) => (
+                <a href={`/reviews/${s.slug}`} class="similar-card">
+                  <ReviewImage r={s} variant="card" height={90} />
+                  <div class="sname">エミエル {s.name}</div>
+                  <div class="sone">{s.oneLiner}</div>
+                  <HeartsRating value={s.rating} size={10} />
+                </a>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+      <div class="bottom-left-overlay">
+        <div class="bear-area">
+          <BearDoodle size={80} class="thanks-bear" />
+          <img class="thanks-bubble" src="/images/bubble-thanks.png" alt="みつけてくれてありがとう〜！" />
         </div>
-      ))}
-      {r.officialUrl && <a href={r.officialUrl} class="official">公式サイト →</a>}
-      {(r.tags?.length ?? 0) > 0 && (
-        <div class="tags-block">
-          <div class="tags-lbl">タグ</div>
-          <div class="tags">
-            {r.tags.map((t: string) => <span>#{t}</span>)}
-          </div>
-        </div>
-      )}
-      <FavoriteButton client:idle slug={r.slug} />
-    </aside>
+        <a href="/reviews" class="back-link">← 一覧に戻る</a>
+      </div>
+    </div>
   </section>
-
-  <div class="back-row">
-    <a href="/reviews">← 一覧に戻る</a>
-    <SpeechBubble>みつけてくれてありがとう〜！</SpeechBubble>
-  </div>
 
   <Footer variant="review-detail" />
 </BaseLayout>
@@ -138,13 +149,70 @@ const info = [
 
 .main {
   padding: 0 40px 40px;
-  display: grid;
-  grid-template-columns: 380px 1fr 280px;
+  display: flex;
+  flex-direction: column;
   gap: 28px;
-  align-items: start;
 }
 
-.img-col { }
+.top-row {
+  display: grid;
+  grid-template-columns: 380px 1fr 240px;
+  gap: 28px;
+  align-items: stretch;
+}
+
+.bottom-row {
+  position: relative;
+  width: 100%;
+}
+.similar-area {
+  width: 100%;
+}
+.bottom-left-overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 380px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  pointer-events: none;
+}
+.bottom-left-overlay > * { pointer-events: auto; }
+.bear-area {
+  margin-top: auto;
+  display: flex;
+  align-items: flex-end;
+  gap: 0;
+}
+.thanks-bubble {
+  width: 180px;
+  height: auto;
+  display: block;
+  margin-bottom: 8px;
+  margin-left: -24px;
+}
+.back-link {
+  font-size: 13px;
+  color: var(--ink-primary);
+  text-decoration: none;
+  padding-top: 8px;
+  font-weight: 600;
+}
+
+.img-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.img-col .thumbs { margin-top: auto; }
+
+.center-col {
+  display: flex;
+  flex-direction: column;
+}
+.center-col .center-bottom { margin-top: auto; }
 .img-frame {
   position: relative;
   background: var(--bg-card);
@@ -165,10 +233,13 @@ const info = [
   clip-path: polygon(0 0, 100% 0, 92% 50%, 100% 100%, 0 100%);
   z-index: 2;
 }
-.img-bubble { position: absolute; top: 30px; right: 20px; font-size: 11px; }
 .img-bear { position: absolute; bottom: 0; left: 10px; }
 
-.thumbs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 12px; }
+.hero-stack { position: relative; }
+.hero-slide { display: none; }
+.hero-slide.is-on { display: block; }
+
+.thumbs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
 .thumbs button {
   padding: 0;
   border: 1px solid #e0e8f0;
@@ -179,35 +250,59 @@ const info = [
 }
 .thumbs button.on { border: 2px solid var(--accent); }
 
-.oneline { margin-top: 14px; }
-.oneline-lbl { font-size: 12px; }
-
 .center-col .date { font-size: 11px; color: var(--ink-tertiary-2); }
 .center-col h1 { font-size: 36px; font-weight: 700; color: var(--ink-primary); margin: 8px 0 12px; font-family: var(--font-jp); }
 .center-col .oneliner { font-size: 22px; color: var(--accent); margin-top: 18px; font-family: var(--font-jp); }
 .center-col .body { font-size: 13px; line-height: 2; color: var(--ink-secondary); margin-top: 14px; }
 
+.section-divider {
+  border: 0;
+  border-top: 1.5px dotted var(--accent);
+  margin: 0 0 24px;
+}
+
 .sub-and-method {
+  position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 24px;
-  margin-top: 24px;
   align-items: start;
+  background: var(--bg-card);
+  border: var(--border-card);
+  border-radius: 18px;
+  padding: 20px 22px;
 }
-.sub-block { border-top: 1px dashed var(--accent); padding-top: 14px; }
+.sub-and-method::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 16px;
+  bottom: 16px;
+  width: 0;
+  border-left: 1px solid rgba(168, 200, 232, 0.4);
+  transform: translateX(-0.5px);
+  pointer-events: none;
+}
+.sub-block { padding-top: 2px; }
 .sub-row {
   display: grid;
-  grid-template-columns: 70px 1fr 30px;
+  grid-template-columns: 92px 1fr 30px;
   gap: 8px;
   align-items: center;
   margin-bottom: 6px;
 }
-.sub-lbl { font-size: 11px; color: var(--ink-secondary); }
-.sub-val { font-size: 11px; color: var(--accent); font-family: var(--font-display); }
+.sub-lbl { font-size: 11px; color: var(--ink-secondary); white-space: nowrap; }
+.sub-val { font-size: 11px; color: var(--ink-primary); font-family: var(--font-display); }
 .method-block h3 { font-size: 12px; font-weight: 600; color: var(--ink-primary); margin-bottom: 10px; }
 
-.similar-h { font-size: 14px; font-weight: 600; margin-top: 32px; color: var(--ink-primary); }
-.similar-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 10px; }
+.similar-h { font-size: 14px; font-weight: 600; margin: 0; color: var(--ink-primary); text-align: center; }
+.similar-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 10px auto 0;
+  max-width: 560px;
+}
 .similar-card {
   background: var(--bg-card);
   border: var(--border-card);
@@ -227,6 +322,14 @@ const info = [
   border-radius: 18px;
   padding: 18px;
   position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.info-aside .fav-divider {
+  margin: auto 0 18px;
+  border: 0;
+  border-top: 1px dashed rgba(168, 200, 232, 0.5);
+  width: 100%;
 }
 .info-aside h3 { font-family: var(--font-display); font-style: italic; font-size: 16px; color: var(--accent); margin: 0 0 12px; }
 .info-photo {
@@ -254,7 +357,7 @@ const info = [
   background: transparent;
   border: 1px solid var(--accent);
   color: var(--accent);
-  border-radius: 999px;
+  border-radius: 999.008px;
   font-family: var(--font-display);
   text-decoration: none;
 }
@@ -264,35 +367,61 @@ const info = [
 .tags span {
   font-size: 10px;
   padding: 3px 10px;
-  border-radius: 999px;
+  border-radius: 999.008px;
   background: var(--list-active);
   color: var(--accent);
 }
-
-.back-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 40px 30px;
-}
-.back-row a { font-size: 13px; color: var(--accent); text-decoration: none; }
 
 @media (max-width: 768px) {
   .bc { padding: 0 16px 8px; }
   .main {
     padding: 0 16px 32px;
+    gap: 20px;
+  }
+  .top-row {
     grid-template-columns: 1fr;
     gap: 20px;
   }
+  .img-col .thumbs { margin-top: 12px; }
+  .center-col .center-bottom { margin-top: 0; }
   .img-frame { padding: 14px; }
   .center-col h1 { font-size: 26px; }
-  .sub-and-method { grid-template-columns: 1fr; gap: 18px; }
+  .sub-and-method { grid-template-columns: 1fr; gap: 18px; padding: 16px; }
+  .sub-and-method::before {
+    left: 16px;
+    right: 16px;
+    top: 50%;
+    bottom: auto;
+    width: auto;
+    height: 0;
+    border-left: 0;
+    border-top: 1px solid rgba(168, 200, 232, 0.4);
+    transform: translateY(-0.5px);
+  }
   .similar-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 8px;
   }
   .info-aside { padding: 14px; }
-  .back-row { padding: 0 16px 24px; }
+  .bottom-left-overlay { position: static; width: 100%; }
+  .similar-area { margin-top: 20px; }
   body { padding-bottom: 64px; }
 }
 </style>
+
+<script>
+  document.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement | null;
+    if (!target) return;
+    const btn = target.closest<HTMLButtonElement>('.thumbs button[data-thumb]');
+    if (!btn) return;
+    const idx = btn.dataset.thumb;
+    const col = btn.closest('.img-col');
+    if (!col || idx == null) return;
+    col.querySelectorAll('.thumbs button').forEach((b) => b.classList.remove('on'));
+    btn.classList.add('on');
+    col.querySelectorAll<HTMLElement>('.hero-slide').forEach((s) => {
+      s.classList.toggle('is-on', s.dataset.slide === idx);
+    });
+  });
+</script>

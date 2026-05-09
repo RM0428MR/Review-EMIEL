@@ -2,16 +2,71 @@
 @import './tokens.css';
 
 html {
-  background: var(--bg-paper);
+  /* デフォルトの 100% 表示を従来の 150% 相当に拡大 */
+  zoom: 1.5;
+
   color: var(--ink-primary);
   font-family: var(--font-jp);
+  background-color: #ffffff;
 }
 
 body {
   font-family: var(--font-jp);
   font-size: var(--fs-body);
   color: var(--ink-primary);
-  background: #ffffff;
+  background: transparent;
+  position: relative;
+}
+
+/* Home: 全面に均一に散らばる水玉 */
+body.dots-scatter {
+  background-image:
+    radial-gradient(circle at 36px  60px,  rgba(70,  155, 230, 0.65) 3px,   transparent 3.6px),
+    radial-gradient(circle at 220px 110px, rgba(160, 210, 245, 0.85) 3.6px, transparent 4.2px),
+    radial-gradient(circle at 280px 320px, rgba(110, 180, 235, 0.70) 2.8px, transparent 3.4px),
+    radial-gradient(circle at 160px 400px, rgba(195, 225, 250, 0.85) 3.2px, transparent 3.8px),
+    radial-gradient(circle at 140px 150px, rgba(110, 180, 235, 0.55) 1.8px, transparent 2.3px),
+    radial-gradient(circle at 320px 200px, rgba(70,  155, 230, 0.55) 1.5px, transparent 2px),
+    radial-gradient(circle at 50px  170px, rgba(160, 210, 245, 0.65) 2px,   transparent 2.5px),
+    radial-gradient(circle at 200px 280px, rgba(195, 225, 250, 0.65) 1.6px, transparent 2.1px),
+    radial-gradient(circle at 60px  360px, rgba(110, 180, 235, 0.55) 1.8px, transparent 2.3px),
+    radial-gradient(circle at 240px 440px, rgba(160, 210, 245, 0.65) 2px,   transparent 2.5px);
+  background-size: 360px 480px;
+}
+
+/* Home 以外: ページの四つ角にだけ集中配置（スクロールと一緒に動く） */
+body.dots-corners::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background-repeat: no-repeat;
+  background-image:
+    /* 左上 */
+    radial-gradient(circle at 24px  36px,  rgba(70,  155, 230, 0.7) 3.2px, transparent 3.8px),
+    radial-gradient(circle at 70px  20px,  rgba(160, 210, 245, 0.85) 2.6px, transparent 3.2px),
+    radial-gradient(circle at 50px  88px,  rgba(110, 180, 235, 0.65) 2.4px, transparent 3px),
+    radial-gradient(circle at 110px 60px,  rgba(195, 225, 250, 0.85) 3px,  transparent 3.6px),
+    radial-gradient(circle at 28px  130px, rgba(70,  155, 230, 0.55) 1.8px, transparent 2.3px),
+    /* 右上 */
+    radial-gradient(circle at calc(100% - 30px)  40px,  rgba(70,  155, 230, 0.7) 3.2px, transparent 3.8px),
+    radial-gradient(circle at calc(100% - 80px)  20px,  rgba(160, 210, 245, 0.85) 2.6px, transparent 3.2px),
+    radial-gradient(circle at calc(100% - 60px)  90px,  rgba(110, 180, 235, 0.65) 2.4px, transparent 3px),
+    radial-gradient(circle at calc(100% - 120px) 60px,  rgba(195, 225, 250, 0.85) 3px,  transparent 3.6px),
+    radial-gradient(circle at calc(100% - 30px)  130px, rgba(70,  155, 230, 0.55) 1.8px, transparent 2.3px),
+    /* 左下 */
+    radial-gradient(circle at 30px  calc(100% - 36px),  rgba(70,  155, 230, 0.7) 3.2px, transparent 3.8px),
+    radial-gradient(circle at 80px  calc(100% - 20px),  rgba(160, 210, 245, 0.85) 2.6px, transparent 3.2px),
+    radial-gradient(circle at 60px  calc(100% - 90px),  rgba(110, 180, 235, 0.65) 2.4px, transparent 3px),
+    radial-gradient(circle at 120px calc(100% - 60px),  rgba(195, 225, 250, 0.85) 3px,  transparent 3.6px),
+    radial-gradient(circle at 24px  calc(100% - 130px), rgba(70,  155, 230, 0.55) 1.8px, transparent 2.3px),
+    /* 右下 */
+    radial-gradient(circle at calc(100% - 30px)  calc(100% - 40px),  rgba(70,  155, 230, 0.7) 3.2px, transparent 3.8px),
+    radial-gradient(circle at calc(100% - 80px)  calc(100% - 20px),  rgba(160, 210, 245, 0.85) 2.6px, transparent 3.2px),
+    radial-gradient(circle at calc(100% - 60px)  calc(100% - 90px),  rgba(110, 180, 235, 0.65) 2.4px, transparent 3px),
+    radial-gradient(circle at calc(100% - 120px) calc(100% - 60px),  rgba(195, 225, 250, 0.85) 3px,  transparent 3.6px),
+    radial-gradient(circle at calc(100% - 30px)  calc(100% - 130px), rgba(70,  155, 230, 0.55) 1.8px, transparent 2.3px);
 }
 
 /* グローバルなセクション横padding */

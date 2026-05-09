@@ -1,25 +1,20 @@
 ---
 import CloudWave from './CloudWave.astro';
-import HandBottle from './HandBottle.astro';
-import HandGlass from './HandGlass.astro';
-import BearDoodle from './BearDoodle.astro';
 import SocialIcon from './SocialIcon.astro';
-import SpeechBubble from './SpeechBubble.astro';
 
 interface Props {
-  variant?: 'home' | 'review-list' | 'review-detail' | 'ranking' | 'archive' | 'contact';
+  variant?: 'home' | 'review-list' | 'review-detail' | 'ranking' | 'archive' | 'contact' | 'about';
 }
 const { variant = 'home' } = Astro.props;
-const wave = 'var(--cloud-soft)';
 const items = ['home', 'about', 'review', 'ranking', 'archive', 'contact'];
 const hrefMap: Record<string, string> = {
   home: '/', about: '/about', review: '/reviews', ranking: '/ranking', archive: '/archive', contact: '/contact',
 };
+const isShared = variant !== 'review-detail';
 ---
 {variant === 'review-list' && (
   <footer class="rl">
-    <BearDoodle size={70} />
-    <HandBottle size={84} />
+    <div class="rl-pagination" data-pagination></div>
   </footer>
 )}
 
@@ -27,224 +22,257 @@ const hrefMap: Record<string, string> = {
   <footer class="rd"></footer>
 )}
 
-{variant === 'archive' && (
-  <footer class="archive">
-    <CloudWave fill={wave} />
+{isShared && (
+  <footer class="shared">
+    <div class="wave-wrap" aria-hidden="true">
+      <CloudWave fill="var(--cloud-soft)" />
+    </div>
+
     <div class="band">
-      <div class="nav-row">
+      <div class="dots" aria-hidden="true">
+        <span class="dot d1"></span>
+        <span class="dot d2"></span>
+        <span class="dot d3"></span>
+        <span class="dot d4"></span>
+        <span class="dot d5"></span>
+        <span class="dot d6"></span>
+        <span class="dot d7"></span>
+        <span class="dot d8"></span>
+        <span class="dot d9"></span>
+        <span class="dot d10"></span>
+      </div>
+
+      <nav class="nav-row">
         {items.map((x, i) => (
           <>
             <a href={hrefMap[x]}>{x}</a>
             {i < items.length - 1 && <span class="sep">|</span>}
           </>
         ))}
-      </div>
-      <div class="copy">© my Calpis review site</div>
+      </nav>
+      <div class="copy">© 2026 my EMIEL diary review</div>
     </div>
-  </footer>
-)}
 
-{variant === 'ranking' && (
-  <footer class="ranking">
-    <CloudWave fill={wave} />
-    <div class="band">
-      <div class="ranking-center">
-        <div class="ranking-text">あなたのおすすめも教えてね！<br />SNSでもカルピス愛を発信中☺</div>
-        <div class="socials">
-          <SocialIcon kind="ig" size={36} />
-          <SocialIcon kind="x" size={36} />
-          <SocialIcon kind="note" size={36} />
-        </div>
+    {/* art layer: rendered above wave + band so nothing is clipped */}
+    <div class="art-layer" aria-hidden="true">
+      <img class="art bottle" src="/images/footer-bottle.png" alt="" />
+      <img class="art bubble bubble-l" src="/images/footer-bubble-thanks.png" alt="いつも見てくれてありがとう〜！" />
+      <img class="art bear" src="/images/footer-bear.png" alt="" />
+      <div class="socials">
+        <SocialIcon kind="ig" size={42} />
+        <SocialIcon kind="x" size={42} />
+        <SocialIcon kind="cup" size={42} />
       </div>
-      <div class="ranking-bottle">
-        <HandBottle size={110} />
-      </div>
-    </div>
-  </footer>
-)}
-
-{variant === 'contact' && (
-  <footer class="contact">
-    <CloudWave fill={wave} />
-    <div class="band">
-      <div class="contact-row">
-        <HandBottle size={92} />
-        <div class="bubble-pad">
-          <SpeechBubble>いつも見てくれて<br />ありがとう〜！</SpeechBubble>
-        </div>
-        <div class="follow">
-          <div class="follow-title">follow me <span>♡</span></div>
-          <div class="socials">
-            <SocialIcon kind="ig" size={34} />
-            <SocialIcon kind="x" size={34} />
-            <SocialIcon kind="note" size={34} />
-          </div>
-        </div>
-        <BearDoodle size={92} />
-        <div class="mailmag">
-          <div class="mailmag-lead">新着レビューをお届けします！</div>
-          <form class="mailmag-form" method="get" action="#">
-            <input type="email" placeholder="メールマガジンに登録" aria-label="メールアドレス" />
-            <button type="submit" aria-label="登録">→</button>
-          </form>
-        </div>
-        <div class="bubble-pad">
-          <SpeechBubble tail="right">これからも<br />よろしくね！</SpeechBubble>
-        </div>
-        <HandGlass size={70} />
-      </div>
-      <div class="divider"></div>
-      <div class="nav-row">
-        {items.map((x, i) => (
-          <>
-            <a href={hrefMap[x]}>{x}</a>
-            {i < items.length - 1 && <span class="sep">|</span>}
-          </>
-        ))}
-      </div>
-      <div class="copy">© my Calpis review site</div>
-    </div>
-  </footer>
-)}
-
-{variant === 'home' && (
-  <footer class="home">
-    <CloudWave fill={wave} />
-    <div class="band">
-      <div class="grid">
-        <div class="left">
-          <p class="lead"><em>new review</em>やお気に入りを</p>
-          <p class="sub">ゆるっとお届けします。</p>
-          <button class="subscribe">subscribe →</button>
-        </div>
-        <div class="center">
-          <BearDoodle size={94} />
-        </div>
-        <div class="right">
-          <p class="follow-title">follow me <span>→</span></p>
-          <div class="socials">
-            <SocialIcon kind="ig" size={34} />
-            <SocialIcon kind="x" size={34} />
-            <SocialIcon kind="note" size={34} />
-          </div>
-        </div>
-      </div>
-      <div class="floating-bottle">
-        <HandBottle size={100} />
-      </div>
-      <div class="divider"></div>
-      <div class="nav-row">
-        {items.map((x, i) => (
-          <>
-            <a href={hrefMap[x]}>{x}</a>
-            {i < items.length - 1 && <span class="sep">|</span>}
-          </>
-        ))}
-      </div>
-      <div class="copy">© my CALPIS 日誌 review site</div>
+      <img class="art bubble bubble-r" src="/images/footer-bubble-yoroshiku.png" alt="これからもよろしくね！" />
+      <img class="art cup" src="/images/footer-cup.png" alt="" />
     </div>
   </footer>
 )}
 
 <style>
 footer { position: relative; margin-top: 24px; }
+
+/* ============ review-list / review-detail ============ */
 footer.rl {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  padding: 20px 56px 32px;
-  margin-top: 40px;
+  justify-content: center;
+  padding: 32px 40px 0;
+  margin-top: 0;
 }
+.rl-pagination {
+  display: flex;
+  justify-content: center;
+}
+.rl-pagination :global(.pg) { margin-top: 0; }
 footer.rd { height: 24px; margin-top: 0; }
-.band {
+
+/* ============ shared footer ============ */
+footer.shared {
+  position: relative;
+  margin-top: 100px;            /* room for the bear above the wave */
+  overflow-x: clip;             /* no horizontal scroll from dots */
+}
+/* when shared follows rl, the rl bear already provides separation — tighten the gap */
+footer.rl + footer.shared { margin-top: 60px; }
+
+/* wave acts as a backdrop only */
+.wave-wrap {
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.shared .band {
+  position: relative;
+  z-index: 2;
   background: var(--cloud-soft);
-  padding: 28px 56px 20px;
+  padding: 48px 56px 18px;      /* socials end ~120px from footer top; band starts here, gap before nav */
   color: var(--ink-primary);
   font-family: var(--font-jp);
-  position: relative;
 }
-.archive .band { padding: 18px 56px 18px; }
-.ranking .band { padding: 24px 56px 28px; min-height: 90px; }
-.ranking-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 28px;
-  padding-right: 130px;
-}
-.ranking-text { font-size: 13px; line-height: 1.8; text-align: center; }
-.ranking-bottle { position: absolute; right: 40px; bottom: 8px; z-index: 2; }
-.contact .band { padding: 28px 40px 18px; }
-.contact-row {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 14px;
-  min-height: 130px;
-  flex-wrap: nowrap;
-}
-.bubble-pad { padding-bottom: 16px; flex-shrink: 0; }
-.follow { display: flex; flex-direction: column; align-items: center; gap: 10px; padding-bottom: 12px; }
-.follow-title { font-family: var(--font-display); font-style: italic; font-size: 20px; line-height: 1; }
-.follow-title span { font-family: var(--font-jp); font-size: 14px; }
-.socials { display: flex; gap: 8px; }
-.mailmag { display: flex; flex-direction: column; gap: 6px; padding-bottom: 16px; }
-.mailmag-lead { font-size: 11px; font-weight: 500; }
-.mailmag-form {
-  display: flex;
-  align-items: center;
-  background: #fff;
-  border-radius: 999px;
-  padding: 5px 6px 5px 18px;
-  border: 1px solid var(--accent);
-  width: 220px;
-}
-.mailmag-form input { font-size: 11px; flex: 1; border: none; outline: none; background: transparent; color: var(--ink-tertiary-2); }
-.mailmag-form button {
-  width: 28px; height: 28px;
-  border-radius: 50%;
-  border: none;
-  background: var(--ink-primary);
-  color: #fff;
-  cursor: pointer;
-  font-size: 13px;
-}
-.divider { height: 1px; background: #fff; opacity: 0.4; margin: 14px 0 8px; }
-.nav-row {
-  display: flex;
-  justify-content: center;
-  gap: 22px;
-  font-size: 13px;
-  font-family: var(--font-display);
-  font-style: italic;
-}
-.nav-row a { text-decoration: none; opacity: 0.85; color: inherit; }
-.sep { opacity: 0.35; }
-.copy { text-align: center; font-size: 10px; opacity: 0.65; margin-top: 6px; }
 
-.home .grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  align-items: end;
-  gap: 16px;
-  min-height: 120px;
+/* polka dots scattered on the cloud + above */
+.dots { position: absolute; inset: -60px 0 0; pointer-events: none; z-index: 3; }
+.dot {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  opacity: 0.55;
 }
-.home .left .lead { font-family: var(--font-display); font-style: italic; font-size: 16px; opacity: 0.85; }
-.home .left .lead em { font-style: italic; }
-.home .left .sub { font-size: 12px; margin: 0 0 12px; opacity: 0.85; }
-.home .left .subscribe {
-  padding: 6px 18px;
-  border-radius: 999px;
-  background: #fff;
-  border: 1px solid var(--accent);
-  color: var(--ink-primary);
+.dot.d1  { width: 10px; height: 10px; top: 12px;  left: 18%; }
+.dot.d2  { width: 6px;  height: 6px;  top: 70px;  left: 27%; opacity: 0.4; }
+.dot.d3  { width: 8px;  height: 8px;  top: 18px;  left: 38%; }
+.dot.d4  { width: 6px;  height: 6px;  top: 110px; left: 47%; opacity: 0.45; }
+.dot.d5  { width: 8px;  height: 8px;  top: 28px;  left: 56%; }
+.dot.d6  { width: 5px;  height: 5px;  top: 90px;  left: 64%; opacity: 0.5; }
+.dot.d7  { width: 8px;  height: 8px;  top: 8px;   left: 72%; }
+.dot.d8  { width: 6px;  height: 6px;  top: 100px; left: 78%; opacity: 0.45; }
+.dot.d9  { width: 9px;  height: 9px;  top: 30px;  left: 86%; }
+.dot.d10 { width: 6px;  height: 6px;  top: 78px;  left: 12%; opacity: 0.4; }
+
+/* art layer overlays the wave + band area */
+.art-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+}
+.art {
+  position: absolute;
+  display: block;
+  height: auto;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* bottle: straddles the wave/band boundary on the left, leaning left */
+.bottle {
+  width: 108px;
+  left: 4%;
+  top: -38px;
+  transform: rotate(-30deg);
+}
+
+/* left bubble (sits closer to the bottle, lifted up) */
+.bubble-l {
+  width: 168px;
+  left: 10%;
+  top: -44px;
+  transform: rotate(-3deg);
+}
+
+/* center bear: sits at the wave/band boundary, larger */
+.bear {
+  width: 276px;
+  left: 50%;
+  transform: translateX(-50%);
+  top: -56px;
+}
+
+/* right bubble (sits closer to the cup, lifted up) */
+.bubble-r {
+  width: 168px;
+  right: 10%;
+  top: -28px;
+  transform: rotate(3deg);
+}
+
+/* cup: straddles the wave/band boundary on the right */
+.cup {
+  width: 100px;
+  right: 4%;
+  top: -28px;
+  transform: rotate(4deg);
+}
+
+/* socials live INSIDE the band area, under the bear */
+.socials {
+  position: absolute;
+  z-index: 11;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 78px;             /* lower position under the bear */
+  display: flex;
+  gap: 18px;
+  pointer-events: auto;
+}
+.socials :global(.si) {
+  border: 1px solid var(--accent-soft) !important;
+  box-shadow: 0 1px 2px rgba(122, 169, 217, 0.12);
+}
+
+/* nav + copyright sit at the bottom of the band */
+.nav-row {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 22px;
+  font-size: 14px;
   font-family: var(--font-display);
   font-style: italic;
-  font-size: 14px;
-  cursor: pointer;
+  color: var(--accent-deeper);
+  margin-top: 4px;
 }
-.home .center { display: flex; justify-content: center; align-items: flex-end; }
-.home .right { display: flex; justify-content: center; align-items: flex-end; padding-right: 110px; }
-.home .right .follow-title { font-size: 20px; margin: 0 0 10px; }
-.floating-bottle { position: absolute; right: 32px; bottom: 50px; z-index: 2; }
+.nav-row a {
+  text-decoration: none;
+  color: inherit;
+  letter-spacing: 0.04em;
+}
+.nav-row a:hover { opacity: 0.7; }
+.sep { color: var(--accent); opacity: 0.6; }
+
+.copy {
+  position: relative;
+  z-index: 4;
+  text-align: center;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--accent-deeper);
+  margin-top: 10px;
+  opacity: 0.85;
+}
+
+/* ============ desktop large ============ */
+@media (min-width: 1280px) {
+  .bottle    { left: 5%; }
+  .bubble-l  { left: 11%; }
+  .bubble-r  { right: 11%; }
+  .cup       { right: 5%; }
+}
+
+/* ============ medium ============ */
+@media (max-width: 1100px) {
+  .bottle    { width: 88px; left: 2%; top: -28px; }
+  .bubble-l  { width: 144px; left: 8%; top: -22px; }
+  .bear      { width: 230px; top: -42px; }
+  .bubble-r  { width: 144px; right: 8%; top: -22px; }
+  .cup       { width: 84px; right: 2%; top: -18px; }
+  .socials   { top: 70px; }
+}
+
+/* ============ mobile ============ */
+@media (max-width: 768px) {
+  footer.rl {
+    padding: 0 16px;
+  }
+}
+
+@media (max-width: 760px) {
+  footer.shared { margin-top: 100px; }
+  .shared .band { padding: 38px 16px 16px; }
+  .bottle    { width: 60px; left: 2%;  top: -22px; }
+  .bubble-l  { width: 110px; left: 9%; top: -10px; }
+  .bear      { width: 150px; top: -22px; }
+  .bubble-r  { width: 110px; right: 9%; top: -10px; }
+  .cup       { width: 60px; right: 2%; top: -16px; }
+  .socials   { top: 56px; gap: 12px; }
+  .socials :global(.si) {
+    width: 32px !important; height: 32px !important;
+  }
+  .nav-row { flex-wrap: wrap; gap: 8px 12px; font-size: 13px; }
+  .copy { font-size: 12px; padding: 0 8px; }
+}
 </style>
