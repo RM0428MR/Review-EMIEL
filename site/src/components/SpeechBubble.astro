@@ -33,17 +33,27 @@ const { tail = 'left', color = '#fff', stroke = 'var(--accent-soft)', dashed = t
   </svg>
 </div>
 <style>
-.bubble { position: relative; display: inline-block; }
+.bubble {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+  margin-bottom: 18px;
+}
 .body {
-  border-radius: 28px;
+  display: inline-block;
+  border-radius: 22px;
   padding: 12px 22px;
   font-size: 13px;
   color: var(--ink-primary);
-  line-height: 1.6;
+  line-height: 1.7;
   font-family: var(--font-jp);
   box-shadow: var(--shadow-card);
+  white-space: nowrap;
+  word-break: keep-all;
+  text-align: center;
 }
-.tail { position: absolute; bottom: -16px; }
-.tail-left { left: 28px; }
-.tail-right { right: 28px; transform: scaleX(-1); }
+.body :global(br) { white-space: normal; }
+.tail { position: absolute; top: 100%; margin-top: -2px; }
+.tail-left { left: 22px; }
+.tail-right { right: 22px; transform: scaleX(-1); }
 </style>

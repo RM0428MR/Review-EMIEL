@@ -11,7 +11,12 @@ const [yyyy, mm, dd] = r.date.replaceAll('-', '.').split('.');
 <a class="card" href={`/reviews/${r.slug}`}>
   <div class="img">
     <ReviewImage r={r} variant="card" height={130} />
-    <div class="date">{yyyy}.{mm}<br /><span>{dd}</span></div>
+    <div class="date">
+      <svg class="date-cloud" viewBox="0 0 120 70" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M 60 6 C 72 -2 92 4 88 20 C 104 18 114 36 100 40 C 110 50 96 62 84 56 C 80 66 60 66 56 56 C 50 66 36 66 32 56 C 18 62 4 50 16 40 C 4 34 14 18 28 20 C 26 4 48 -2 60 6 Z" fill="#ffffff" stroke="rgba(122,169,217,0.55)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+      </svg>
+      <span class="date-text">{yyyy}<br />{mm}.{dd}</span>
+    </div>
     {r.badge && <div class="badge">{r.badge}</div>}
   </div>
   <div class="body">
@@ -30,7 +35,9 @@ const [yyyy, mm, dd] = r.date.replaceAll('-', '.').split('.');
 </a>
 <style>
 .card {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   background: var(--bg-card);
   border: var(--border-card);
   border-radius: 14px;
@@ -41,20 +48,35 @@ const [yyyy, mm, dd] = r.date.replaceAll('-', '.').split('.');
   transition: transform 0.2s, box-shadow 0.2s;
 }
 .card:hover { transform: translateY(-2px); box-shadow: var(--shadow-card); }
-.img { position: relative; }
+.img { position: relative; flex-shrink: 0; }
 .date {
   position: absolute;
-  top: 8px;
-  left: 8px;
-  background: rgba(255, 255, 255, 0.85);
-  border-radius: 6px;
-  padding: 2px 6px;
+  top: -6px;
+  left: -6px;
+  width: 56px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 10px;
   color: var(--ink-primary);
   font-family: var(--font-display);
-  line-height: 1.2;
+  font-weight: 600;
+  line-height: 1.15;
+  z-index: 3;
+  pointer-events: none;
 }
-.date span { font-size: 9px; }
+.date-cloud {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 1px 2px rgba(60, 90, 130, 0.12));
+}
+.date-text {
+  position: relative;
+  text-align: center;
+}
 .badge {
   position: absolute;
   top: 0;
@@ -67,14 +89,20 @@ const [yyyy, mm, dd] = r.date.replaceAll('-', '.').split('.');
   font-style: italic;
   clip-path: polygon(0 0, 100% 0, 100% 100%, 8px 100%, 0 70%);
 }
-.body { padding: 8px 4px 4px; }
+.body {
+  padding: 8px 4px 4px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
 .title { font-size: 12px; font-weight: 700; margin-top: 4px; color: var(--ink-primary); }
 .oneliner { font-size: 10px; line-height: 1.5; margin-top: 2px; color: var(--ink-tertiary); }
 .row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 6px;
+  margin-top: auto;
+  padding-top: 6px;
   gap: 4px;
   flex-wrap: wrap;
 }

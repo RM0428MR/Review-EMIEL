@@ -5,6 +5,7 @@ export type Variant = 'pet' | 'carton' | 'cup' | 'plastic';
 export type Cat = '定番' | '期間限定' | 'コラボ' | 'その他' | '新商品';
 export type Mood = 'さっぱり' | '濃厚' | 'フルーティー' | '甘め' | 'すっきり';
 export type Season = '春' | '夏' | '秋' | '冬' | '通年';
+export type DrinkMethod = 'そのまま' | '氷を入れて' | '牛乳で割って';
 
 export interface MicroCmsImage {
   url: string;
@@ -13,11 +14,11 @@ export interface MicroCmsImage {
 }
 
 export interface SubRatings {
-  subAmasa?: number;   // 甘さ
-  subKoisa?: number;   // 濃さ
-  subSappari?: number; // さっぱり感
-  subMilk?: number;    // ミルク感
-  subRepeat?: number;  // リピしたい度
+  subTaste?: number;       // 味のおいしさ
+  subEasy?: number;        // 飲みやすさ
+  subSpecial?: number;     // 特別感
+  subRepeat?: number;      // リピートしたさ
+  subAftertaste?: number;  // あと味
 }
 
 export interface ProductInfo {
@@ -45,14 +46,16 @@ export interface Review extends SubRatings, ProductInfo {
   heroImage?: MicroCmsImage;
   gallery?: MicroCmsImage[];
   officialUrl?: string;
+  recommendedDrink?: DrinkMethod;
+  recommendedDrinkNote?: string;
 }
 
 export const SUB_LABELS: Array<[keyof SubRatings, string]> = [
-  ['subAmasa', '甘さ'],
-  ['subKoisa', '濃さ'],
-  ['subSappari', 'さっぱり感'],
-  ['subMilk', 'ミルク感'],
-  ['subRepeat', 'リピしたい度'],
+  ['subTaste', '味のおいしさ'],
+  ['subEasy', '飲みやすさ'],
+  ['subAftertaste', 'あと味'],
+  ['subSpecial', '特別感'],
+  ['subRepeat', 'リピートしたさ'],
 ];
 
 export function visibleSubRatings(r: Review): Array<{ label: string; value: number }> {
