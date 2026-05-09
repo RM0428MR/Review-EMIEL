@@ -35,3 +35,4 @@
 | [0003](0003-contact-form-cfp-discord.md) | お問い合わせ：CFP Function + Turnstile + Discord Webhook | Accepted |
 | [0004](0004-design-source-claude-design-not-pencil.md) | 実装ソースの真：claude-design jsx（Pencil は学習用に降格） | Accepted |
 | [0005](0005-handglass-as-hamburger.md) | ナビゲーション：HandGlass（カップ）をハンバーガー扱いに統一 | Accepted |
+| [0006](0006-brand-copyright-policy.md) | ブランド表記・著作権ポリシー（個人ファンサイトとしての立ち位置） | Accepted |
