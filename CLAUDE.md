@@ -157,7 +157,6 @@ Review-Calpis/
 │   └── uploads/
 ├── design/
 │   ├── _sample.epgz             ← Pencil フォーマット参考
-│   ├── source/                  ← 旧 ChatGPT モック（参考用、非アクティブ）
 │   └── pencil/                  ← Pencil 学習用 .epgz
 │       ├── _test1.epgz
 │       ├── 06-contact.epgz      ← 旧学習素材
@@ -240,3 +239,4 @@ FE/デザイン/
 - 元デザイン（claude-design）からのトレースは **構造優先・実装で使える形** で行う
 - Pencil 編集中は MCP 操作で破壊的変更しないよう注意
 - 「CALPIS」公式ロゴ・公式パッケージ画像は使わない（個人ファン日誌として運営）
+- 公開サイト名・ロゴ・写真の扱いは [`ADR/0006-brand-copyright-policy.md`](ADR/0006-brand-copyright-policy.md) を参照（AI生成のパッケージ模写画像も使用禁止）
