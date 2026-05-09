@@ -1,6 +1,7 @@
 # site/ — Astro 実装本体
 
 Phase 3 の本実装。`pnpm dev` でローカル開発、`pnpm build` で `dist/` に静的サイト出力。
+Astro Dev Toolbar は通常は非表示で、必要なときだけ `pnpm dev:toolbar` で起動する。
 
 ## セットアップ
 
@@ -14,7 +15,8 @@ cp .env.example .env
 
 | コマンド | 説明 |
 |---|---|
-| `pnpm dev` | dev サーバ起動（既定 http://localhost:4321） |
+| `pnpm dev` | dev サーバ起動（既定 http://localhost:4321、Dev Toolbar は非表示） |
+| `pnpm dev:toolbar` | Dev Toolbar を有効にして dev サーバ起動 |
 | `pnpm build` | 型チェック + 静的ビルド（→ `dist/`） |
 | `pnpm preview` | ビルド結果のローカルプレビュー |
 | `pnpm check` | 型チェックのみ |

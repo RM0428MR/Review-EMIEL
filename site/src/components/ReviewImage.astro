@@ -9,12 +9,12 @@ interface Props {
 }
 const { r, variant = 'card', height, alt } = Astro.props;
 
-// claude-design ProductPhoto の代替：実画像が無いのでカラーフレーム + ボトル形プレースホルダー。
-// microCMS の heroImage が入ったら <img src> に切替。
 const aspectRatio = variant === 'hero' ? '16 / 9' : variant === 'detail' ? '3 / 4' : '5 / 7';
 const h = height ?? (variant === 'hero' ? 192 : variant === 'detail' ? 280 : variant === 'thumb' ? 56 : 140);
 
 const bg = `linear-gradient(160deg, ${r.tint} 0%, #fff 60%, #fefaf2 100%)`;
+const gradId = `${r.id}-${variant}`;
+const shape = r.variant; // 'pet' | 'carton' | 'cup' | 'plastic'
 ---
 <div
   class="ri"
@@ -23,19 +23,145 @@ const bg = `linear-gradient(160deg, ${r.tint} 0%, #fff 60%, #fefaf2 100%)`;
 >
   {r.heroImage?.url ? (
     <img src={r.heroImage.url} alt={alt ?? r.name} loading="lazy" />
-  ) : (
+  ) : shape === 'carton' ? (
     <svg viewBox="0 0 100 150" class="bottle" aria-hidden="true">
-      <rect x="40" y="2" width="20" height="9" fill="#cbd5e0" rx="1.5" />
-      <path
-        d="M 38 11 L 62 11 L 64 22 Q 68 32 66 44 L 66 134 Q 66 144 56 144 L 44 144 Q 34 144 34 134 L 34 44 Q 32 32 36 22 Z"
-        fill={r.tint}
-        stroke="#9aaab8"
-        stroke-width="0.6"
-      />
-      <rect x="36" y="48" width="28" height="62" fill="#fff" stroke={r.accent} stroke-width="0.5" />
-      <rect x="36" y="68" width="28" height="14" fill={r.accent} opacity="0.85" />
-      <text x="50" y="78" font-size="6.5" fill="#fff" text-anchor="middle" font-weight="700" font-family="sans-serif">CALPIS</text>
-      <text x="50" y="92" font-size="3.5" fill={r.accent} text-anchor="middle" font-family="sans-serif">{r.name}</text>
+      <defs>
+        <linearGradient id={`gloss-${gradId}`} x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="rgba(255,255,255,0.55)" />
+          <stop offset="35%" stop-color="rgba(255,255,255,0)" />
+          <stop offset="100%" stop-color="rgba(0,0,0,0.18)" />
+        </linearGradient>
+      </defs>
+      <ellipse cx="50" cy="146" rx="22" ry="2" fill="black" opacity="0.12" />
+      {/* gable top */}
+      <path d="M 30 28 L 50 14 L 70 28 Z" fill={r.tint} stroke="rgba(0,0,0,0.2)" stroke-width="0.5" />
+      <path d="M 50 14 L 50 28" stroke="rgba(0,0,0,0.18)" stroke-width="0.5" />
+      <path d="M 30 28 L 50 22 L 70 28" stroke="rgba(0,0,0,0.15)" stroke-width="0.4" fill="none" />
+      {/* spout fold */}
+      <path d="M 44 18 L 50 14 L 56 18 L 56 24 L 44 24 Z" fill="rgba(0,0,0,0.06)" stroke="rgba(0,0,0,0.15)" stroke-width="0.3" />
+      {/* body */}
+      <rect x="30" y="28" width="40" height="116" fill={r.tint} stroke="rgba(0,0,0,0.2)" stroke-width="0.5" />
+      {/* side fold shadow */}
+      <rect x="62" y="28" width="8" height="116" fill="rgba(0,0,0,0.08)" />
+      {/* white label area */}
+      <rect x="32" y="58" width="36" height="56" fill="white" opacity="0.92" />
+      <rect x="32" y="76" width="36" height="14" fill={r.accent} opacity="0.9" />
+      <text x="50" y="86" font-size="7.5" fill="white" text-anchor="middle" font-weight="900" font-family="sans-serif" letter-spacing="0.3">EMIEL</text>
+      <text x="50" y="100" font-size="3.5" fill={r.accent} text-anchor="middle" font-family="sans-serif" font-weight="700">{r.name}</text>
+      <text x="50" y="68" font-size="2.5" fill="rgba(0,0,0,0.4)" text-anchor="middle" font-family="sans-serif">{r.infoType ?? '乳酸飲料'}</text>
+      {/* gloss overlay */}
+      <rect x="30" y="14" width="40" height="130" fill={`url(#gloss-${gradId})`} />
+    </svg>
+  ) : shape === 'cup' ? (
+    <svg viewBox="0 0 100 150" class="bottle" aria-hidden="true">
+      <defs>
+        <linearGradient id={`gloss-${gradId}`} x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="rgba(255,255,255,0.6)" />
+          <stop offset="40%" stop-color="rgba(255,255,255,0)" />
+          <stop offset="100%" stop-color="rgba(0,0,0,0.2)" />
+        </linearGradient>
+        <linearGradient id={`cream-${gradId}`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="white" />
+          <stop offset="100%" stop-color={r.tint} />
+        </linearGradient>
+      </defs>
+      <ellipse cx="50" cy="146" rx="22" ry="2" fill="black" opacity="0.12" />
+      {/* cup body (slightly tapered) */}
+      <path d="M 28 50 L 72 50 L 68 142 Q 68 144 66 144 L 34 144 Q 32 144 32 142 Z" fill={r.tint} stroke="rgba(0,0,0,0.2)" stroke-width="0.5" />
+      {/* rim */}
+      <ellipse cx="50" cy="50" rx="22" ry="3.5" fill="white" stroke="rgba(0,0,0,0.18)" stroke-width="0.4" />
+      <ellipse cx="50" cy="50" rx="22" ry="3.5" fill="rgba(0,0,0,0.06)" />
+      {/* cream / sherbet on top */}
+      <path d="M 30 50 Q 36 38 44 44 Q 50 36 56 44 Q 64 38 70 50 Z" fill={`url(#cream-${gradId})`} stroke="rgba(0,0,0,0.15)" stroke-width="0.4" />
+      {/* label band */}
+      <rect x="30" y="80" width="40" height="14" fill={r.accent} opacity="0.9" />
+      <text x="50" y="90" font-size="7" fill="white" text-anchor="middle" font-weight="900" font-family="sans-serif" letter-spacing="0.3">EMIEL</text>
+      <text x="50" y="108" font-size="3.5" fill={r.accent} text-anchor="middle" font-family="sans-serif" font-weight="700">{r.name}</text>
+      <text x="50" y="128" font-size="2.6" fill="rgba(0,0,0,0.4)" text-anchor="middle" font-family="sans-serif">{r.infoType ?? '氷菓'}</text>
+      {/* gloss overlay */}
+      <path d="M 28 50 L 72 50 L 68 142 Q 68 144 66 144 L 34 144 Q 32 144 32 142 Z" fill={`url(#gloss-${gradId})`} />
+    </svg>
+  ) : (
+    /* default: PET bottle (also for 'plastic') */
+    <svg viewBox="0 0 100 150" class="bottle" aria-hidden="true">
+      <defs>
+        <linearGradient id={`gloss-${gradId}`} x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="rgba(255,255,255,0.6)" />
+          <stop offset="35%" stop-color="rgba(255,255,255,0)" />
+          <stop offset="65%" stop-color="rgba(0,0,0,0.04)" />
+          <stop offset="100%" stop-color="rgba(0,0,0,0.22)" />
+        </linearGradient>
+        <linearGradient id={`liquid-${gradId}`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color={r.accent} stop-opacity="0.55" />
+          <stop offset="100%" stop-color={r.accent} stop-opacity="0.35" />
+        </linearGradient>
+        <linearGradient id={`cap-${gradId}`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color={r.accent} />
+          <stop offset="50%" stop-color={r.accent} stop-opacity="0.9" />
+          <stop offset="100%" stop-color="rgba(0,0,0,0.4)" />
+        </linearGradient>
+      </defs>
+      {/* shadow */}
+      <ellipse cx="50" cy="146" rx="18" ry="2" fill="black" opacity="0.13" />
+      {/* cap */}
+      <rect x="42" y="2" width="16" height="9" fill={`url(#cap-${gradId})`} rx="1.6" />
+      {/* cap ridges */}
+      <line x1="43.5" y1="3.5" x2="43.5" y2="9" stroke="rgba(0,0,0,0.18)" stroke-width="0.3" />
+      <line x1="45.5" y1="3.5" x2="45.5" y2="9" stroke="rgba(0,0,0,0.12)" stroke-width="0.3" />
+      <line x1="47.5" y1="3.5" x2="47.5" y2="9" stroke="rgba(0,0,0,0.12)" stroke-width="0.3" />
+      <line x1="49.5" y1="3.5" x2="49.5" y2="9" stroke="rgba(0,0,0,0.12)" stroke-width="0.3" />
+      <line x1="51.5" y1="3.5" x2="51.5" y2="9" stroke="rgba(0,0,0,0.12)" stroke-width="0.3" />
+      <line x1="53.5" y1="3.5" x2="53.5" y2="9" stroke="rgba(0,0,0,0.12)" stroke-width="0.3" />
+      <line x1="55.5" y1="3.5" x2="55.5" y2="9" stroke="rgba(0,0,0,0.12)" stroke-width="0.3" />
+      <line x1="56.5" y1="3.5" x2="56.5" y2="9" stroke="rgba(0,0,0,0.18)" stroke-width="0.3" />
+      <ellipse cx="50" cy="3" rx="7" ry="0.8" fill="rgba(255,255,255,0.5)" />
+      {/* tamper-evident ring under cap */}
+      <rect x="42" y="11" width="16" height="2.4" fill={r.tint} stroke="rgba(0,0,0,0.22)" stroke-width="0.4" />
+      {/* PET bottle: narrow neck → curved shoulder → straight body → curved base */}
+      <path d="M 43 13.4
+               Q 43 27 33 33
+               L 33 130
+               Q 33 144 44 144
+               L 56 144
+               Q 67 144 67 130
+               L 67 33
+               Q 57 27 57 13.4 Z"
+            fill={r.tint} stroke="rgba(0,0,0,0.22)" stroke-width="0.5" />
+      {/* horizontal contour grip lines on body */}
+      <line x1="34.5" y1="46" x2="65.5" y2="46" stroke="rgba(0,0,0,0.08)" stroke-width="0.4" />
+      <line x1="34.5" y1="124" x2="65.5" y2="124" stroke="rgba(0,0,0,0.08)" stroke-width="0.4" />
+      <line x1="34.5" y1="128" x2="65.5" y2="128" stroke="rgba(0,0,0,0.08)" stroke-width="0.4" />
+      {/* liquid (offset slightly inward) */}
+      <path d="M 35 32.5
+               L 35 130
+               Q 35 142 44.5 142
+               L 55.5 142
+               Q 65 142 65 130
+               L 65 32.5 Z"
+            fill={`url(#liquid-${gradId})`} />
+      {/* liquid surface */}
+      <ellipse cx="50" cy="32.5" rx="15" ry="1.8" fill={r.accent} opacity="0.6" />
+      {/* white label */}
+      <rect x="34" y="58" width="32" height="58" fill="white" stroke="rgba(0,0,0,0.12)" stroke-width="0.4" />
+      {/* accent band */}
+      <rect x="34" y="76" width="32" height="14" fill={r.accent} opacity="0.92" />
+      {/* small text above EMIEL */}
+      <text x="50" y="68" font-size="2.6" fill="rgba(0,0,0,0.4)" text-anchor="middle" font-family="sans-serif">{r.infoType ?? '乳酸飲料'}</text>
+      <text x="50" y="86" font-size="7.4" fill="white" text-anchor="middle" font-weight="900" font-family="sans-serif" letter-spacing="0.4">EMIEL</text>
+      <text x="50" y="100" font-size="3.5" fill={r.accent} text-anchor="middle" font-family="sans-serif" font-weight="700">{r.name}</text>
+      <text x="50" y="110" font-size="2.5" fill="rgba(0,0,0,0.35)" text-anchor="middle" font-family="sans-serif">{r.infoVolume ?? ''}</text>
+      {/* glossy highlight stripe on left */}
+      <ellipse cx="38" cy="80" rx="1.6" ry="44" fill="rgba(255,255,255,0.5)" />
+      {/* overall gloss overlay */}
+      <path d="M 43 13.4
+               Q 43 27 33 33
+               L 33 130
+               Q 33 144 44 144
+               L 56 144
+               Q 67 144 67 130
+               L 67 33
+               Q 57 27 57 13.4 Z"
+            fill={`url(#gloss-${gradId})`} />
     </svg>
   )}
 </div>
@@ -48,7 +174,8 @@ const bg = `linear-gradient(160deg, ${r.tint} 0%, #fff 60%, #fefaf2 100%)`;
   align-items: flex-end;
   justify-content: center;
   padding-bottom: 8px;
+  width: 100%;
 }
-.ri img { width: 100%; height: 100%; object-fit: cover; }
-.bottle { height: 80%; max-height: 110px; }
+.ri img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.bottle { height: 88%; max-height: 130px; display: block; margin: 0 auto; }
 </style>

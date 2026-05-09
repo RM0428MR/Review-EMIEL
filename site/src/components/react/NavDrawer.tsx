@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 const NAV_ITEMS = [
   { id: 'home', label: 'Home', sub: 'トップページへ', href: '/' },
   { id: 'review', label: 'Review', sub: 'すべてのレビューを見る', href: '/reviews' },
-  { id: 'ranking', label: 'Ranking', sub: '人気のカルピスランキング', href: '/ranking' },
+  { id: 'ranking', label: 'Ranking', sub: '人気のエミエルランキング', href: '/ranking' },
   { id: 'archive', label: 'Archive', sub: '月別のレビュー一覧', href: '/archive' },
   { id: 'contact', label: 'Contact', sub: 'お問い合わせ・ご依頼', href: '/contact' },
   { id: 'about', label: 'About', sub: 'このサイトについて', href: '/about' },
@@ -39,8 +39,9 @@ export default function NavDrawer() {
         aria-expanded={open}
         aria-controls="nav-drawer"
         onClick={() => setOpen(true)}
+        title="メニューを開く"
       >
-        <img src="/images/calpis_cup.png" alt="" width={32} height={32 * (88 / 62)} aria-hidden="true" />
+        <img src="/images/calpis_cup.png" alt="" width={26} height={26 * (88 / 62)} aria-hidden="true" />
       </button>
 
       {open && (
@@ -63,9 +64,9 @@ export default function NavDrawer() {
 
             <div className="logo">
               <div className="logo-text">
-                <span className="lg-my">My</span>
-                <span className="lg-jp">カルピス</span>
-                <span className="lg-rev">Review</span>
+                <span className="lg-my">my</span>
+                <span className="lg-jp">エミエル</span>
+                <span className="lg-rev">review</span>
               </div>
               <div className="logo-imgs">
                 <img src="/images/calpis_cup.png" alt="" width={36} height={36 * (88 / 62)} />
@@ -89,7 +90,7 @@ export default function NavDrawer() {
             <div className="socials">
               {SOCIALS.map((s) => (
                 <a key={s.k} href={s.href} className="social" aria-label={s.label}>
-                  <span className="bubble">
+                  <span className="nav-bubble">
                     {s.k === 'ig' && (
                       <svg width={20} height={20} viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.4">
                         <rect x="2" y="2" width="10" height="10" rx="2.5" />
@@ -123,13 +124,33 @@ export default function NavDrawer() {
 
       <style>{`
         .trigger {
-          background: none;
-          border: none;
-          cursor: pointer;
+          background: #ffffff;
+          border: 2px dashed #7aa9d9;
+          border-radius: 50%;
+          width: 48px;
+          height: 48px;
           padding: 0;
+          cursor: pointer;
           display: inline-flex;
           align-items: center;
           justify-content: center;
+          transition: all 0.18s ease;
+          box-shadow: 0 2px 6px rgba(122, 169, 217, 0.18);
+        }
+        .trigger:hover {
+          background: #eaf4fc;
+          border-style: solid;
+          transform: translateY(-1px);
+          box-shadow: 0 4px 10px rgba(122, 169, 217, 0.28);
+        }
+        .trigger:active { transform: translateY(0); }
+        .trigger:focus-visible {
+          outline: 2px solid #7aa9d9;
+          outline-offset: 2px;
+        }
+        .trigger[aria-expanded="true"] {
+          background: #eaf4fc;
+          border-style: solid;
         }
         .overlay {
           position: fixed;
@@ -180,7 +201,7 @@ export default function NavDrawer() {
         }
         .logo-text { display: flex; flex-direction: column; line-height: 1; align-items: flex-start; }
         .lg-my { font-family: var(--font-display); font-style: italic; font-size: 26px; color: #7aa9d9; margin-left: 18px; }
-        .lg-jp { font-family: var(--font-logo); font-size: 36px; color: #1f5fa8; letter-spacing: -0.5px; margin-top: 4px; }
+        .lg-jp { font-family: var(--font-logo); font-weight: 800; font-size: 36px; color: #1f5fa8; letter-spacing: -0.2px; margin-top: 4px; }
         .lg-rev { font-family: var(--font-display); font-style: italic; font-size: 22px; color: #7aa9d9; align-self: flex-end; margin-right: 8px; margin-top: 2px; }
         .logo-imgs { display: flex; align-items: flex-end; gap: 4px; margin-bottom: 4px; }
 
@@ -197,10 +218,17 @@ export default function NavDrawer() {
           grid-template-columns: 44px 1fr 18px;
           align-items: center;
           gap: 12px;
-          padding: 18px 4px;
+          padding: 18px 12px;
           border-bottom: 1px dashed #d7e6f1;
+          border-radius: 10px;
           text-decoration: none;
           color: inherit;
+          transition: background 0.15s ease;
+        }
+        .row:hover,
+        .row:focus-visible {
+          background: #eaf4fc;
+          outline: none;
         }
         .row-label { font-size: 18px; font-weight: 700; color: #1f5fa8; font-family: var(--font-jp); letter-spacing: 0.3px; }
         .row-sub { font-size: 12px; color: #7a98b8; margin-top: 3px; font-family: var(--font-jp); }
@@ -220,7 +248,7 @@ export default function NavDrawer() {
           text-decoration: none;
           color: inherit;
         }
-        .bubble {
+        .nav-bubble {
           width: 44px;
           height: 44px;
           border-radius: 50%;

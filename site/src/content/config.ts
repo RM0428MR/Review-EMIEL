@@ -7,6 +7,25 @@ const site = defineCollection({
     catch: z.string().optional(),
     intro: z.string().optional(),
     avatar: z.string().optional(),
+    heroBubble: z.string().optional(),
+    profile: z
+      .object({
+        reviewCount: z.string().optional(),
+        favoriteFlavor: z.string().optional(),
+        timing: z.string().optional(),
+        favoriteWay: z.string().optional(),
+        updateRhythm: z.string().optional(),
+      })
+      .optional(),
+    capabilities: z
+      .array(
+        z.object({
+          title: z.string(),
+          body: z.string(),
+          icon: z.enum(['cup', 'heart', 'sparkle']).optional(),
+        }),
+      )
+      .optional(),
     topics: z
       .array(
         z.object({

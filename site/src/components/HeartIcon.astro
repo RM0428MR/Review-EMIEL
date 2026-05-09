@@ -1,13 +1,29 @@
 ---
-interface Props { filled?: boolean; size?: number; color?: string; }
-const { filled = true, size = 16, color = 'var(--accent)' } = Astro.props;
+interface Props { fill?: 'full' | 'half' | 'none'; filled?: boolean; size?: number; color?: string; }
+const { fill, filled = true, size = 16, color = 'var(--accent)' } = Astro.props;
+const mode: 'full' | 'half' | 'none' = fill ?? (filled ? 'full' : 'none');
+const clipId = `hc-${Math.random().toString(36).slice(2, 9)}`;
 ---
 <svg viewBox="0 0 24 24" width={size} height={size} aria-hidden="true">
+  {mode === 'half' && (
+    <defs>
+      <clipPath id={clipId}>
+        <rect x="0" y="0" width="12" height="24" />
+      </clipPath>
+    </defs>
+  )}
   <path
     d="M12 21s-7-4.5-9.5-9C.5 8 3 4 7 4c2 0 3.5 1 5 3 1.5-2 3-3 5-3 4 0 6.5 4 4.5 8C19 16.5 12 21 12 21z"
-    fill={filled ? color : 'none'}
+    fill={mode === 'full' ? color : 'none'}
     stroke={color}
     stroke-width="1.6"
     stroke-linejoin="round"
   />
+  {mode === 'half' && (
+    <path
+      d="M12 21s-7-4.5-9.5-9C.5 8 3 4 7 4c2 0 3.5 1 5 3 1.5-2 3-3 5-3 4 0 6.5 4 4.5 8C19 16.5 12 21 12 21z"
+      fill={color}
+      clip-path={`url(#${clipId})`}
+    />
+  )}
 </svg>

@@ -4,7 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import ReviewImage from '../components/ReviewImage.astro';
 import BearDoodle from '../components/BearDoodle.astro';
-import SpeechBubble from '../components/SpeechBubble.astro';
+import ArchiveBrowser from '../components/react/ArchiveBrowser.tsx';
 import { listReviews } from '../lib/microcms.ts';
 import { getMonth, archiveYearBucket } from '../lib/format.ts';
 
@@ -23,6 +23,15 @@ const yearOrder = Array.from(buckets.keys()).sort((a, b) => {
   return parseInt(b) - parseInt(a);
 });
 
+// month buckets (1..12) — cross-year grouping for 月別ビュー
+const monthBuckets = new Map<number, typeof all>();
+for (const r of all) {
+  const m = getMonth(r.date);
+  if (!monthBuckets.has(m)) monthBuckets.set(m, []);
+  monthBuckets.get(m)!.push(r);
+}
+const monthOrder = Array.from({ length: 12 }, (_, i) => i + 1);
+
 const yearList = ['すべての年代', '2024年', '2023年', '2022年', '2021年', '2020年', 'それ以前'];
 const yearCount = (y: string) => (y === 'すべての年代' ? all.length : buckets.get(y)?.length ?? 0);
 ---
@@ -31,16 +40,18 @@ const yearCount = (y: string) => (y === 'すべての年代' ? all.length : buck
 
   <section class="head">
     <div class="head-l">
-      <h1>archive</h1>
-      <p>これまでにレビューしたカルピスたちを<br />月ごと・年ごとにまとめています。</p>
-      <div class="head-bear"><BearDoodle size={50} /></div>
+      <div class="head-bear"><BearDoodle size={70} /></div>
+      <div class="head-text">
+        <h1>archive</h1>
+        <p>これまでにレビューしたエミエルたちを<br />月ごと・年ごとにまとめています。</p>
+      </div>
     </div>
     <div class="head-c">
       <div class="toggle">
-        <a href="/archive" class="on">年別で見る</a>
-        <a href="/archive?mode=month">月別で見る</a>
+        <button type="button" class="on" data-archive-mode="year">年別で見る</button>
+        <button type="button" data-archive-mode="month">月別で見る</button>
       </div>
-      <SpeechBubble>いろんなカルピスとの<br />思い出がいっぱい…！</SpeechBubble>
+      <img class="omoide-bubble" src="/images/bubble-omoide.png" alt="いろんなエミエルとの思い出がいっぱい…！" />
     </div>
     <div class="count">
       <div class="lbl">レビューした数</div>
@@ -52,9 +63,9 @@ const yearCount = (y: string) => (y === 'すべての年代' ? all.length : buck
   <section class="body">
     <aside class="sidebar">
       {yearList.map((y) => (
-        <a class={`yrow ${y === '2024年' ? 'on' : ''}`} href={`/archive?year=${encodeURIComponent(y)}`}>
+        <button type="button" class={`yrow ${y === 'すべての年代' ? 'on' : ''}`} data-archive-year={y}>
           <span>{y}</span><span class="cnt">{yearCount(y)}</span>
-        </a>
+        </button>
       ))}
       <div class="bear-pad">
         <BearDoodle size={50} />
@@ -63,29 +74,65 @@ const yearCount = (y: string) => (y === 'すべての年代' ? all.length : buck
     </aside>
 
     <div class="content">
-      {yearOrder.map((y) => (
-        <div class="ysec">
-          <div class="ysec-head">
-            <h3>{y} 〜</h3>
-            <span class="ycnt">{(buckets.get(y) ?? []).length}件のレビュー</span>
+      <div data-archive-year-view>
+        {yearOrder.map((y) => (
+          <div class="ysec" data-archive-section>
+            <div class="ysec-head">
+              {y === 'それ以前' ? (
+                <h3 class="y-prev">それ以前</h3>
+              ) : (
+                <h3>
+                  <span class="year-num">{y.replace('年', '')}</span>
+                </h3>
+              )}
+              <span class="ycnt" data-archive-section-count>{(buckets.get(y) ?? []).length}件のレビュー</span>
+            </div>
+            <div class="ygrid">
+              {(buckets.get(y) ?? []).slice(0, 12).map((r) => (
+                <a class="acard" href={`/reviews/${r.slug}`} data-archive-card data-year={archiveYearBucket(r.date)}>
+                  <div class="mbadge">{getMonth(r.date)}月</div>
+                  <ReviewImage r={r} variant="card" height={70} />
+                  <div class="aname">エミエル {r.name}</div>
+                  <div class="ameta">
+                    <span>{r.date}</span>
+                    <span>♡ 1件</span>
+                  </div>
+                </a>
+              ))}
+            </div>
           </div>
-          <div class="ygrid">
-            {(buckets.get(y) ?? []).slice(0, 12).map((r) => (
-              <a class="acard" href={`/reviews/${r.slug}`}>
-                <div class="mbadge">{getMonth(r.date)}月</div>
-                <ReviewImage r={r} variant="card" height={70} />
-                <div class="aname">カルピス {r.name}</div>
-                <div class="ameta">
-                  <span>{r.date}</span>
-                  <span>♡ 1件</span>
-                </div>
-              </a>
-            ))}
+        ))}
+      </div>
+
+      <div data-archive-month-view hidden>
+        {monthOrder.map((m) => (
+          <div class="ysec" data-archive-section>
+            <div class="ysec-head">
+              <h3>
+                <span class="month-num">{m}</span><span class="month-suffix">月</span>
+              </h3>
+              <span class="ycnt" data-archive-section-count>{(monthBuckets.get(m) ?? []).length}件のレビュー</span>
+            </div>
+            <div class="ygrid">
+              {(monthBuckets.get(m) ?? []).slice(0, 12).map((r) => (
+                <a class="acard" href={`/reviews/${r.slug}`} data-archive-card data-year={archiveYearBucket(r.date)}>
+                  <div class="mbadge">{archiveYearBucket(r.date)}</div>
+                  <ReviewImage r={r} variant="card" height={70} />
+                  <div class="aname">エミエル {r.name}</div>
+                  <div class="ameta">
+                    <span>{r.date}</span>
+                    <span>♡ 1件</span>
+                  </div>
+                </a>
+              ))}
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   </section>
+
+  <ArchiveBrowser client:load yearList={yearList} />
 
   <Footer variant="archive" />
 </BaseLayout>
@@ -98,27 +145,43 @@ const yearCount = (y: string) => (y === 'すべての年代' ? all.length : buck
   gap: 20px;
   align-items: center;
 }
-.head-l { position: relative; }
+.head-l { display: flex; align-items: center; gap: 14px; }
+.head-text { min-width: 0; }
 .head h1 { font-family: var(--font-display); font-style: italic; font-size: var(--fs-hero); color: var(--accent); margin: 0; line-height: 1; }
 .head p { font-size: 12px; margin-top: 8px; color: var(--ink-tertiary); }
-.head-bear { position: absolute; top: 4px; left: 200px; }
-.head-c { display: flex; align-items: center; justify-content: center; gap: 12px; }
+.head-bear { flex-shrink: 0; }
+.head-c { display: flex; align-items: center; justify-content: center; gap: 14px; position: relative; }
+.head-c .toggle { flex-shrink: 0; }
 .toggle {
   display: inline-flex;
   background: var(--bg-card);
   border: var(--border-card);
-  border-radius: 999px;
+  border-radius: 999.008px;
   padding: 4px;
 }
-.toggle a {
+.toggle button {
   padding: 6px 18px;
   font-size: 12px;
-  border-radius: 999px;
-  text-decoration: none;
+  border-radius: 999.008px;
+  border: none;
+  background: transparent;
   color: var(--ink-tertiary);
   font-family: var(--font-jp);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
 }
-.toggle a.on { background: var(--accent); color: #fff; }
+.toggle button:hover:not(.on) { background: rgba(122, 169, 217, 0.12); }
+.toggle button.on { background: var(--accent); color: #fff; }
+.omoide-bubble {
+  width: 240px;
+  height: auto;
+  display: block;
+  position: absolute;
+  left: calc(100% + 12px);
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
 .count {
   background: var(--bg-card);
   border: var(--border-card);
@@ -148,23 +211,75 @@ const yearCount = (y: string) => (y === 'すべての年代' ? all.length : buck
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
   padding: 8px 12px;
   font-size: 12px;
+  border: none;
   border-radius: 8px;
+  background: transparent;
+  text-align: left;
   text-decoration: none;
   color: var(--ink-secondary);
   font-family: var(--font-jp);
   margin-bottom: 2px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
 }
+.yrow:hover:not(.on) { background: rgba(122, 169, 217, 0.12); }
 .yrow.on { background: var(--accent); color: #fff; }
 .yrow .cnt { font-size: 10px; opacity: 0.8; }
 .bear-pad { margin-top: 14px; text-align: center; padding: 10px; font-size: 10px; color: var(--ink-tertiary-2); }
 
 .content { display: flex; flex-direction: column; gap: 30px; }
-.ysec-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 12px; }
-.ysec-head h3 { font-size: 22px; font-weight: 600; color: var(--ink-primary); margin: 0; font-family: var(--font-display); }
-.ycnt { font-size: 11px; color: var(--accent); }
-.ygrid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
+.ysec-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.ysec-head h3 {
+  margin: 0;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  font-family: var(--font-display);
+}
+.year-num {
+  font-size: 38px;
+  font-style: italic;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 1px;
+  line-height: 1;
+}
+.month-num {
+  font-size: 38px;
+  font-style: italic;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 1px;
+  line-height: 1;
+}
+.month-suffix {
+  font-size: 18px;
+  font-family: var(--font-jp);
+  color: var(--accent);
+  margin-left: 4px;
+}
+.y-prev {
+  font-family: var(--font-jp);
+  font-size: 22px;
+  color: var(--ink-secondary);
+  font-weight: 600;
+  margin: 0;
+}
+.ycnt {
+  font-size: 12px;
+  color: var(--accent);
+  font-family: var(--font-display);
+  font-style: italic;
+}
+.ygrid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
 .acard {
   background: var(--bg-card);
   border: var(--border-card);
@@ -178,13 +293,15 @@ const yearCount = (y: string) => (y === 'すべての年代' ? all.length : buck
   position: absolute;
   top: -6px;
   left: 6px;
+  z-index: 2;
   background: var(--badge-bg);
   color: var(--accent);
   font-size: 10px;
-  padding: 1px 8px;
-  border-radius: 999px;
+  padding: 2px 10px;
+  border-radius: 999.008px;
   font-family: var(--font-jp);
   font-weight: 600;
+  box-shadow: 0 1px 3px rgba(60, 90, 130, 0.1);
 }
 .aname { font-size: 10px; font-weight: 600; margin-top: 4px; color: var(--ink-primary); }
 .ameta { display: flex; justify-content: space-between; font-size: 9px; color: var(--ink-tertiary-2); margin-top: 2px; }
@@ -214,8 +331,9 @@ const yearCount = (y: string) => (y === 'すべての年代' ? all.length : buck
   }
   .yrow {
     flex-shrink: 0;
+    width: auto;
     padding: 6px 14px;
-    border-radius: 999px;
+    border-radius: 999.008px;
   }
   .yrow .cnt { display: none; }
   .bear-pad { display: none; }

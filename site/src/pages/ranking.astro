@@ -5,7 +5,6 @@ import Footer from '../components/Footer.astro';
 import ReviewImage from '../components/ReviewImage.astro';
 import HeartsRating from '../components/HeartsRating.astro';
 import BearDoodle from '../components/BearDoodle.astro';
-import SpeechBubble from '../components/SpeechBubble.astro';
 import Cloud from '../components/Cloud.astro';
 import { listReviews } from '../lib/microcms.ts';
 
@@ -15,8 +14,8 @@ const top3 = all.slice(0, 3);
 const themes = [
   {
     title: 'さっぱり系',
-    sub: 'ゴクゴク飲める！きっぱりおいしいカルピス',
-    icon: '🥤',
+    sub: 'ゴクゴク飲める！きっぱりおいしいエミエル',
+    icon: '✿',
     href: '/reviews?mood=さっぱり',
     items: all.filter((r) => r.mood?.includes('さっぱり')).slice(0, 3),
   },
@@ -29,14 +28,14 @@ const themes = [
   },
   {
     title: '夏に飲みたい！',
-    sub: '暑い日にぴったりな爽やかカルピス',
+    sub: '暑い日にぴったりな爽やかエミエル',
     icon: '☀',
     href: '/reviews?season=夏',
     items: all.filter((r) => r.season === '夏').slice(0, 3),
   },
   {
     title: '限定・コラボ',
-    sub: '出会えたらラッキー♡特別なカルピスたち',
+    sub: '出会えたらラッキー♡特別なエミエルたち',
     icon: '✦',
     href: '/reviews?cat=コラボ,期間限定',
     items: all.filter((r) => r.cat === 'コラボ' || r.cat === '期間限定').slice(0, 3),
@@ -49,15 +48,15 @@ const themes = [
   <section class="head">
     <div>
       <h1>ranking <span>♔</span></h1>
-      <p>これまで飲んできたカルピスたちの<br />中から、特にお気に入りをランキングにしました！</p>
+      <p>これまで飲んできたエミエルたちの<br />中から、特にお気に入りをランキングにしました！</p>
     </div>
     <div class="bear-bubble">
-      <BearDoodle size={70} />
-      <SpeechBubble>どの子もおいしくて<br />本当に迷っちゃう…！</SpeechBubble>
+      <BearDoodle size={72} class="mayou-bear" />
+      <img class="mayou-bubble" src="/images/bubble-mayou.png" alt="どの子もおいしくて 本当に迷っちゃう…！" />
     </div>
     <div class="criteria">
       <div class="criteria-h">♔ rankingについて</div>
-      <p>評価は「味のおいしさ」「飲みやすさ」「特別感」「リピートしたさ」の4つのポイントをもとに、5.0点満点でつけています。</p>
+      <p>評価は「味のおいしさ」「飲みやすさ」「あと味」「特別感」「リピートしたさ」の5つのポイントをもとに、5.0点満点でつけています。</p>
     </div>
   </section>
 
@@ -67,7 +66,7 @@ const themes = [
         <div class="rank-no">No.{i + 1}</div>
         <ReviewImage r={r} variant="card" height={140} />
         <div class="tinfo">
-          <h3>カルピス {r.name}</h3>
+          <h3>エミエル {r.name}</h3>
           <HeartsRating value={r.rating} size={12} />
           <p>{r.oneLiner}</p>
           <div class="tags">
@@ -89,12 +88,11 @@ const themes = [
           {th.items.map((r, i) => (
             <a href={`/reviews/${r.slug}`} class="trow">
               <span class="rn">{i + 1}</span>
-              <ReviewImage r={r} variant="card" height={28} />
-              <span class="rname">カルピス {r.name}</span>
-              <HeartsRating value={r.rating} size={9} showValue={false} />
+              <ReviewImage r={r} variant="card" height={44} />
+              <span class="rname">エミエル {r.name}</span>
+              <HeartsRating value={r.rating} size={11} showValue={false} />
             </a>
           ))}
-          <a href={th.href} class="more">もっと見る →</a>
         </div>
       ))}
     </div>
@@ -105,12 +103,12 @@ const themes = [
       <BearDoodle size={60} />
       <div>
         <div class="fav-title">my favorite ♡</div>
-        <p>やっぱり、No.1の<br />「カルピス {top3[0]?.name}」が特別！<br />この濃さとコクは唯一無二〜</p>
+        <p>やっぱり、No.1の<br />「エミエル {top3[0]?.name}」が特別！<br />この濃さとコクは唯一無二〜</p>
       </div>
     </div>
     <div class="sns-card">
       <div class="cloud-deco"><Cloud width={120} fill="rgba(255,255,255,0.5)" /></div>
-      <p>あなたのおすすめも教えてね！<br />SNSでもカルピス愛を発信中☺</p>
+      <p>あなたのおすすめも教えてね！<br />SNSでもエミエル愛を発信中☺</p>
       <div class="sns-icons">
         <span>IG</span><span>X</span><span>YT</span>
       </div>
@@ -131,7 +129,17 @@ const themes = [
 .head h1 { font-family: var(--font-display); font-style: italic; font-size: var(--fs-hero); color: var(--accent); margin: 0; line-height: 1; }
 .head h1 span { font-size: 28px; }
 .head p { font-size: 12px; margin-top: 8px; color: var(--ink-tertiary); }
-.bear-bubble { display: flex; align-items: center; gap: 14px; }
+.bear-bubble {
+  display: inline-flex;
+  align-items: flex-end;
+}
+.mayou-bubble {
+  width: 200px;
+  height: auto;
+  display: block;
+  margin-left: 8px;
+  margin-bottom: 6px;
+}
 .criteria {
   background: var(--bg-card);
   border: var(--border-card);
@@ -191,29 +199,17 @@ const themes = [
 .theme-sub { font-size: 10px; color: var(--ink-tertiary-2); margin: 4px 0 10px; }
 .trow {
   display: grid;
-  grid-template-columns: 20px 28px 1fr auto;
-  gap: 8px;
+  grid-template-columns: 22px 44px 1fr auto;
+  gap: 10px;
   align-items: center;
-  padding: 6px 0;
+  padding: 10px 0;
   border-bottom: 1px dashed rgba(168, 200, 232, 0.3);
   text-decoration: none;
   color: inherit;
 }
-.rn { font-size: 14px; font-family: var(--font-display); font-style: italic; color: var(--accent); font-weight: 700; }
-.rname { font-size: 11px; color: var(--ink-primary); }
+.rn { font-size: 18px; font-family: var(--font-display); font-style: italic; color: var(--accent); font-weight: 700; }
+.rname { font-size: 13px; color: var(--ink-primary); line-height: 1.3; }
 .empty { font-size: 11px; color: var(--ink-muted); padding: 12px 0; }
-.more {
-  display: inline-block;
-  margin-top: 8px;
-  padding: 4px 12px;
-  font-size: 10px;
-  background: transparent;
-  border: 1px solid var(--accent);
-  color: var(--accent);
-  border-radius: 999px;
-  text-decoration: none;
-  font-family: var(--font-jp);
-}
 
 .myfav {
   padding: 0 40px;

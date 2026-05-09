@@ -1,6 +1,6 @@
 ---
 interface Props {
-  kind: 'ig' | 'x' | 'note';
+  kind: 'ig' | 'x' | 'note' | 'cup';
   href?: string;
   size?: number;
   border?: string;
@@ -12,7 +12,7 @@ const { kind, href = '#', size = 30, border = 'var(--accent)', color = 'var(--in
   href={href}
   class="si"
   style={`width:${size}px;height:${size}px;border:1px solid ${border};color:${color};`}
-  aria-label={kind === 'ig' ? 'Instagram' : kind === 'x' ? 'X' : 'Drink Log'}
+  aria-label={kind === 'ig' ? 'Instagram' : kind === 'x' ? 'X' : kind === 'cup' ? 'Drink' : 'Drink Log'}
 >
   {kind === 'ig' && (
     <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4">
@@ -31,6 +31,18 @@ const { kind, href = '#', size = 30, border = 'var(--accent)', color = 'var(--in
       <path d="M3.5 9.5V3l5 1.5v5" stroke-linejoin="round" />
       <circle cx="3" cy="9.2" r="1.2" fill="currentColor" />
       <circle cx="8" cy="8.7" r="1.2" fill="currentColor" />
+    </svg>
+  )}
+  {kind === 'cup' && (
+    <svg width="13" height="14" viewBox="0 0 14 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 5.5h8l-0.7 8.2a1 1 0 0 1-1 0.9H4.7a1 1 0 0 1-1-0.9L3 5.5z" />
+      <path d="M3 5.5h8" />
+      <path d="M8.5 5.3 9.7 2 11 1.4" />
+      <circle cx="6" cy="9.2" r="0.55" fill="currentColor" stroke="none" />
+      <circle cx="8" cy="9" r="0.55" fill="currentColor" stroke="none" />
+      <circle cx="7" cy="11" r="0.55" fill="currentColor" stroke="none" />
+      <circle cx="5.3" cy="11.5" r="0.5" fill="currentColor" stroke="none" />
+      <circle cx="8.7" cy="11.6" r="0.5" fill="currentColor" stroke="none" />
     </svg>
   )}
 </a>

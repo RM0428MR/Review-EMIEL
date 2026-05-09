@@ -20,7 +20,7 @@ export default function FavoriteButton({ slug }: Props) {
   };
 
   return (
-    <button onClick={toggle} aria-pressed={fav} className={fav ? 'on' : ''}>
+    <button onClick={toggle} aria-pressed={fav} className={fav ? 'fav-btn is-on' : 'fav-btn'}>
       <svg viewBox="0 0 24 24" width={14} height={14} aria-hidden="true">
         <path
           d="M12 21s-7-4.5-9.5-9C.5 8 3 4 7 4c2 0 3.5 1 5 3 1.5-2 3-3 5-3 4 0 6.5 4 4.5 8C19 16.5 12 21 12 21z"
@@ -33,7 +33,7 @@ export default function FavoriteButton({ slug }: Props) {
       お気に入りに追加
 
       <style>{`
-        button {
+        .fav-btn {
           width: 100%;
           margin-top: 14px;
           padding: 10px;
@@ -41,7 +41,7 @@ export default function FavoriteButton({ slug }: Props) {
           background: transparent;
           color: #7aa9d9;
           border: 1.5px solid #7aa9d9;
-          border-radius: 999px;
+          border-radius: 999.008px;
           cursor: pointer;
           font-family: var(--font-jp);
           display: flex;
@@ -49,7 +49,7 @@ export default function FavoriteButton({ slug }: Props) {
           justify-content: center;
           gap: 6px;
         }
-        button.on { background: #7aa9d9; color: #fff; }
+        .fav-btn.is-on { background: #7aa9d9; color: #fff; }
       `}</style>
     </button>
   );
