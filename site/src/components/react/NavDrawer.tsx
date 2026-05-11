@@ -41,7 +41,7 @@ export default function NavDrawer() {
         onClick={() => setOpen(true)}
         title="メニューを開く"
       >
-        <img src="/images/calpis_cup.png" alt="" width={26} height={26 * (88 / 62)} aria-hidden="true" />
+        <img src="/images/hand-cup.png" alt="" width={26} height={26 * (88 / 62)} aria-hidden="true" />
       </button>
 
       {open && (
@@ -71,8 +71,8 @@ export default function NavDrawer() {
                   <span className="lg-rev">Review</span>
                 </div>
                 <div className="logo-imgs">
-                  <img src="/images/calpis_cup.png" alt="" width={36} height={36 * (88 / 62)} />
-                  <img src="/images/calpis_bottle.png" alt="" width={56 * 0.48} height={56} />
+                  <img src="/images/hand-cup.png" alt="" width={36} height={36 * (88 / 62)} />
+                  <img src="/images/hand-bottle.png" alt="" width={56 * 0.48} height={56} />
                 </div>
               </div>
 
@@ -120,7 +120,7 @@ export default function NavDrawer() {
                 </svg>
                 <div className="bear-wrap">
                   <span className="bear-heart" aria-hidden="true">♥</span>
-                  <img className="bear" src="/images/calpis_bear.png" alt="" width={86} height={86 * (123 / 129)} />
+                  <img className="bear" src="/images/bear-doodle.png" alt="" width={86} height={86 * (123 / 129)} />
                 </div>
               </div>
             </div>
@@ -143,8 +143,8 @@ export default function NavDrawer() {
                   <span className="lg-rev">Review</span>
                 </div>
                 <div className="logo-imgs">
-                  <img src="/images/calpis_cup.png" alt="" width={42} height={42 * (88 / 62)} />
-                  <img src="/images/calpis_bottle.png" alt="" width={64 * 0.48} height={64} />
+                  <img src="/images/hand-cup.png" alt="" width={42} height={42 * (88 / 62)} />
+                  <img src="/images/hand-bottle.png" alt="" width={64 * 0.48} height={64} />
                 </div>
               </div>
 
@@ -164,7 +164,7 @@ export default function NavDrawer() {
                   <path d="M0 86 Q40 60 90 70 T180 64 T270 70 T360 62 T430 70 L430 120 L0 120 Z" fill="#bcd8ee" opacity="0.65" />
                 </svg>
                 <div className="band-content">
-                  <img className="band-bear" src="/images/calpis_bear.png" alt="" width={86} height={86 * (123 / 129)} />
+                  <img className="band-bear" src="/images/bear-doodle.png" alt="" width={86} height={86 * (123 / 129)} />
                   <p className="band-tagline">
                     シュワっと、やさしく、<br />しあわせな味。
                     <span className="band-heart" aria-hidden="true">♥</span>

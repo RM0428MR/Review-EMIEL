@@ -29,7 +29,7 @@ claude-design/
 ├── pages-2.jsx          ← Review詳細 / Ranking / Archive / Contact + Navigation → 移植対象
 ├── pages-mobile.jsx     ← モバイル版5画面 → 移植対象
 ├── ios-frame.jsx        ← モバイルプレビュー枠（本番不要）
-├── assets/              ← calpis_bear.png 等のキャラ画像
+├── assets/              ← bear-doodle.png 等のキャラ画像
 └── uploads/             ← 写真モック（01-home.png 〜 06-contact.png + *-mobile.png）
 ```
 
@@ -42,7 +42,7 @@ claude-design/
 | サブ色 | `#a8c8e8`（淡い水色）/ ピンク系（白桃・いちご・桜もちアクセント） |
 | フォント | `Klee One`（本文）/ `Caveat`（英字あしらい）/ `Yusei Magic`（補助） |
 | 雰囲気 | 手書き感・日誌・スタンプ・マスキングテープ・水玉散らし |
-| マスコット | しろくま（カップ持ち・座り）`assets/calpis_bear.png` |
+| マスコット | しろくま（カップ持ち・座り）`assets/bear-doodle.png` |
 | 装飾要素 | 雲・吹き出し・ハート・四点星・washi tape — `stickers.jsx` 集約 |
 
 **勝手に変えない:**
