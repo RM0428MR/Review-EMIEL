@@ -1,5 +1,7 @@
 # my EMIEL diary review
 
+![CI](https://github.com/RM0428MR/Review-EMIEL/actions/workflows/ci.yml/badge.svg)
+
 **EMIEL** は架空の乳酸飲料ブランド。本サイトは、その架空ラインナップを個人ファン視点で気ままにレビューしていく「日記帳風」レビューサイトのソースコード。
 
 紙の日記帳・マスキングテープ・スタンプ・手書きのあしらいを、そのまま Web に落とし込むことを目指したクリエイティブ実装プロジェクト。
