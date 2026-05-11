@@ -1,0 +1,487 @@
+---
+import ReviewImage from '../ReviewImage.astro';
+import HeartsRating from '../HeartsRating.astro';
+import BearDoodle from '../BearDoodle.astro';
+import type { Review } from '../../lib/types';
+
+type RankingTab = { label: string; key: string };
+type Theme = {
+  title: string;
+  sub: string;
+  icon: string;
+  href: string;
+  items: Review[];
+};
+
+interface Props {
+  rankingTabs: RankingTab[];
+  top3ByCat: Record<string, Review[]>;
+  top3: Review[];
+  themes: Theme[];
+}
+
+const { rankingTabs, top3ByCat, themes } = Astro.props;
+---
+<!-- title -->
+<section class="mrk-title">
+  <svg class="mrk-title-star" width="34" height="30" viewBox="0 0 40 32" aria-hidden="true">
+    <path d="M4 26 L8 8 L18 18 L20 4 L22 18 L32 8 L36 26 Z" fill="#cfe3f4"/>
+  </svg>
+  <div>
+    <h1>Ranking</h1>
+    <p>みんなのレビューをもとにした人気ランキング</p>
+  </div>
+</section>
+
+<!-- category tabs -->
+<div class="mrk-tabs" data-rk-tabs>
+  {rankingTabs.map((t, i) => (
+    <button
+      type="button"
+      class={`mrk-tab ${i === 0 ? 'active' : ''}`}
+      data-rk-tab={t.key}
+    >{t.label}</button>
+  ))}
+</div>
+
+<!-- podium (Top3) -->
+{rankingTabs.map((t, ti) => {
+  const list = top3ByCat[t.key];
+  return (
+    <section class={`mrk-podium ${ti === 0 ? 'active' : ''}`} data-rk-pane={t.key}>
+      {list.length < 3 ? (
+        <div class="mrk-empty">該当する商品はまだありません</div>
+      ) : (
+        [1, 0, 2].map((idx) => {
+          const r = list[idx];
+          const isFirst = idx === 0;
+          const crowns = ['#f5c84a', '#c0c5cc', '#cf8a4a'];
+          return (
+            <a class={`mrk-pod ${isFirst ? 'mrk-pod-first' : ''}`} href={`/reviews/${r.slug}`}>
+              <svg class="mrk-pod-crown" width="36" height="22" viewBox="0 0 40 22" aria-hidden="true">
+                <path d="M4 18 L8 4 L16 12 L20 2 L24 12 L32 4 L36 18 Z" fill={crowns[idx]} />
+              </svg>
+              <div class="mrk-pod-card" style={`--crown:${crowns[idx]};`}>
+                <span class="mrk-pod-no">{idx + 1}</span>
+                <div class={`mrk-pod-img ${isFirst ? 'is-first' : ''}`}>
+                  <ReviewImage r={r} variant="card" height={isFirst ? 110 : 92} />
+                </div>
+                <div class="mrk-pod-name">エミエル {r.name}</div>
+                <div class="mrk-pod-stars">
+                  <HeartsRating value={r.rating} size={10} showValue={false} />
+                </div>
+                <div class="mrk-pod-pill">★ {r.rating.toFixed(1)}</div>
+              </div>
+            </a>
+          );
+        })
+      )}
+    </section>
+  );
+})}
+
+<!-- theme-based rankings -->
+<section class="mrk-themes">
+  <h2 class="mrk-themes-title">✦ テーマ別ランキング</h2>
+  {themes.map((th) => (
+    <div class="mrk-theme">
+      <div class="mrk-theme-head">
+        <span class="mrk-theme-icon">{th.icon}</span>
+        <div class="mrk-theme-text">
+          <div class="mrk-theme-name">{th.title}</div>
+          <div class="mrk-theme-sub">{th.sub}</div>
+        </div>
+      </div>
+      {th.items.length === 0 ? (
+        <div class="mrk-theme-empty">該当する商品はまだありません</div>
+      ) : (
+        <div class="mrk-theme-list">
+          {th.items.map((r, i) => (
+            <a class="mrk-theme-row" href={`/reviews/${r.slug}`}>
+              <span class="mrk-theme-rank">{i + 1}</span>
+              <div class="mrk-theme-img">
+                <ReviewImage r={r} variant="card" height={44} />
+              </div>
+              <div class="mrk-theme-info">
+                <div class="mrk-theme-product">エミエル {r.name}</div>
+                <HeartsRating value={r.rating} size={10} showValue={false} />
+              </div>
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+  ))}
+</section>
+
+<!-- criteria -->
+<section class="mrk-criteria">
+  <div class="mrk-criteria-card">
+    <div class="mrk-criteria-h">♔ rankingについて</div>
+    <p>評価は「味のおいしさ」「飲みやすさ」「あと味」「特別感」「リピートしたさ」の5つのポイントをもとに、5.0点満点でつけています。</p>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="mrk-cta">
+  <div class="mrk-cta-card">
+    <svg class="mrk-cta-dots" viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true">
+      <circle cx="20" cy="16" r="2" fill="#cfe3f4"/>
+      <circle cx="40" cy="40" r="1.6" fill="#cfe3f4"/>
+      <circle cx="14" cy="76" r="2" fill="#cfe3f4"/>
+      <circle cx="80" cy="16" r="1.5" fill="#cfe3f4"/>
+    </svg>
+    <div class="mrk-cta-text">
+      あなたの推しエミエルは<br />ランキングに入ってるかな？
+    </div>
+    <div class="mrk-cta-art">
+      <BearDoodle size={52} />
+    </div>
+  </div>
+  <div class="mrk-cta-btn-wrap">
+    <a class="mrk-cta-btn" href="/reviews">
+      <span aria-hidden="true">✎</span> レビューを見る
+    </a>
+  </div>
+</section>
+
+<style>
+  .mrk-podium:not(.active) { display: none; }
+  .mrk-empty {
+    text-align: center;
+    padding: 24px 16px;
+    font-size: 12px;
+    color: var(--ink-tertiary-2);
+  }
+
+  /* title */
+  .mrk-title {
+    padding: 14px 18px 6px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .mrk-title-star { flex-shrink: 0; margin-top: 2px; }
+  .mrk-title h1 {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 700;
+    font-size: 28px;
+    color: #1f5fa8;
+    margin: 0;
+    line-height: 1;
+  }
+  .mrk-title p {
+    font-size: 11px;
+    color: #5a7a98;
+    margin: 4px 0 0;
+    font-family: var(--font-jp);
+  }
+
+  /* category tabs */
+  .mrk-tabs {
+    display: flex;
+    gap: 6px;
+    padding: 10px 16px 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .mrk-tabs::-webkit-scrollbar { display: none; }
+  .mrk-tab {
+    flex-shrink: 0;
+    padding: 6px 12px;
+    font-size: 11px;
+    font-family: var(--font-jp);
+    color: var(--ink-tertiary);
+    background: #fff;
+    border: 1px solid rgba(168, 200, 232, 0.45);
+    border-radius: 999.008px;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .mrk-tab.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+
+  /* podium (Top3) */
+  .mrk-podium {
+    padding: 24px 10px 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: 6px;
+    align-items: flex-end;
+  }
+  .mrk-pod {
+    position: relative;
+    min-width: 0;
+    text-align: center;
+    text-decoration: none;
+    color: inherit;
+  }
+  .mrk-pod-crown {
+    display: block;
+    margin: 0 auto -4px;
+  }
+  .mrk-pod-card {
+    background: #fff;
+    border: 1px solid #e3edf6;
+    border-radius: 14px;
+    padding: 14px 6px 12px;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(160, 190, 220, 0.14);
+    min-height: 150px;
+    min-width: 0;
+  }
+  .mrk-pod-first .mrk-pod-card {
+    border: 2px solid #f5c84a;
+    box-shadow: 0 4px 16px rgba(245, 200, 74, 0.25);
+    min-height: 170px;
+  }
+  .mrk-pod-no {
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--crown);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #fff;
+  }
+  .mrk-pod-img {
+    height: 92px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .mrk-pod-img.is-first { height: 110px; }
+  .mrk-pod-img :global(.ri) { height: 92px !important; }
+  .mrk-pod-img.is-first :global(.ri) { height: 110px !important; }
+  .mrk-pod-name {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--ink-primary);
+    margin-top: 8px;
+    line-height: 1.3;
+    padding: 0 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    word-break: break-word;
+  }
+  .mrk-pod-first .mrk-pod-name { font-size: 12px; }
+  .mrk-pod-stars {
+    margin-top: 4px;
+    display: flex;
+    justify-content: center;
+  }
+  .mrk-pod-pill {
+    background: #eaf4fc;
+    color: #3d86c4;
+    font-size: 9px;
+    font-weight: 600;
+    padding: 3px 6px;
+    border-radius: 999.008px;
+    margin: 8px auto 0;
+    display: inline-block;
+  }
+
+  /* themes */
+  .mrk-themes {
+    padding: 26px 16px 0;
+  }
+  .mrk-themes-title {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--accent-deeper);
+    margin: 0 0 14px;
+    line-height: 1;
+  }
+  .mrk-theme {
+    background: #fff;
+    border: 1px solid rgba(168, 200, 232, 0.22);
+    border-radius: 14px;
+    padding: 14px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(160, 190, 220, 0.1);
+  }
+  .mrk-theme-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .mrk-theme-icon {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(122, 169, 217, 0.12);
+    color: var(--accent);
+    font-size: 14px;
+  }
+  .mrk-theme-text { min-width: 0; }
+  .mrk-theme-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink-primary);
+    font-family: var(--font-jp);
+  }
+  .mrk-theme-sub {
+    font-size: 10px;
+    color: var(--ink-tertiary-2);
+    margin-top: 2px;
+    line-height: 1.4;
+  }
+  .mrk-theme-empty {
+    font-size: 11px;
+    color: var(--ink-tertiary-2);
+    padding: 8px 0;
+  }
+  .mrk-theme-list {
+    display: flex;
+    flex-direction: column;
+  }
+  .mrk-theme-row {
+    display: grid;
+    grid-template-columns: 22px 44px minmax(0, 1fr);
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    text-decoration: none;
+    color: inherit;
+    border-bottom: 1px dashed rgba(168, 200, 232, 0.3);
+  }
+  .mrk-theme-row:last-child { border-bottom: none; }
+  .mrk-theme-rank {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--accent);
+    text-align: center;
+  }
+  .mrk-theme-img {
+    height: 44px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .mrk-theme-img :global(.ri) { height: 44px !important; }
+  .mrk-theme-info { min-width: 0; }
+  .mrk-theme-product {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ink-primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-bottom: 2px;
+  }
+
+  /* criteria */
+  .mrk-criteria {
+    padding: 22px 16px 0;
+  }
+  .mrk-criteria-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(168, 200, 232, 0.22);
+    border-radius: 14px;
+    padding: 14px 16px;
+    box-shadow: 0 2px 8px rgba(160, 190, 220, 0.1);
+  }
+  .mrk-criteria-h {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 6px;
+    font-family: var(--font-jp);
+  }
+  .mrk-criteria p {
+    font-size: 11px;
+    line-height: 1.7;
+    color: var(--ink-tertiary);
+    margin: 0;
+  }
+
+  /* CTA */
+  .mrk-cta {
+    padding: 20px 16px 0;
+  }
+  .mrk-cta-card {
+    background: #eef5fc;
+    border-radius: 14px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+    min-height: 88px;
+  }
+  .mrk-cta-dots {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.7;
+    pointer-events: none;
+  }
+  .mrk-cta-text {
+    position: relative;
+    font-size: 12px;
+    color: #3a5a82;
+    line-height: 1.55;
+    font-family: var(--font-jp);
+  }
+  .mrk-cta-art {
+    position: relative;
+    margin-left: auto;
+    margin-right: -10px;
+    display: flex;
+    align-items: flex-end;
+    flex-shrink: 0;
+  }
+  .mrk-cta-art :global(img) {
+    flex-shrink: 0;
+  }
+  .mrk-cta-btn-wrap {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: -22px;
+    padding-right: 14px;
+    position: relative;
+    z-index: 2;
+  }
+  .mrk-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 12px;
+    font-family: var(--font-jp);
+    padding: 9px 18px;
+    border-radius: 999.008px;
+    text-decoration: none;
+    box-shadow: 0 2px 6px rgba(122, 169, 217, 0.3);
+  }
+</style>
