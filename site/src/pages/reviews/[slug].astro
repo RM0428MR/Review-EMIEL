@@ -6,8 +6,8 @@ import ReviewImage from '../../components/ReviewImage.astro';
 import HeartsRating from '../../components/HeartsRating.astro';
 import BearDoodle from '../../components/BearDoodle.astro';
 import WashiTape from '../../components/WashiTape.astro';
+import HandBottle from '../../components/HandBottle.astro';
 import DrinkMethodPicker from '../../components/react/DrinkMethodPicker.tsx';
-import FavoriteButton from '../../components/react/FavoriteButton.tsx';
 import { listReviews } from '../../lib/microcms.ts';
 import { getSimilarReviews } from '../../lib/similar.ts';
 import { visibleSubRatings } from '../../lib/types.ts';
@@ -29,6 +29,8 @@ const info = [
 ---
 <BaseLayout title={`エミエル ${r.name}`} description={r.oneLiner} activeTab="review">
   <Header active="review" />
+
+  <div class="rd-desktop">
   <div class="bc">home <span>›</span> <a href="/reviews">review</a> <span>›</span> {r.name}</div>
 
   <section class="main">
@@ -106,8 +108,6 @@ const info = [
             </div>
           </div>
         )}
-        <hr class="fav-divider" />
-        <FavoriteButton client:idle slug={r.slug} />
       </aside>
     </div>
 
@@ -138,6 +138,129 @@ const info = [
       </div>
     </div>
   </section>
+  </div>
+
+  <!-- ============== MOBILE ============== -->
+  <div class="rd-mobile">
+    <div class="rdm-bc">home <span>›</span> <a href="/reviews">review</a> <span>›</span> {r.name}</div>
+
+    <!-- main card: image + meta -->
+    <section class="rdm-main">
+      <div class="rdm-card">
+        {r.badge && <div class="rdm-badge">{r.badge}</div>}
+        <div class="rdm-card-img">
+          <ReviewImage r={r} variant="detail" height={220} />
+        </div>
+        <div class="rdm-card-meta">
+          <span class="rdm-cat">{r.cat}</span>
+          <h1 class="rdm-name">エミエル {r.name}</h1>
+          {r.oneLiner && <p class="rdm-card-catch">{r.oneLiner}</p>}
+          <div class="rdm-rating">
+            <HeartsRating value={r.rating} size={14} />
+          </div>
+          <div class="rdm-card-date">{r.date}</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- memo / oneLiner + body -->
+    <section class="rdm-sec">
+      <h2 class="rdm-sec-title">ひとことメモ</h2>
+      <div class="rdm-memo">
+        <div class="rdm-memo-text">
+          <p class="rdm-oneliner">{r.oneLiner}</p>
+          {r.body && <p class="rdm-body" set:html={r.body}></p>}
+        </div>
+        <div class="rdm-memo-art">
+          <BearDoodle size={60} />
+          <HandBottle size={36} style="margin-bottom:6px;" />
+        </div>
+      </div>
+    </section>
+
+    <!-- taste eval -->
+    {subs.length > 0 && (
+      <section class="rdm-sec">
+        <h2 class="rdm-sec-title">味の評価</h2>
+        <div class="rdm-eval">
+          <div class="rdm-sub-list">
+            {subs.map((s) => (
+              <div class="rdm-sub-row">
+                <span class="rdm-sub-lbl">{s.label}</span>
+                <span class="rdm-sub-stars"><HeartsRating value={s.value} size={11} showValue={false} /></span>
+                <span class="rdm-sub-val">{s.value.toFixed(1)}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- recommended drink -->
+    <section class="rdm-sec">
+      <h2 class="rdm-sec-title">おすすめの飲み方</h2>
+      <div class="rdm-drink">
+        <DrinkMethodPicker picked={r.recommendedDrink ?? 'そのまま'} note={r.recommendedDrinkNote} />
+      </div>
+    </section>
+
+    <!-- product info -->
+    {(info.length > 0 || r.officialUrl || (r.tags?.length ?? 0) > 0) && (
+      <section class="rdm-sec">
+        <h2 class="rdm-sec-title">Product Info</h2>
+        <div class="rdm-product">
+          <div class="rdm-product-name-row">
+            <span class="rdm-product-name-k">商品名</span>
+            <span class="rdm-product-name-v">エミエル {r.name}</span>
+          </div>
+          <div class="rdm-product-row">
+            <div class="rdm-product-img">
+              <ReviewImage r={r} variant="card" height={88} />
+            </div>
+            <div class="rdm-product-body">
+              {info.slice(1).map(([k, v]) => (
+                <div class="rdm-info-row-kv">
+                  <span class="rdm-info-k">{k}</span>
+                  <span class="rdm-info-v">{v}</span>
+                </div>
+              ))}
+              {r.officialUrl && <a class="rdm-product-link" href={r.officialUrl}>公式サイト →</a>}
+            </div>
+          </div>
+          {(r.tags?.length ?? 0) > 0 && (
+            <div class="rdm-product-tags">
+              <div class="rdm-product-tags-list">
+                {r.tags!.map((t: string) => <span class="rdm-product-tag">#{t}</span>)}
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+    )}
+
+    <!-- similar -->
+    {similar.length > 0 && (
+      <section class="rdm-sec">
+        <h2 class="rdm-sec-title">似ているかも？？</h2>
+        <div class="rdm-similar">
+          {similar.map((s) => (
+            <a class="rdm-similar-card" href={`/reviews/${s.slug}`}>
+              <div class="rdm-similar-img">
+                <ReviewImage r={s} variant="card" height={70} />
+              </div>
+              <div class="rdm-similar-name">エミエル {s.name}</div>
+              <div class="rdm-similar-one">{s.oneLiner}</div>
+              <HeartsRating value={s.rating} size={9} showValue={false} />
+            </a>
+          ))}
+        </div>
+        <div class="rdm-back-row">
+          <a href="/reviews" class="rdm-back">← 一覧に戻る</a>
+        </div>
+      </section>
+    )}
+
+  </div>
 
   <Footer variant="review-detail" />
 </BaseLayout>
@@ -322,14 +445,6 @@ const info = [
   border-radius: 18px;
   padding: 18px;
   position: relative;
-  display: flex;
-  flex-direction: column;
-}
-.info-aside .fav-divider {
-  margin: auto 0 18px;
-  border: 0;
-  border-top: 1px dashed rgba(168, 200, 232, 0.5);
-  width: 100%;
 }
 .info-aside h3 { font-family: var(--font-display); font-style: italic; font-size: 16px; color: var(--accent); margin: 0 0 12px; }
 .info-photo {
@@ -406,6 +521,331 @@ const info = [
   .bottom-left-overlay { position: static; width: 100%; }
   .similar-area { margin-top: 20px; }
   body { padding-bottom: 64px; }
+}
+
+/* ────────── MOBILE LAYOUT ────────── */
+.rd-mobile { display: none; }
+
+@media (max-width: 768px) {
+  .rd-desktop { display: none; }
+  .rd-mobile { display: block; }
+  body { padding-bottom: 64px; }
+
+  .rdm-bc {
+    padding: 8px 16px 4px;
+    font-size: 11px;
+    color: var(--ink-tertiary-2);
+  }
+  .rdm-bc span { margin: 0 6px; }
+  .rdm-bc a { color: inherit; text-decoration: underline; }
+
+  /* main card */
+  .rdm-main { padding: 8px 16px 0; }
+  .rdm-card {
+    position: relative;
+    background: #fff;
+    border: 1px solid rgba(168, 200, 232, 0.22);
+    border-radius: 16px;
+    padding: 18px 16px 16px;
+    box-shadow: 0 2px 10px rgba(122, 169, 217, 0.12);
+    text-align: center;
+  }
+  .rdm-badge {
+    position: absolute;
+    top: 12px;
+    left: -4px;
+    background: var(--accent);
+    color: #fff;
+    padding: 3px 12px;
+    font-size: 10px;
+    font-family: var(--font-display);
+    font-style: italic;
+    clip-path: polygon(0 0, 100% 0, 92% 50%, 100% 100%, 0 100%);
+    z-index: 2;
+  }
+  .rdm-card-img {
+    height: 220px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+  .rdm-card-img :global(.ri) { height: 220px !important; }
+  .rdm-card-meta { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .rdm-cat {
+    display: inline-block;
+    font-size: 10px;
+    font-family: var(--font-jp);
+    padding: 3px 12px;
+    border-radius: 999.008px;
+    background: rgba(122, 169, 217, 0.12);
+    color: var(--accent);
+  }
+  .rdm-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink-primary);
+    margin: 2px 0 0;
+    line-height: 1.35;
+    font-family: var(--font-jp);
+    word-break: break-word;
+  }
+  .rdm-card-catch {
+    font-size: 12px;
+    color: var(--accent);
+    font-family: var(--font-jp);
+    margin: 4px 8px 0;
+    line-height: 1.55;
+    text-align: center;
+    word-break: break-word;
+  }
+  .rdm-card-date {
+    font-size: 11px;
+    color: var(--ink-tertiary-2);
+    font-family: var(--font-display);
+    font-style: italic;
+  }
+  .rdm-rating { margin-top: 4px; }
+
+  /* shared section heading & spacing */
+  .rdm-sec { padding: 18px 16px 0; }
+  .rdm-sec-title {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--accent-deeper);
+    margin: 0 0 10px;
+    line-height: 1;
+  }
+
+  /* memo */
+  .rdm-memo {
+    background: #eef5fc;
+    border-radius: 14px;
+    padding: 14px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .rdm-memo-text { width: 100%; }
+  .rdm-oneliner {
+    font-size: 14px;
+    color: var(--accent);
+    margin: 0;
+    font-family: var(--font-jp);
+    line-height: 1.5;
+  }
+  .rdm-body {
+    font-size: 12px;
+    color: var(--ink-secondary);
+    margin: 8px 0 0;
+    line-height: 1.85;
+  }
+  .rdm-memo-art {
+    margin-top: 8px;
+    align-self: flex-end;
+    display: flex;
+    align-items: flex-end;
+    pointer-events: none;
+  }
+
+  /* taste eval */
+  .rdm-eval {
+    background: #fff;
+    border: 1px solid rgba(168, 200, 232, 0.22);
+    border-radius: 14px;
+    padding: 14px;
+    box-shadow: 0 2px 8px rgba(160, 190, 220, 0.1);
+  }
+  .rdm-sub-list { display: flex; flex-direction: column; gap: 4px; }
+  .rdm-sub-row {
+    display: grid;
+    grid-template-columns: 92px 1fr 30px;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+  }
+  .rdm-sub-lbl {
+    font-size: 11px;
+    color: var(--ink-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .rdm-sub-val {
+    font-size: 11px;
+    color: var(--ink-primary);
+    text-align: right;
+    font-family: var(--font-display);
+  }
+
+  /* drink method */
+  .rdm-drink {
+    background: #fff;
+    border: 1px solid rgba(168, 200, 232, 0.22);
+    border-radius: 14px;
+    padding: 12px 14px;
+    box-shadow: 0 2px 8px rgba(160, 190, 220, 0.1);
+  }
+
+  /* product info */
+  .rdm-product {
+    background: #fff;
+    border: 1px solid rgba(168, 200, 232, 0.22);
+    border-radius: 14px;
+    padding: 14px 12px;
+    box-shadow: 0 2px 8px rgba(160, 190, 220, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .rdm-product-name-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-bottom: 12px;
+    border-bottom: 1px dashed rgba(168, 200, 232, 0.35);
+  }
+  .rdm-product-name-k {
+    color: var(--ink-tertiary-2);
+    font-size: 10px;
+    align-self: flex-start;
+  }
+  .rdm-product-name-v {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink-primary);
+    line-height: 1.4;
+    word-break: break-word;
+    width: 100%;
+  }
+  .rdm-product-row {
+    display: grid;
+    grid-template-columns: 78px minmax(0, 1fr);
+    gap: 12px;
+    align-items: center;
+  }
+  .rdm-product-img {
+    height: 88px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .rdm-product-img :global(.ri) { height: 88px !important; }
+  .rdm-product-body { min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+  .rdm-info-row-kv {
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr);
+    gap: 8px;
+    font-size: 11px;
+    line-height: 1.4;
+    align-items: baseline;
+  }
+  .rdm-info-k {
+    color: var(--ink-tertiary-2);
+    font-size: 10px;
+  }
+  .rdm-info-v {
+    color: var(--ink-primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .rdm-product-link {
+    display: inline-block;
+    margin-top: 4px;
+    font-size: 11px;
+    color: var(--accent);
+    font-family: var(--font-display);
+    font-style: italic;
+    text-decoration: none;
+  }
+  .rdm-product-tags {
+    margin-top: 0;
+    padding-top: 12px;
+    border-top: 1px dashed rgba(168, 200, 232, 0.4);
+    text-align: center;
+  }
+  .rdm-product-tags-lbl {
+    font-size: 10px;
+    color: var(--ink-tertiary-2);
+    margin-bottom: 6px;
+  }
+  .rdm-product-tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    justify-content: center;
+  }
+  .rdm-product-tag {
+    font-size: 10px;
+    color: var(--accent);
+    background: rgba(246, 200, 204, 0.25);
+    padding: 3px 9px;
+    border-radius: 999.008px;
+    font-family: var(--font-jp);
+    white-space: nowrap;
+  }
+
+  /* similar */
+  .rdm-similar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .rdm-similar-card {
+    background: #fff;
+    border: 1px solid rgba(168, 200, 232, 0.22);
+    border-radius: 12px;
+    padding: 8px;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: 0 2px 8px rgba(160, 190, 220, 0.1);
+    display: block;
+    min-width: 0;
+  }
+  .rdm-similar-img {
+    height: 70px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .rdm-similar-img :global(.ri) { height: 70px !important; }
+  .rdm-similar-name {
+    font-size: 11px;
+    font-weight: 700;
+    margin-top: 4px;
+    color: var(--ink-primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .rdm-similar-one {
+    font-size: 10px;
+    color: var(--ink-tertiary-2);
+    margin-top: 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .rdm-back-row {
+    margin-top: 14px;
+    display: flex;
+    justify-content: flex-start;
+  }
+  .rdm-back {
+    font-size: 13px;
+    color: var(--ink-primary);
+    text-decoration: none;
+    font-weight: 600;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
 }
 </style>
 

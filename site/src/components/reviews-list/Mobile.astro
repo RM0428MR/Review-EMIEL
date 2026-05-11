@@ -1,0 +1,366 @@
+---
+import ReviewImage from '../ReviewImage.astro';
+import HeartsRating from '../HeartsRating.astro';
+import ReviewFilters from '../react/ReviewFilters.tsx';
+import type { Review } from '../../lib/types';
+
+interface Props {
+  all: Review[];
+  initialCat?: string;
+}
+
+const { all, initialCat = 'すべて' } = Astro.props;
+---
+<section class="mr-head">
+  <div class="title-deco mr-title-deco">
+    <img class="dec petal" src="/images/decor-petals.png" alt="" aria-hidden="true"
+      style="top:8px; left:8px; width:36px; transform:rotate(40deg);" />
+    <img class="dec petal" src="/images/decor-petals.png" alt="" aria-hidden="true"
+      style="top:18px; left:42px; width:22px; transform:rotate(120deg);" />
+    <img class="dec petal" src="/images/decor-petals.png" alt="" aria-hidden="true"
+      style="top:42px; left:6px; width:30px; transform:rotate(-8deg);" />
+    <svg class="dec heart" viewBox="0 0 30 28" aria-hidden="true"
+      style="top:6px; left:128px; width:22px; transform:rotate(5deg);">
+      <path d="M15 25 C3 17 1 9 6 5 C10 2 14 5 15 8 C16 5 20 2 24 5 C29 9 27 17 15 25 Z"
+        fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <svg class="dec heart" viewBox="0 0 30 28" aria-hidden="true"
+      style="top:24px; right:14px; width:16px; transform:rotate(10deg);">
+      <path d="M15 25 C3 17 1 9 6 5 C10 2 14 5 15 8 C16 5 20 2 24 5 C29 9 27 17 15 25 Z"
+        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <h1>review</h1>
+  </div>
+  <p>これまでに飲んだエミエルたちのレビュー一覧です。</p>
+</section>
+
+<div class="mr-bar">
+  <span class="mr-count" data-result-count>{all.length}件の商品</span>
+  <button type="button" class="mr-filter-trigger" data-mr-filter-open aria-haspopup="dialog" aria-controls="mr-filter-sheet">
+    <svg viewBox="0 0 16 16" width="13" height="13" aria-hidden="true">
+      <path d="M2 3h12M4 8h8M6 13h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+    </svg>
+    絞り込み
+  </button>
+</div>
+
+<!-- bottom sheet: filter -->
+<div class="mr-fsheet" id="mr-filter-sheet" data-mr-filter-sheet hidden aria-hidden="true">
+  <div class="mr-fsheet-overlay" data-mr-filter-close></div>
+  <div class="mr-fsheet-panel" role="dialog" aria-modal="true" aria-label="絞り込み">
+    <div class="mr-fsheet-handle" aria-hidden="true"></div>
+    <div class="mr-fsheet-header">
+      <h2 class="mr-fsheet-title">絞り込み</h2>
+      <button type="button" class="mr-fsheet-close" data-mr-filter-close aria-label="閉じる">✕</button>
+    </div>
+    <div class="mr-fsheet-body">
+      <ReviewFilters client:load reviews={all} initialCat={initialCat} />
+    </div>
+    <div class="mr-fsheet-footer">
+      <button type="button" class="mr-fsheet-apply" data-mr-filter-close>この条件でみる</button>
+    </div>
+  </div>
+</div>
+
+<div class="mr-list">
+  {all.map((r) => (
+    <a class="mr-card" href={`/reviews/${r.slug}`} data-review-slug={r.slug}>
+      <div class="mr-card-tr">
+        <span class="mr-card-date">{r.date}</span>
+      </div>
+      <div class="mr-card-img">
+        <ReviewImage r={r} variant="card" height={110} />
+      </div>
+      <div class="mr-card-info">
+        <span class="mr-card-cat">{r.cat}</span>
+        <div class="mr-card-name">{r.name}</div>
+        <div class="mr-card-one">{r.oneLiner}</div>
+        <div class="mr-card-rating"><HeartsRating value={r.rating} size={11} showValue={false} /></div>
+        {r.tags && r.tags.length > 0 && (
+          <div class="mr-card-tags">
+            {r.tags.slice(0, 3).map((t) => <span class="mr-tag">#{t}</span>)}
+          </div>
+        )}
+      </div>
+    </a>
+  ))}
+</div>
+
+<script>
+  // Mobile review-list: open/close the filter bottom sheet
+  (function () {
+    const sheet = document.querySelector('[data-mr-filter-sheet]') as HTMLElement | null;
+    const opener = document.querySelector('[data-mr-filter-open]') as HTMLButtonElement | null;
+    if (!sheet || !opener) return;
+    const closers = Array.from(
+      document.querySelectorAll('[data-mr-filter-close]')
+    ) as HTMLElement[];
+
+    function open() {
+      sheet!.hidden = false;
+      sheet!.setAttribute('aria-hidden', 'false');
+      // 次フレームで is-open を付与してスライドアップ開始
+      requestAnimationFrame(() => sheet!.classList.add('is-open'));
+      document.body.style.overflow = 'hidden';
+    }
+    function close() {
+      sheet!.classList.remove('is-open');
+      sheet!.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      // トランジション後に hidden
+      window.setTimeout(() => {
+        if (!sheet!.classList.contains('is-open')) sheet!.hidden = true;
+      }, 220);
+    }
+
+    opener.addEventListener('click', open);
+    closers.forEach((el) => el.addEventListener('click', close));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !sheet.hidden) close();
+    });
+  })();
+</script>
+
+<style>
+/* head */
+.mr-head {
+  padding: 14px 16px 0;
+}
+.mr-title-deco {
+  position: relative;
+  display: inline-block;
+  padding: 24px 40px 6px 56px;
+}
+.mr-title-deco h1 {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(40px, 11vw, 56px);
+  color: var(--accent);
+  margin: 0;
+  line-height: 1;
+  position: relative;
+}
+.mr-head p {
+  font-size: 12px;
+  color: var(--ink-tertiary);
+  margin-top: 8px;
+}
+.dec {
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+  display: block;
+  height: auto;
+}
+.heart { color: #5a89c7; }
+
+/* sort/count + filter trigger bar */
+.mr-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 16px 0;
+  gap: 12px;
+}
+.mr-bar .mr-count { font-size: 11px; color: var(--ink-tertiary); }
+.mr-filter-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-family: var(--font-jp);
+  color: var(--accent);
+  background: #fff;
+  border: 1px solid rgba(168, 200, 232, 0.55);
+  border-radius: 999.008px;
+  cursor: pointer;
+  line-height: 1;
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.mr-filter-trigger:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* bottom sheet */
+.mr-fsheet {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  pointer-events: auto;
+}
+.mr-fsheet[hidden] { display: none; }
+.mr-fsheet-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(40, 60, 90, 0);
+  transition: background 0.2s ease;
+}
+.mr-fsheet.is-open .mr-fsheet-overlay {
+  background: rgba(40, 60, 90, 0.45);
+}
+.mr-fsheet-panel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  max-height: 88vh;
+  background: #f7f6f1;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  box-shadow: 0 -8px 28px rgba(40, 60, 90, 0.18);
+  transform: translateY(100%);
+  transition: transform 0.22s ease;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 16px 16px;
+  font-family: var(--font-jp);
+}
+.mr-fsheet.is-open .mr-fsheet-panel {
+  transform: translateY(0);
+}
+.mr-fsheet-handle {
+  width: 40px;
+  height: 4px;
+  border-radius: 999.008px;
+  background: rgba(122, 169, 217, 0.5);
+  margin: 4px auto 8px;
+}
+.mr-fsheet-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0 12px;
+  border-bottom: 1px dashed rgba(168, 200, 232, 0.45);
+}
+.mr-fsheet-title {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 18px;
+  color: var(--accent);
+  margin: 0;
+}
+.mr-fsheet-close {
+  appearance: none;
+  background: transparent;
+  border: none;
+  color: var(--ink-tertiary);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px 6px;
+}
+.mr-fsheet-body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 14px 0 12px;
+  -webkit-overflow-scrolling: touch;
+}
+.mr-fsheet-footer {
+  padding-top: 12px;
+  border-top: 1px dashed rgba(168, 200, 232, 0.45);
+}
+.mr-fsheet-apply {
+  width: 100%;
+  padding: 12px;
+  font-size: 13px;
+  font-family: var(--font-jp);
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 999.008px;
+  cursor: pointer;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+.mr-fsheet-apply:hover { filter: brightness(1.05); }
+
+/* card list */
+.mr-list {
+  padding: 12px 8px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.mr-card {
+  position: relative;
+  background: #fff;
+  border: 1px solid rgba(168, 200, 232, 0.22);
+  border-radius: 14px;
+  padding: 8px 12px;
+  box-shadow: 0 2px 10px rgba(122, 169, 217, 0.1);
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+}
+.mr-card-tr {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  font-size: 10px;
+  color: var(--ink-tertiary-2);
+}
+.mr-card-img {
+  height: 70px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  overflow: hidden;
+}
+.mr-card-img :global(.ri) { height: 70px !important; }
+.mr-card-info { padding-right: 36px; }
+.mr-card-cat {
+  display: inline-block;
+  font-size: 9px;
+  font-family: var(--font-jp);
+  padding: 2px 8px;
+  border-radius: 999.008px;
+  background: rgba(122, 169, 217, 0.12);
+  color: var(--accent);
+}
+.mr-card-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink-primary);
+  margin-top: 4px;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mr-card-one {
+  font-size: 10.5px;
+  color: var(--ink-tertiary);
+  margin-top: 2px;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mr-card-rating { margin-top: 4px; }
+.mr-card-tags {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 4px;
+  margin-top: 6px;
+  overflow: hidden;
+  min-width: 0;
+}
+.mr-tag {
+  font-size: 9px;
+  color: var(--accent);
+  background: rgba(246, 200, 204, 0.25);
+  padding: 2px 8px;
+  border-radius: 999.008px;
+  font-family: var(--font-jp);
+  white-space: nowrap;
+  flex-shrink: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+</style>
