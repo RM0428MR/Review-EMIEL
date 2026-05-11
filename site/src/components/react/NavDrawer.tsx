@@ -181,7 +181,11 @@ export default function NavDrawer() {
         </div>
       )}
 
-      <style>{`
+      {/* React は <style> の children を HTML エンティティで escape するが、
+          <style> は HTML 仕様上 RAW_TEXT でブラウザは decode しないため、
+          SSR 出力 (&quot; など) と CSR 出力 (") が不一致になり hydration が
+          壊れる。dangerouslySetInnerHTML で escape を回避する。 */}
+      <style dangerouslySetInnerHTML={{ __html: `
         /* ─────────── trigger ─────────── */
         .trigger {
           background: #ffffff;
@@ -654,7 +658,7 @@ export default function NavDrawer() {
           margin: 0;
         }
         #nav-drawer .band-heart { margin-left: 4px; color: #7aa9d9; }
-      `}</style>
+      ` }} />
     </>
   );
 }

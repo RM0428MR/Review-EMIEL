@@ -134,7 +134,10 @@ export default function ContactForm() {
       </div>
       <p className="note">※ 内容を確認後、できるだけ早くお返事させていただきます。</p>
 
-      <style>{`
+      {/* hydration mismatch 回避: <style> 内の特殊文字は React が SSR で
+          escape するが <style> は RAW_TEXT で browser が decode しない。
+          dangerouslySetInnerHTML で escape を回避する。 */}
+      <style dangerouslySetInnerHTML={{ __html: `
         .cf-form {
           height: 100%;
           display: flex;
@@ -201,7 +204,7 @@ export default function ContactForm() {
         }
         .cf-form button[type="submit"]:disabled { opacity: 0.6; cursor: not-allowed; }
         .cf-form .note { font-size: 10px; margin-top: 8px; color: var(--ink-tertiary-2); text-align: center; }
-      `}</style>
+      ` }} />
     </form>
   );
 }
