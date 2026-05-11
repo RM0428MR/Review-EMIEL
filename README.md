@@ -1,6 +1,9 @@
 # my EMIEL diary review
 
+[![Live](https://img.shields.io/badge/Live-online-success?style=flat&logo=cloudflare&logoColor=white)](https://review-emiel.rm0428mr.workers.dev/)
 ![CI](https://github.com/RM0428MR/Review-EMIEL/actions/workflows/ci.yml/badge.svg)
+
+🌐 **Live**: <https://review-emiel.rm0428mr.workers.dev/>
 
 **EMIEL** は架空の乳酸飲料ブランド。本サイトは、その架空ラインナップを個人ファン視点で気ままにレビューしていく「日記帳風」レビューサイトのソースコード。
 
