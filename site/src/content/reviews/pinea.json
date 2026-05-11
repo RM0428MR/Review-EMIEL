@@ -1,0 +1,31 @@
+{
+  "id": "pinea",
+  "slug": "pinea",
+  "date": "2024.07.03",
+  "name": "パイナップル",
+  "variant": "pet",
+  "tint": "#fef4c8",
+  "accent": "#d8a858",
+  "rating": 4,
+  "oneLiner": "トロピカルでさっぱり",
+  "tags": [
+    "期間限定"
+  ],
+  "cat": "期間限定",
+  "mood": [
+    "フルーティー",
+    "さっぱり"
+  ],
+  "season": "夏",
+  "body": "パインの甘酸っぱさがトロピカル〜！<br>後味はさっぱりで夏にぴったりな仕上がり。<br>南国気分になれる味で気分転換に◎<br>季節限定なのが惜しい…！",
+  "subTaste": 4,
+  "subEasy": 3.5,
+  "subSpecial": 4.5,
+  "subAftertaste": 3.5,
+  "subRepeat": 4,
+  "infoReleased": "2024年7月3日",
+  "infoVolume": "470ml",
+  "infoType": "乳酸飲料",
+  "recommendedDrink": "氷を入れて",
+  "recommendedDrinkNote": "氷でトロピカル感アップ！"
+}

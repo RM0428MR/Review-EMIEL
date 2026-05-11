@@ -1,0 +1,33 @@
+{
+  "id": "rame",
+  "slug": "rame",
+  "date": "2024.04.22",
+  "name": "ラムネ",
+  "variant": "pet",
+  "tint": "#e0eff8",
+  "accent": "#7aa9d9",
+  "rating": 4.5,
+  "oneLiner": "ラムネみたいでなつかしい味！",
+  "tags": [
+    "期間限定",
+    "ラムネ",
+    "清涼感"
+  ],
+  "cat": "期間限定",
+  "mood": [
+    "さっぱり",
+    "すっきり"
+  ],
+  "season": "夏",
+  "body": "ラムネのあのなつかしさがそのまま液体に〜！<br>シュワっとした清涼感がクセになる。<br>子どもの頃の夏休みを思い出しちゃう味…<br>夏にリピ確定♪",
+  "subTaste": 4,
+  "subEasy": 3,
+  "subSpecial": 5,
+  "subAftertaste": 3,
+  "subRepeat": 4.5,
+  "infoReleased": "2024年4月22日",
+  "infoVolume": "470ml",
+  "infoType": "乳酸飲料",
+  "recommendedDrink": "氷を入れて",
+  "recommendedDrinkNote": "氷を浮かべて夏らしくシュワッと！"
+}

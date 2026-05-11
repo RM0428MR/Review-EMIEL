@@ -1,0 +1,30 @@
+{
+  "id": "kuro",
+  "slug": "kuro",
+  "date": "2024.06.05",
+  "name": "ブラックチェリー",
+  "variant": "pet",
+  "tint": "#f8d8d8",
+  "accent": "#a85868",
+  "rating": 4.5,
+  "oneLiner": "チェリーの甘酸っぱさ◎",
+  "tags": [
+    "期間限定"
+  ],
+  "cat": "期間限定",
+  "mood": [
+    "フルーティー"
+  ],
+  "season": "夏",
+  "body": "チェリーの甘酸っぱい香りにうっとり〜♪<br>濃厚なフルーティーさで贅沢気分。<br>夏の夜にゆったり楽しみたい味…<br>限定でも毎年出てほしい！",
+  "subTaste": 4,
+  "subEasy": 4,
+  "subSpecial": 3.5,
+  "subAftertaste": 3.5,
+  "subRepeat": 4.5,
+  "infoReleased": "2024年6月5日",
+  "infoVolume": "470ml",
+  "infoType": "乳酸飲料",
+  "recommendedDrink": "氷を入れて",
+  "recommendedDrinkNote": "氷を浮かべて贅沢に〜"
+}

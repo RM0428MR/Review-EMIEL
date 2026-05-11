@@ -1,0 +1,31 @@
+{
+  "id": "grape",
+  "slug": "grape",
+  "date": "2023.06.18",
+  "name": "グレープ",
+  "variant": "pet",
+  "tint": "#ece0fa",
+  "accent": "#a888d8",
+  "rating": 4,
+  "oneLiner": "ぶどうの甘酸っぱさ◎",
+  "tags": [
+    "期間限定",
+    "ぶどう"
+  ],
+  "cat": "期間限定",
+  "mood": [
+    "フルーティー"
+  ],
+  "season": "秋",
+  "body": "ぶどうの甘酸っぱさがふわっと広がる〜！<br>渋みがなくてゴクゴク飲める仕上がり。<br>秋の夜長にゆっくり楽しみたい味…<br>季節限定が惜しい！",
+  "subTaste": 4,
+  "subEasy": 3.5,
+  "subSpecial": 3.5,
+  "subAftertaste": 3,
+  "subRepeat": 4,
+  "infoReleased": "2023年6月18日",
+  "infoVolume": "470ml",
+  "infoType": "乳酸飲料",
+  "recommendedDrink": "氷を入れて",
+  "recommendedDrinkNote": "氷を入れると秋夜にもひんやり美味しい〜"
+}

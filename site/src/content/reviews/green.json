@@ -1,0 +1,30 @@
+{
+  "id": "green",
+  "slug": "green",
+  "date": "2022.06.12",
+  "name": "抹茶",
+  "variant": "pet",
+  "tint": "#dce8c8",
+  "accent": "#7a9858",
+  "rating": 4,
+  "oneLiner": "抹茶の苦みがいい〜",
+  "tags": [
+    "コラボ"
+  ],
+  "cat": "コラボ",
+  "mood": [
+    "濃厚"
+  ],
+  "season": "夏",
+  "body": "抹茶の苦みがほどよくきいて大人な味〜♪<br>ミルク感とのバランスが絶妙でクセになる。<br>和菓子と一緒に楽しみたい味…<br>抹茶好きにはたまらない！",
+  "subTaste": 3,
+  "subEasy": 4.5,
+  "subSpecial": 3,
+  "subAftertaste": 4,
+  "subRepeat": 4,
+  "infoReleased": "2022年6月12日",
+  "infoVolume": "470ml",
+  "infoType": "乳酸飲料",
+  "recommendedDrink": "牛乳で割って",
+  "recommendedDrinkNote": "牛乳で割って抹茶ラテ風♪"
+}

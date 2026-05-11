@@ -1,0 +1,30 @@
+{
+  "id": "water",
+  "slug": "water",
+  "date": "2023.10.11",
+  "name": "WATER",
+  "variant": "pet",
+  "tint": "#eaf4fc",
+  "accent": "#7aa9d9",
+  "rating": 4,
+  "oneLiner": "すっきり飲みやすい〜",
+  "tags": [
+    "定番"
+  ],
+  "cat": "定番",
+  "mood": [
+    "さっぱり"
+  ],
+  "season": "夏",
+  "body": "すっきり爽やかでゴクゴク飲める〜！<br>甘さもひかえめで、お水感覚で楽しめる。<br>暑い日のお風呂上がりに最高♪<br>夏の冷蔵庫の常連！",
+  "subTaste": 2.5,
+  "subEasy": 2.5,
+  "subSpecial": 5,
+  "subAftertaste": 2.5,
+  "subRepeat": 4,
+  "infoReleased": "2023年10月11日",
+  "infoVolume": "500ml",
+  "infoType": "清涼飲料水",
+  "recommendedDrink": "氷を入れて",
+  "recommendedDrinkNote": "キンキンに冷やしてさっぱり！"
+}
