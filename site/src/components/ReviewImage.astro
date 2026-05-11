@@ -18,6 +18,7 @@ const shape = r.variant; // 'pet' | 'carton' | 'cup' | 'plastic'
 ---
 <div
   class="ri"
+  data-variant={variant}
   style={`background:${bg};height:${h}px;aspect-ratio:${aspectRatio};`}
   aria-label={alt ?? r.name}
 >
@@ -178,4 +179,6 @@ const shape = r.variant; // 'pet' | 'carton' | 'cup' | 'plastic'
 }
 .ri img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
 .bottle { height: 88%; max-height: 130px; display: block; margin: 0 auto; }
+/* detail variant: the main product card on review detail page — let the SVG scale up (slightly under 88%) */
+.ri[data-variant="detail"] .bottle { max-height: 320px; }
 </style>

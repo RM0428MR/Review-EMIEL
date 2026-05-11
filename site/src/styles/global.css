@@ -2,12 +2,18 @@
 @import './tokens.css';
 
 html {
-  /* デフォルトの 100% 表示を従来の 150% 相当に拡大 */
-  zoom: 1.5;
-
+  /* デフォルトの 100% 表示を従来の 150% 相当に拡大（デスクトップのみ） */
   color: var(--ink-primary);
   font-family: var(--font-jp);
   background-color: #ffffff;
+}
+
+@media (min-width: 769px) {
+  html { zoom: 1.5; }
+}
+
+@media (max-width: 768px) {
+  html, body { overflow-x: clip; }
 }
 
 body {

@@ -1,0 +1,466 @@
+---
+import BearDoodle from '../BearDoodle.astro';
+import ReviewImage from '../ReviewImage.astro';
+import HeartsRating from '../HeartsRating.astro';
+import HandBottle from '../HandBottle.astro';
+import type { Review } from '../../lib/types';
+
+interface Props {
+  mNewReviews: Review[];
+  mYearCounts: [string, number][];
+  mMonthTimeline: [string, { count: number; latest: string }][];
+  top3: Review[];
+  totalReviews: number;
+}
+
+const { mNewReviews, mYearCounts, mMonthTimeline, top3, totalReviews } = Astro.props;
+---
+    <!-- HERO CARD -->
+    <section class="mhero">
+      <div class="mhero-card">
+        <svg class="mhero-dots" viewBox="0 0 360 160" preserveAspectRatio="none" aria-hidden="true">
+          <circle cx="20" cy="28" r="3" fill="#fff" opacity="0.85" />
+          <circle cx="44" cy="16" r="2" fill="#fff" opacity="0.85" />
+          <circle cx="80" cy="40" r="2.5" fill="#fff" opacity="0.85" />
+          <circle cx="200" cy="18" r="3" fill="#fff" opacity="0.85" />
+          <circle cx="260" cy="40" r="2" fill="#fff" opacity="0.85" />
+          <circle cx="320" cy="28" r="3" fill="#fff" opacity="0.85" />
+          <circle cx="42" cy="120" r="3" fill="#fff" opacity="0.85" />
+          <circle cx="120" cy="140" r="2.5" fill="#fff" opacity="0.85" />
+          <circle cx="330" cy="120" r="2.5" fill="#fff" opacity="0.85" />
+        </svg>
+        <div class="mhero-text">
+          <h1 class="mhero-title">My Emiel Life</h1>
+          <p class="mhero-lead">エミエルを愛しすぎた記録</p>
+          <a class="mhero-btn" href="/reviews">もっと見る ›</a>
+        </div>
+        <div class="mhero-art">
+          <BearDoodle size={94} />
+          <HandBottle size={70} />
+        </div>
+      </div>
+    </section>
+
+    <!-- NEW REVIEWS (horizontal scroll) -->
+    <section class="mnew">
+      <div class="msec-head">
+        <h2>New Reviews</h2>
+        <a class="msec-more" href="/reviews">すべて見る ›</a>
+      </div>
+      <div class="mnew-row">
+        {mNewReviews.map((r, i) => (
+          <a class="mnew-card" href={`/reviews/${r.slug}`}>
+            <div class={`mnew-badge mnew-badge-${(i % 3) + 1}`}>NEW</div>
+            <div class="mnew-img">
+              <ReviewImage r={r} variant="card" height={86} />
+            </div>
+            <div class="mnew-name">{r.name}</div>
+            <div class="mnew-date">{r.date}</div>
+            <div class="mnew-rating">
+              <HeartsRating value={r.rating} size={9} showValue={false} />
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <!-- RANKING (Top 3 list with crowns) -->
+    <section class="mrank">
+      <div class="msec-head">
+        <h2>Ranking</h2>
+        <a class="msec-more" href="/ranking">すべて見る ›</a>
+      </div>
+      <div class="mrank-list">
+        {top3.map((r, i) => {
+          const crown = i === 0 ? '#f5c84a' : i === 1 ? '#c0c5cc' : '#cf8a4a';
+          return (
+            <a class="mrank-row" href={`/reviews/${r.slug}`}>
+              <svg class="mrank-crown" width="32" height="28" viewBox="0 0 40 32">
+                <path d="M4 26 L8 10 L16 18 L20 6 L24 18 L32 10 L36 26 Z" fill={crown} />
+                <rect x="4" y="26" width="32" height="3" fill={crown} opacity="0.85" />
+                <text x="20" y="25" font-size="10" font-weight="700" fill="#fff" text-anchor="middle">{i + 1}</text>
+              </svg>
+              <div class="mrank-img">
+                <ReviewImage r={r} variant="card" height={56} />
+              </div>
+              <div class="mrank-info">
+                <div class="mrank-name">{r.name}</div>
+                <div class="mrank-stars"><HeartsRating value={r.rating} size={10} showValue={false} /></div>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    </section>
+
+    <!-- ARCHIVE (year chips + month timeline) -->
+    <section class="march">
+      <div class="msec-head">
+        <h2>Archive</h2>
+        <a class="msec-more" href="/archive">すべて見る ›</a>
+      </div>
+      <div class="march-card">
+        <div class="march-chips">
+          {mYearCounts.map(([y, c], i) => (
+            <span class={`march-chip march-chip-${i % 3}`}>{y}年・{c}件</span>
+          ))}
+          <span class="march-chip march-chip-total">全 {totalReviews}件</span>
+        </div>
+        {mMonthTimeline.map(([ym, d], i) => (
+          <a class={`march-row ${i < mMonthTimeline.length - 1 ? 'has-divider' : ''}`} href="/archive">
+            <span class="march-ym">{ym}</span>
+            <span class="march-latest">最新：{d.latest}</span>
+            <span class="march-count">{d.count}件</span>
+            <span class="march-chev">›</span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="mcontact">
+      <div class="msec-head">
+        <h2>Contact</h2>
+      </div>
+      <div class="mcontact-card">
+        <div class="mcontact-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3d86c4" stroke-width="1.8">
+            <rect x="3" y="6" width="18" height="13" rx="1.5" />
+            <path d="M3 7l9 7 9-7" />
+          </svg>
+        </div>
+        <div>
+          <div class="mcontact-title">ご感想・リクエスト募集中</div>
+          <div class="mcontact-sub">飲んでみてほしい商品や、感想を<br />お気軽にお寄せください。</div>
+        </div>
+      </div>
+      <div class="mcontact-links">
+        <a class="mcontact-link" href="/contact"><span>お問い合わせ</span><span class="chev">›</span></a>
+      </div>
+    </section>
+
+    <!-- PROMO -->
+    <section class="mpromo">
+      <div class="mpromo-card">
+        <p class="mpromo-text">お気に入りのエミエルを<br />見つけよう！</p>
+        <div class="mpromo-art">
+          <BearDoodle size={70} />
+        </div>
+      </div>
+    </section>
+
+<style>
+  section { padding: 0; }
+
+  /* shared section heading */
+  .msec-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 8px 16px 6px;
+    margin: 8px 0 22px;
+  }
+  .msec-head h2 {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--accent-deeper);
+    margin: 0;
+    line-height: 1;
+  }
+  .msec-more {
+    font-size: 11px;
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  /* HERO */
+  .mhero { padding: 30px 16px 0; }
+  .mhero-card {
+    position: relative;
+    background: linear-gradient(180deg, #d6ebfa 0%, #ecf5fc 100%);
+    border-radius: 18px;
+    padding: 20px 18px 22px;
+    overflow: hidden;
+    min-height: 156px;
+  }
+  .mhero-dots { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .mhero-text { position: relative; max-width: 60%; }
+  .mhero-title {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 700;
+    font-size: 30px;
+    color: #1f5fa8;
+    line-height: 1;
+    margin: 0;
+  }
+  .mhero-lead {
+    font-size: 12px;
+    color: #3a5a82;
+    margin: 8px 0 0;
+    font-family: var(--font-jp);
+  }
+  .mhero-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 14px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-family: var(--font-jp);
+    padding: 7px 14px;
+    border-radius: 999.008px;
+    text-decoration: none;
+    box-shadow: 0 2px 6px rgba(122, 169, 217, 0.3);
+  }
+  .mhero-art {
+    position: absolute;
+    right: 8px;
+    bottom: 4px;
+    display: flex;
+    align-items: flex-end;
+    gap: 0;
+    pointer-events: none;
+  }
+  .mhero-art > :nth-child(2) { margin-left: -6px; margin-bottom: 4px; }
+
+  /* shared section divider — decorative star with side lines */
+  .mnew::before,
+  .mrank::before,
+  .march::before,
+  .mcontact::before,
+  .mpromo::before {
+    content: '────  ✦  ────';
+    display: block;
+    text-align: center;
+    font-size: 13px;
+    color: rgba(122, 169, 217, 0.7);
+    letter-spacing: 0.05em;
+    margin: 20px 16px 22px;
+    font-family: var(--font-display);
+    line-height: 1;
+  }
+
+  /* NEW REVIEWS */
+  .mnew { padding: 28px 0 0; }
+  .mnew-row {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 4px 16px 6px;
+    scrollbar-width: none;
+  }
+  .mnew-row::-webkit-scrollbar { display: none; }
+  .mnew-card {
+    flex: 0 0 130px;
+    background: #fff;
+    border: 1px solid rgba(168, 200, 232, 0.22);
+    border-radius: 14px;
+    padding: 12px 8px 10px;
+    box-shadow: 0 2px 10px rgba(122, 169, 217, 0.12);
+    position: relative;
+    text-decoration: none;
+    color: inherit;
+  }
+  .mnew-badge {
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 9px;
+    font-weight: 700;
+    font-family: var(--font-display);
+    font-style: italic;
+    border: 2px solid #fff;
+    z-index: 2;
+  }
+  .mnew-badge-1 { background: #bfdcf4; }
+  .mnew-badge-2 { background: #f6c8cc; }
+  .mnew-badge-3 { background: #f5dca4; }
+  .mnew-img {
+    height: 86px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 8px;
+  }
+  .mnew-img :global(.ri) { height: 86px !important; }
+  .mnew-name {
+    font-size: 11px;
+    font-weight: 700;
+    margin-top: 6px;
+    color: var(--ink-primary);
+    text-align: center;
+    line-height: 1.3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .mnew-date {
+    font-size: 9px;
+    color: var(--ink-tertiary-2);
+    text-align: center;
+    margin-top: 3px;
+  }
+  .mnew-rating { display: flex; justify-content: center; margin-top: 4px; }
+
+  /* RANKING */
+  .mrank { padding: 28px 0 0; }
+  .mrank-list {
+    margin: 0 16px;
+    background: #fff;
+    border: 1px solid rgba(168, 200, 232, 0.22);
+    border-radius: 14px;
+    padding: 4px 0;
+    box-shadow: 0 2px 10px rgba(122, 169, 217, 0.1);
+  }
+  .mrank-row {
+    display: grid;
+    grid-template-columns: 36px 56px minmax(0, 1fr);
+    align-items: center;
+    gap: 8px;
+    padding: 12px 14px;
+    text-decoration: none;
+    color: inherit;
+    border-bottom: 1px solid #f0f5fa;
+  }
+  .mrank-info { min-width: 0; }
+  .mrank-row:last-child { border-bottom: none; }
+  .mrank-img {
+    height: 56px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .mrank-img :global(.ri) { height: 56px !important; }
+  .mrank-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink-primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .mrank-stars { margin-top: 2px; }
+
+  /* ARCHIVE */
+  .march { padding: 28px 0 0; }
+  .march-card {
+    margin: 0 16px;
+    background: #fff;
+    border: 1px solid rgba(168, 200, 232, 0.22);
+    border-radius: 14px;
+    padding: 12px 14px;
+    box-shadow: 0 2px 10px rgba(122, 169, 217, 0.1);
+  }
+  .march-chips {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+  .march-chip {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 999.008px;
+    font-family: var(--font-jp);
+  }
+  .march-chip-0 { background: #eaf2fa; color: #3d86c4; }
+  .march-chip-1 { background: #fff2dc; color: #dc9a48; }
+  .march-chip-2 { background: #fdeaea; color: #d97070; }
+  .march-chip-total { background: #f0eee9; color: #9b8a78; }
+  .march-row {
+    display: grid;
+    grid-template-columns: 64px 1fr auto 14px;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    text-decoration: none;
+    color: inherit;
+  }
+  .march-row.has-divider { border-bottom: 1px dashed #e3edf6; }
+  .march-ym {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 700;
+    font-size: 16px;
+    color: #1f5fa8;
+  }
+  .march-latest { font-size: 11px; color: var(--ink-tertiary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .march-count { font-size: 10px; color: var(--accent); font-weight: 600; }
+  .march-chev { color: #9bbedc; font-size: 14px; line-height: 1; text-align: center; }
+
+  /* CONTACT */
+  .mcontact { padding: 28px 0 0; }
+  .mcontact-card {
+    margin: 0 16px;
+    background: #fff;
+    border: 1px solid rgba(168, 200, 232, 0.22);
+    border-radius: 14px;
+    padding: 14px 16px;
+    box-shadow: 0 2px 10px rgba(122, 169, 217, 0.1);
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: 12px;
+    align-items: center;
+  }
+  .mcontact-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #eaf4fc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .mcontact-title { font-size: 13px; font-weight: 700; color: var(--ink-primary); }
+  .mcontact-sub { font-size: 10px; color: var(--ink-tertiary-2); margin-top: 3px; line-height: 1.55; }
+  .mcontact-links {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin: 8px 16px 0;
+  }
+  .mcontact-link {
+    background: #fff;
+    border: 1px solid rgba(168, 200, 232, 0.22);
+    border-radius: 10px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--ink-primary);
+    text-decoration: none;
+    box-shadow: 0 1px 4px rgba(122, 169, 217, 0.08);
+  }
+  .mcontact-link .chev { color: var(--accent); }
+
+  /* PROMO */
+  .mpromo { padding: 28px 16px 32px; }
+  .mpromo-card {
+    background: #fff7d6;
+    border-radius: 14px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+  }
+  .mpromo-text { font-size: 13px; color: var(--ink-primary); line-height: 1.5; margin: 0; font-family: var(--font-jp); }
+  .mpromo-art { display: flex; align-items: flex-end; }
+  .mpromo-heart { margin-left: -10px; margin-bottom: 30px; font-size: 18px; color: #f5a3a3; }
+</style>

@@ -37,6 +37,7 @@ const profileItems = [
 <BaseLayout title="about" activeTab="about">
   <Header active="about" />
 
+  <div class="about-desktop">
   <!-- ───────── HERO ───────── -->
   <section class="hero">
     <div class="hero-l">
@@ -235,6 +236,174 @@ const profileItems = [
       ))}
     </div>
   </section>
+
+  </div>
+
+  <!-- ============== MOBILE ============== -->
+  <div class="about-mobile">
+    <!-- HERO -->
+    <section class="mab-hero">
+      <div class="mab-hero-card">
+        <div class="mab-hero-text">
+          <h1 class="mab-hero-title">about</h1>
+          <p class="mab-hero-sub">このサイトと運営者について</p>
+          <p class="mab-hero-catch">エミエルがくれる、<br />ちいさな幸せを記録する場所。</p>
+        </div>
+        <div class="mab-hero-art" aria-hidden="true">
+          <BearDoodle size={68} />
+        </div>
+      </div>
+      <p class="mab-hero-lede">{data?.intro}</p>
+    </section>
+
+    <!-- PROFILE (about me) -->
+    <section class="mab-section">
+      <h2 class="mab-sec-title"><span class="mab-sec-bullet" aria-hidden="true">✦</span>about me<span class="mab-sec-kira" aria-hidden="true"><Star size={9} color="var(--accent-soft)" /><Star size={6} color="var(--accent-soft)" /></span></h2>
+      <div class="mab-card mab-profile">
+        <div class="mab-profile-head">
+          <div class="mab-profile-avatar"><img src={data?.avatar ?? '/images/about-me.png'} alt="" /></div>
+          <div class="mab-profile-name">{data?.catch}</div>
+        </div>
+        <ul class="mab-profile-list">
+          {profileItems.map((it) => (
+            <li>
+              <span class="mab-profile-icon" aria-hidden="true">
+                {it.icon === 'cup' && (
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round">
+                    <path d="M8 6h8l-1.2 12a2 2 0 0 1-2 1.8h-1.6a2 2 0 0 1-2-1.8z" />
+                    <path d="M9 9.5h6" stroke-linecap="round" />
+                  </svg>
+                )}
+                {it.icon === 'heart' && <HeartIcon size={14} color="currentColor" />}
+                {it.icon === 'clock' && (
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                    <circle cx="12" cy="12" r="8" />
+                    <path d="M12 8v4l2.5 2" />
+                  </svg>
+                )}
+                {it.icon === 'ice' && (
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round">
+                    <rect x="5" y="5" width="6" height="6" rx="1" />
+                    <rect x="13" y="9" width="6" height="6" rx="1" />
+                    <rect x="7" y="13" width="6" height="6" rx="1" />
+                  </svg>
+                )}
+                {it.icon === 'cal' && (
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round">
+                    <rect x="4" y="6" width="16" height="14" rx="2" />
+                    <path d="M4 10h16M9 4v4M15 4v4" stroke-linecap="round" />
+                  </svg>
+                )}
+              </span>
+              <span class="mab-profile-label">{it.label}</span>
+              <span class="mab-profile-value">{it.value}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <!-- このサイトについて -->
+    <section class="mab-section">
+      <h2 class="mab-sec-title"><span class="mab-sec-bullet" aria-hidden="true">✦</span>このサイトについて<span class="mab-sec-kira" aria-hidden="true"><Star size={9} color="var(--accent-soft)" /><Star size={6} color="var(--accent-soft)" /></span><BearDoodle size={26} class="mab-sec-bear" /></h2>
+      <div class="mab-card mab-lead">
+        <Content />
+      </div>
+    </section>
+
+    <!-- レビューの基準 -->
+    <section class="mab-section">
+      <h2 class="mab-sec-title"><span class="mab-sec-bullet" aria-hidden="true">✦</span>レビューの基準<span class="mab-sec-kira" aria-hidden="true"><Star size={9} color="var(--accent-soft)" /><Star size={6} color="var(--accent-soft)" /></span><BearDoodle size={26} class="mab-sec-bear" /></h2>
+      <div class="mab-card mab-criteria">
+        <p class="mab-criteria-note">5つの視点で 5.0 点満点で評価しています！</p>
+        {criteria.map((c) => (
+          <div class="mab-crit">
+            <div class={`mab-crit-icon ic-${c.key}`} aria-hidden="true">
+              {c.key === 'taste' && (
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-linecap="round">
+                  <circle cx="12" cy="12" r="9" />
+                  <circle cx="9" cy="10" r="0.8" fill="var(--accent)" />
+                  <circle cx="15" cy="10" r="0.8" fill="var(--accent)" />
+                  <path d="M8.5 14.5q3.5 2.5 7 0" />
+                </svg>
+              )}
+              {c.key === 'drink' && (
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-linejoin="round">
+                  <path d="M7 6h10l-1.4 13a2 2 0 0 1-2 1.8h-3.2a2 2 0 0 1-2-1.8z" />
+                  <path d="M7.6 10h8.8" />
+                </svg>
+              )}
+              {c.key === 'special' && (
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-linejoin="round">
+                  <path d="M12 3l2.4 5.6 6.1.5-4.7 4 1.5 6-5.3-3.2-5.3 3.2 1.5-6-4.7-4 6.1-.5z" />
+                </svg>
+              )}
+              {c.key === 'repeat' && (
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round">
+                  <path d="M8 6h8l-1.2 12a2 2 0 0 1-2 1.8h-1.6a2 2 0 0 1-2-1.8z" />
+                  <path d="M11 3l-1.5 3M13 3l1.5 3" />
+                </svg>
+              )}
+              {c.key === 'aftertaste' && (
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 14q3-4 6 0t6 0t6 0" />
+                  <path d="M3 9q3-3 6 0t6 0t6 0" opacity="0.55" />
+                </svg>
+              )}
+            </div>
+            <div class="mab-crit-info">
+              <div class="mab-crit-label">{c.label}</div>
+              <div class="mab-crit-desc">{c.desc.split('\n').join(' ')}</div>
+              <div class="mab-crit-rating"><HeartsRating value={c.value} size={11} showValue={false} /></div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- このサイトでできること -->
+    <section class="mab-section">
+      <h2 class="mab-sec-title"><span class="mab-sec-bullet" aria-hidden="true">✦</span>このサイトでできること<span class="mab-sec-kira" aria-hidden="true"><Star size={9} color="var(--accent-soft)" /><Star size={6} color="var(--accent-soft)" /></span><BearDoodle size={26} class="mab-sec-bear" /></h2>
+      <div class="mab-cap-list">
+        {capabilities.map((cap) => (
+          <div class="mab-card mab-cap">
+            <div class={`mab-cap-icon ic-${cap.icon ?? 'cup'}`} aria-hidden="true">
+              {cap.icon === 'cup' && (
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linejoin="round">
+                  <path d="M7 6h10l-1.4 13a2 2 0 0 1-2 1.8h-3.2a2 2 0 0 1-2-1.8z" />
+                  <path d="M11 3v3M13 3v3" stroke-linecap="round" />
+                </svg>
+              )}
+              {cap.icon === 'sparkle' && (
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 4v4M12 16v4M4 12h4M16 12h4" />
+                  <path d="M7.5 7.5l2 2M14.5 14.5l2 2M16.5 7.5l-2 2M9.5 14.5l-2 2" />
+                </svg>
+              )}
+              {cap.icon === 'heart' && <HeartIcon size={20} color="var(--accent)" />}
+            </div>
+            <div class="mab-cap-info">
+              <div class="mab-cap-title">{cap.title}</div>
+              <p class="mab-cap-body">{cap.body}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- もう少し詳しく -->
+    <section class="mab-section">
+      <h2 class="mab-sec-title"><span class="mab-sec-bullet" aria-hidden="true">✦</span>もう少し詳しく<span class="mab-sec-kira" aria-hidden="true"><Star size={9} color="var(--accent-soft)" /><Star size={6} color="var(--accent-soft)" /></span><BearDoodle size={26} class="mab-sec-bear" /></h2>
+      <div class="mab-topic-list">
+        {topics.map((t) => (
+          <div class="mab-card mab-topic">
+            <h3 class="mab-topic-title">{t.title}</h3>
+            <p class="mab-topic-body">{t.body}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  </div>
 
   <Footer variant="about" />
 
@@ -649,6 +818,297 @@ const profileItems = [
 
   .bg-deco { display: none; }
   body { padding-bottom: 64px; }
+}
+
+/* ─────────────── ABOUT MOBILE LAYOUT ─────────────── */
+.about-mobile { display: none; }
+
+@media (max-width: 768px) {
+  .about-desktop { display: none; }
+  .about-mobile { display: block; }
+
+  .about-mobile section { padding: 0; }
+
+  /* shared section heading */
+  .about-mobile .mab-sec-title {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--accent-deeper);
+    margin: 0 16px 14px;
+    padding: 0 0 8px;
+    line-height: 1.1;
+    letter-spacing: 0.3px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    overflow: hidden;
+    position: relative;
+    background-image: linear-gradient(to right, rgba(122, 169, 217, 0.5) 50%, transparent 50%);
+    background-size: 6px 1.5px;
+    background-repeat: repeat-x;
+    background-position: bottom left;
+  }
+  .about-mobile .mab-sec-bullet {
+    color: var(--accent);
+    font-size: 14px;
+    font-style: normal;
+    line-height: 1;
+    transform: translateY(-1px);
+  }
+  .about-mobile .mab-sec-kira {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    margin-left: 4px;
+    transform: translateY(-2px);
+  }
+  .about-mobile :global(.mab-sec-bear) {
+    margin-left: auto;
+    flex-shrink: 0;
+    transform: translateY(-2px);
+  }
+  .about-mobile .mab-section { padding: 22px 0 0; }
+  .about-mobile .mab-card {
+    background: #fff;
+    border: 1px solid rgba(168, 200, 232, 0.22);
+    border-radius: 14px;
+    margin: 0 16px;
+    padding: 14px 16px;
+    box-shadow: 0 2px 10px rgba(122, 169, 217, 0.1);
+  }
+
+  /* HERO */
+  .about-mobile .mab-hero { padding: 18px 16px 0; }
+  .about-mobile .mab-hero-card {
+    background: linear-gradient(180deg, #d6ebfa 0%, #ecf5fc 100%);
+    border-radius: 18px;
+    padding: 18px 18px 16px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 12px;
+    align-items: center;
+    overflow: hidden;
+  }
+  .about-mobile .mab-hero-text { min-width: 0; }
+  .about-mobile .mab-hero-title {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 700;
+    font-size: 30px;
+    color: #1f5fa8;
+    margin: 0;
+    line-height: 1;
+  }
+  .about-mobile .mab-hero-sub {
+    font-size: 11px;
+    color: #3a5a82;
+    margin: 6px 0 0;
+    font-family: var(--font-jp);
+  }
+  .about-mobile .mab-hero-catch {
+    font-family: var(--font-jp);
+    font-size: 13px;
+    color: var(--ink-primary);
+    line-height: 1.55;
+    margin: 10px 0 0;
+    font-weight: 600;
+  }
+  .about-mobile .mab-hero-art { flex-shrink: 0; }
+  .about-mobile .mab-hero-lede {
+    font-size: 12px;
+    line-height: 1.85;
+    color: var(--ink-tertiary);
+    font-family: var(--font-jp);
+    margin: 14px 16px 0;
+  }
+
+  /* PROFILE */
+  .about-mobile .mab-profile-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .about-mobile .mab-profile-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: var(--list-active);
+  }
+  .about-mobile .mab-profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .about-mobile .mab-profile-name {
+    font-family: var(--font-jp);
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--ink-primary);
+    line-height: 1.5;
+    white-space: pre-line;
+  }
+  .about-mobile .mab-profile-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .about-mobile .mab-profile-list li {
+    display: grid;
+    grid-template-columns: 26px minmax(0, 1fr);
+    grid-template-areas:
+      "icon label"
+      "icon value";
+    align-items: center;
+    column-gap: 10px;
+    row-gap: 2px;
+    padding: 10px 0;
+    border-top: 1px dashed rgba(168, 200, 232, 0.3);
+  }
+  .about-mobile .mab-profile-list li:first-child { border-top: none; }
+  .about-mobile .mab-profile-icon {
+    grid-area: icon;
+    width: 26px;
+    height: 26px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--list-active);
+    color: var(--accent);
+    align-self: center;
+  }
+  .about-mobile .mab-profile-label {
+    grid-area: label;
+    font-size: 10.5px;
+    color: var(--ink-tertiary-2);
+    font-family: var(--font-jp);
+    line-height: 1.2;
+  }
+  .about-mobile .mab-profile-value {
+    grid-area: value;
+    font-size: 13px;
+    color: var(--ink-primary);
+    font-weight: 700;
+    word-break: break-word;
+    line-height: 1.35;
+    font-family: var(--font-jp);
+  }
+
+  /* LEAD (markdown content) */
+  .about-mobile .mab-lead :global(p) {
+    font-size: 12px;
+    line-height: 1.85;
+    color: var(--ink-secondary);
+    margin: 0 0 10px;
+    font-family: var(--font-jp);
+  }
+  .about-mobile .mab-lead :global(p:last-child) { margin-bottom: 0; }
+
+  /* CRITERIA */
+  .about-mobile .mab-criteria-note {
+    font-size: 10.5px;
+    color: var(--ink-tertiary);
+    margin: 0 0 12px;
+    text-align: center;
+    font-family: var(--font-jp);
+  }
+  .about-mobile .mab-crit {
+    display: grid;
+    grid-template-columns: 36px minmax(0, 1fr);
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-top: 1px dashed rgba(168, 200, 232, 0.3);
+  }
+  .about-mobile .mab-crit:first-of-type { border-top: none; padding-top: 4px; }
+  .about-mobile .mab-crit-icon {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--list-active);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .about-mobile .mab-crit-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink-primary);
+    font-family: var(--font-jp);
+  }
+  .about-mobile .mab-crit-desc {
+    font-size: 10.5px;
+    color: var(--ink-tertiary);
+    line-height: 1.5;
+    margin-top: 2px;
+  }
+  .about-mobile .mab-crit-rating { margin-top: 4px; }
+
+  /* CAPABILITIES */
+  .about-mobile .mab-cap-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .about-mobile .mab-cap {
+    display: grid;
+    grid-template-columns: 36px minmax(0, 1fr);
+    align-items: center;
+    gap: 12px;
+  }
+  .about-mobile .mab-cap-icon {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--list-active);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .about-mobile .mab-cap-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink-primary);
+    font-family: var(--font-jp);
+  }
+  .about-mobile .mab-cap-body {
+    font-size: 11px;
+    color: var(--ink-tertiary);
+    line-height: 1.6;
+    margin: 4px 0 0;
+    font-family: var(--font-jp);
+  }
+
+  /* TOPICS */
+  .about-mobile .mab-topic-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .about-mobile .mab-topic-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink-primary);
+    font-family: var(--font-jp);
+    margin: 0 0 6px;
+  }
+  .about-mobile .mab-topic-body {
+    font-size: 11px;
+    line-height: 1.7;
+    color: var(--ink-tertiary);
+    margin: 0;
+    font-family: var(--font-jp);
+    white-space: pre-line;
+  }
 }
 </style>
 </BaseLayout>

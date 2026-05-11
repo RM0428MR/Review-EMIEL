@@ -1,11 +1,11 @@
 ---
-interface Props { fill?: string; }
-const { fill = 'var(--cloud-soft)' } = Astro.props;
+interface Props { fill?: string; step?: number; lift?: number; }
+const { fill = 'var(--cloud-soft)', step: stepProp, lift: liftProp } = Astro.props;
 
 const W = 1280;
 const baseY = 80;
-const baseStep = 90;
-const baseLift = 60;
+const baseStep = stepProp ?? 90;
+const baseLift = liftProp ?? 60;
 const stepJ = [0, -8, 6, -4, 10, -6, 4, -10, 8, -2, 6, -8, 4, 10, -6, 2];
 const liftJ = [0, 14, -10, 8, -16, 12, -6, 18, -12, 6, -14, 10, -8, 16, -10, 4];
 let x = -20;

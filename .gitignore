@@ -29,6 +29,7 @@ Thumbs.db
 # Claude Code
 .claude/settings.local.json
 .claude/review-workspace/
+.agent-workspace/
 
 # 旧 ChatGPT モック素材（参考用、リポジトリには含めない／ADR 0006 に準拠）
 design/source/

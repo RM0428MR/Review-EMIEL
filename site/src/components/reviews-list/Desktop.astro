@@ -1,0 +1,171 @@
+---
+import ReviewCard from '../ReviewCard.astro';
+import BearDoodle from '../BearDoodle.astro';
+import ReviewFilters from '../react/ReviewFilters.tsx';
+import type { Review } from '../../lib/types';
+
+interface Props {
+  all: Review[];
+  totalCount: number;
+  initialCat?: string;
+}
+
+const { all, totalCount, initialCat = 'すべて' } = Astro.props;
+---
+<section class="page-head">
+  <div class="bc">home <span>›</span> review</div>
+  <div class="title-block">
+    <div class="title-deco">
+      {/* === 飾り：ここの style を編集して位置/サイズ/角度を調整 === */}
+      <img class="dec petal" src="/images/decor-petals.png" alt="" aria-hidden="true"
+        style="top:10px; left:20px; width:42px; transform:rotate(40deg);" />
+      <img class="dec petal" src="/images/decor-petals.png" alt="" aria-hidden="true"
+        style="top:20px; left:60px; width:25px; transform:rotate(120deg);" />
+      <img class="dec petal" src="/images/decor-petals.png" alt="" aria-hidden="true"
+        style="top:50px; left:18px; width:36px; transform:rotate(-8deg);" />
+      <svg class="dec heart" viewBox="0 0 30 28" aria-hidden="true"
+        style="top:10px; left:150px; width:26px; transform:rotate(5deg);">
+        <path d="M15 25 C3 17 1 9 6 5 C10 2 14 5 15 8 C16 5 20 2 24 5 C29 9 27 17 15 25 Z"
+          fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <svg class="dec heart" viewBox="0 0 30 28" aria-hidden="true"
+        style="top:30px; right:20px; width:18px; transform:rotate(10deg);">
+        <path d="M15 25 C3 17 1 9 6 5 C10 2 14 5 15 8 C16 5 20 2 24 5 C29 9 27 17 15 25 Z"
+          fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      {/* === 飾りここまで === */}
+      <h1>review</h1>
+    </div>
+    <p>これまでに飲んだエミエルたちのレビュー一覧です。</p>
+  </div>
+  <div class="bubble-group">
+    <img src="/images/review-bubble.png" class="bubble-img" alt="気になるエミエルを見つけてね！" />
+    <BearDoodle size={72} class="bubble-bear" />
+  </div>
+  <div class="count">
+    <div class="lbl">みつけた数</div>
+    <div class="num">{totalCount}</div>
+    <div class="unit">種類</div>
+  </div>
+</section>
+
+<section class="main">
+  <aside class="sidebar">
+    <ReviewFilters client:load reviews={all} initialCat={initialCat} />
+    <div class="sidebar-bubble">
+      <BearDoodle size={56} />
+      <img class="sidebar-bubble-img" src="/images/review-bubble-bottom.png" alt="どれもおいしいよ〜！" />
+    </div>
+  </aside>
+  <div class="grid-area">
+    <div class="result-meta" data-result-count>{all.length}件の商品</div>
+    <div class="card-grid" data-card-grid>
+      {all.map((r) => (
+        <div class="card-slot" data-review-slug={r.slug}>
+          <ReviewCard r={r} />
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+.bc {
+  grid-column: 1;
+  align-self: start;
+  font-size: 11px;
+  color: var(--ink-tertiary-2);
+}
+.bc span { margin: 0 6px; }
+
+.page-head {
+  padding: 0 40px 12px;
+  display: grid;
+  grid-template-columns: 224px auto 1fr auto;
+  align-items: start;
+  column-gap: 24px;
+}
+.title-block { grid-column: 2; }
+.title-deco {
+  position: relative;
+  display: inline-block;
+  padding: 32px 50px 8px 70px;
+}
+.title-block h1 {
+  font-family: var(--font-display);
+  font-size: var(--fs-hero);
+  font-style: italic;
+  color: var(--accent);
+  margin: 0;
+  line-height: 1;
+  position: relative;
+}
+.title-block p { font-size: 12px; margin-top: 8px; color: var(--ink-tertiary); }
+/* 位置・サイズ・回転は JSX の各要素の style 属性で個別調整する。
+   ここは共通スタイルだけ。 */
+.dec {
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+  display: block;
+  height: auto;
+}
+.heart { color: #5a89c7; }
+
+.bubble-group {
+  grid-column: 3;
+  justify-self: center;
+  align-self: center;
+  display: inline-flex;
+  align-items: flex-end;
+}
+.bubble-img {
+  width: 240px;
+  height: auto;
+  display: block;
+}
+.bubble-bear {
+  margin-left: -6px;
+  margin-bottom: -6px;
+}
+
+.count {
+  grid-column: 4;
+  align-self: center;
+  background: var(--bg-card);
+  border: var(--border-card);
+  border-radius: 14px;
+  padding: 12px 24px;
+  text-align: center;
+}
+.count .lbl { font-size: 11px; color: var(--ink-tertiary-2); }
+.count .num { font-size: 36px; font-family: var(--font-display); font-weight: 700; color: var(--accent); line-height: 1; }
+.count .unit { font-size: 10px; color: var(--ink-tertiary-2); }
+
+.main {
+  padding: 0 40px 0;
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 24px;
+}
+.sidebar-bubble {
+  display: flex;
+  align-items: flex-end;
+  margin-top: 40px;
+  padding-left: 4px;
+}
+.sidebar-bubble-img {
+  width: 130px;
+  height: auto;
+  display: block;
+  margin-left: -8px;
+  margin-bottom: 4px;
+}
+
+.result-meta { font-size: 13px; color: var(--ink-tertiary); margin-bottom: 14px; }
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+}
+</style>

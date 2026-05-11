@@ -2,8 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import ReviewImage from '../components/ReviewImage.astro';
-import BearDoodle from '../components/BearDoodle.astro';
+import ArchiveDesktop from '../components/archive/Desktop.astro';
+import ArchiveMobile from '../components/archive/Mobile.astro';
 import ArchiveBrowser from '../components/react/ArchiveBrowser.tsx';
 import { listReviews } from '../lib/microcms.ts';
 import { getMonth, archiveYearBucket } from '../lib/format.ts';
@@ -33,104 +33,31 @@ for (const r of all) {
 const monthOrder = Array.from({ length: 12 }, (_, i) => i + 1);
 
 const yearList = ['すべての年代', '2024年', '2023年', '2022年', '2021年', '2020年', 'それ以前'];
-const yearCount = (y: string) => (y === 'すべての年代' ? all.length : buckets.get(y)?.length ?? 0);
 ---
 <BaseLayout title="archive" activeTab="archive">
   <Header active="archive" />
 
-  <section class="head">
-    <div class="head-l">
-      <div class="head-bear"><BearDoodle size={70} /></div>
-      <div class="head-text">
-        <h1>archive</h1>
-        <p>これまでにレビューしたエミエルたちを<br />月ごと・年ごとにまとめています。</p>
-      </div>
-    </div>
-    <div class="head-c">
-      <div class="toggle">
-        <button type="button" class="on" data-archive-mode="year">年別で見る</button>
-        <button type="button" data-archive-mode="month">月別で見る</button>
-      </div>
-      <img class="omoide-bubble" src="/images/bubble-omoide.png" alt="いろんなエミエルとの思い出がいっぱい…！" />
-    </div>
-    <div class="count">
-      <div class="lbl">レビューした数</div>
-      <div class="num">{totalCount}</div>
-      <div class="unit">種類</div>
-    </div>
-  </section>
+  <div class="ar-desktop">
+    <ArchiveDesktop
+      all={all}
+      totalCount={totalCount}
+      buckets={buckets}
+      yearOrder={yearOrder}
+      monthBuckets={monthBuckets}
+      monthOrder={monthOrder}
+      yearList={yearList}
+    />
+  </div>
 
-  <section class="body">
-    <aside class="sidebar">
-      {yearList.map((y) => (
-        <button type="button" class={`yrow ${y === 'すべての年代' ? 'on' : ''}`} data-archive-year={y}>
-          <span>{y}</span><span class="cnt">{yearCount(y)}</span>
-        </button>
-      ))}
-      <div class="bear-pad">
-        <BearDoodle size={50} />
-        <div>気になる年を<br />えらんでね♡</div>
-      </div>
-    </aside>
-
-    <div class="content">
-      <div data-archive-year-view>
-        {yearOrder.map((y) => (
-          <div class="ysec" data-archive-section>
-            <div class="ysec-head">
-              {y === 'それ以前' ? (
-                <h3 class="y-prev">それ以前</h3>
-              ) : (
-                <h3>
-                  <span class="year-num">{y.replace('年', '')}</span>
-                </h3>
-              )}
-              <span class="ycnt" data-archive-section-count>{(buckets.get(y) ?? []).length}件のレビュー</span>
-            </div>
-            <div class="ygrid">
-              {(buckets.get(y) ?? []).slice(0, 12).map((r) => (
-                <a class="acard" href={`/reviews/${r.slug}`} data-archive-card data-year={archiveYearBucket(r.date)}>
-                  <div class="mbadge">{getMonth(r.date)}月</div>
-                  <ReviewImage r={r} variant="card" height={70} />
-                  <div class="aname">エミエル {r.name}</div>
-                  <div class="ameta">
-                    <span>{r.date}</span>
-                    <span>♡ 1件</span>
-                  </div>
-                </a>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div data-archive-month-view hidden>
-        {monthOrder.map((m) => (
-          <div class="ysec" data-archive-section>
-            <div class="ysec-head">
-              <h3>
-                <span class="month-num">{m}</span><span class="month-suffix">月</span>
-              </h3>
-              <span class="ycnt" data-archive-section-count>{(monthBuckets.get(m) ?? []).length}件のレビュー</span>
-            </div>
-            <div class="ygrid">
-              {(monthBuckets.get(m) ?? []).slice(0, 12).map((r) => (
-                <a class="acard" href={`/reviews/${r.slug}`} data-archive-card data-year={archiveYearBucket(r.date)}>
-                  <div class="mbadge">{archiveYearBucket(r.date)}</div>
-                  <ReviewImage r={r} variant="card" height={70} />
-                  <div class="aname">エミエル {r.name}</div>
-                  <div class="ameta">
-                    <span>{r.date}</span>
-                    <span>♡ 1件</span>
-                  </div>
-                </a>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
+  <div class="ar-mobile">
+    <ArchiveMobile
+      all={all}
+      totalCount={totalCount}
+      buckets={buckets}
+      yearOrder={yearOrder}
+      yearList={yearList}
+    />
+  </div>
 
   <ArchiveBrowser client:load yearList={yearList} />
 
@@ -138,206 +65,12 @@ const yearCount = (y: string) => (y === 'すべての年代' ? all.length : buck
 </BaseLayout>
 
 <style>
-.head {
-  padding: 0 40px 20px;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 20px;
-  align-items: center;
-}
-.head-l { display: flex; align-items: center; gap: 14px; }
-.head-text { min-width: 0; }
-.head h1 { font-family: var(--font-display); font-style: italic; font-size: var(--fs-hero); color: var(--accent); margin: 0; line-height: 1; }
-.head p { font-size: 12px; margin-top: 8px; color: var(--ink-tertiary); }
-.head-bear { flex-shrink: 0; }
-.head-c { display: flex; align-items: center; justify-content: center; gap: 14px; position: relative; }
-.head-c .toggle { flex-shrink: 0; }
-.toggle {
-  display: inline-flex;
-  background: var(--bg-card);
-  border: var(--border-card);
-  border-radius: 999.008px;
-  padding: 4px;
-}
-.toggle button {
-  padding: 6px 18px;
-  font-size: 12px;
-  border-radius: 999.008px;
-  border: none;
-  background: transparent;
-  color: var(--ink-tertiary);
-  font-family: var(--font-jp);
-  cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease;
-}
-.toggle button:hover:not(.on) { background: rgba(122, 169, 217, 0.12); }
-.toggle button.on { background: var(--accent); color: #fff; }
-.omoide-bubble {
-  width: 240px;
-  height: auto;
-  display: block;
-  position: absolute;
-  left: calc(100% + 12px);
-  top: 50%;
-  transform: translateY(-50%);
-  pointer-events: none;
-}
-.count {
-  background: var(--bg-card);
-  border: var(--border-card);
-  border-radius: 14px;
-  padding: 12px 24px;
-  text-align: center;
-  justify-self: end;
-}
-.count .lbl { font-size: 11px; color: var(--ink-tertiary-2); }
-.count .num { font-size: 36px; font-family: var(--font-display); font-weight: 700; color: var(--accent); line-height: 1; }
-.count .unit { font-size: 10px; color: var(--ink-tertiary-2); }
-
-.body {
-  padding: 0 40px 40px;
-  display: grid;
-  grid-template-columns: 200px 1fr;
-  gap: 24px;
-}
-.sidebar {
-  background: var(--bg-card);
-  border: var(--border-card);
-  border-radius: 14px;
-  padding: 14px;
-  align-self: start;
-}
-.yrow {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  padding: 8px 12px;
-  font-size: 12px;
-  border: none;
-  border-radius: 8px;
-  background: transparent;
-  text-align: left;
-  text-decoration: none;
-  color: var(--ink-secondary);
-  font-family: var(--font-jp);
-  margin-bottom: 2px;
-  cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease;
-}
-.yrow:hover:not(.on) { background: rgba(122, 169, 217, 0.12); }
-.yrow.on { background: var(--accent); color: #fff; }
-.yrow .cnt { font-size: 10px; opacity: 0.8; }
-.bear-pad { margin-top: 14px; text-align: center; padding: 10px; font-size: 10px; color: var(--ink-tertiary-2); }
-
-.content { display: flex; flex-direction: column; gap: 30px; }
-.ysec-head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  margin-bottom: 16px;
-}
-.ysec-head h3 {
-  margin: 0;
-  display: inline-flex;
-  align-items: baseline;
-  gap: 6px;
-  font-family: var(--font-display);
-}
-.year-num {
-  font-size: 38px;
-  font-style: italic;
-  font-weight: 700;
-  color: var(--accent);
-  letter-spacing: 1px;
-  line-height: 1;
-}
-.month-num {
-  font-size: 38px;
-  font-style: italic;
-  font-weight: 700;
-  color: var(--accent);
-  letter-spacing: 1px;
-  line-height: 1;
-}
-.month-suffix {
-  font-size: 18px;
-  font-family: var(--font-jp);
-  color: var(--accent);
-  margin-left: 4px;
-}
-.y-prev {
-  font-family: var(--font-jp);
-  font-size: 22px;
-  color: var(--ink-secondary);
-  font-weight: 600;
-  margin: 0;
-}
-.ycnt {
-  font-size: 12px;
-  color: var(--accent);
-  font-family: var(--font-display);
-  font-style: italic;
-}
-.ygrid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
-.acard {
-  background: var(--bg-card);
-  border: var(--border-card);
-  border-radius: 10px;
-  padding: 6px;
-  position: relative;
-  text-decoration: none;
-  color: inherit;
-}
-.mbadge {
-  position: absolute;
-  top: -6px;
-  left: 6px;
-  z-index: 2;
-  background: var(--badge-bg);
-  color: var(--accent);
-  font-size: 10px;
-  padding: 2px 10px;
-  border-radius: 999.008px;
-  font-family: var(--font-jp);
-  font-weight: 600;
-  box-shadow: 0 1px 3px rgba(60, 90, 130, 0.1);
-}
-.aname { font-size: 10px; font-weight: 600; margin-top: 4px; color: var(--ink-primary); }
-.ameta { display: flex; justify-content: space-between; font-size: 9px; color: var(--ink-tertiary-2); margin-top: 2px; }
+/* desktop / mobile toggle */
+.ar-mobile { display: none; }
 
 @media (max-width: 768px) {
-  .head {
-    padding: 0 16px 20px;
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-  .head h1 { font-size: clamp(36px, 9vw, 56px); }
-  .head-bear { display: none; }
-  .head-c { justify-content: flex-start; }
-  .count { justify-self: flex-start; padding: 8px 16px; }
-  .count .num { font-size: 28px; }
-  .body {
-    padding: 0 16px 32px;
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-  .sidebar {
-    display: flex;
-    flex-direction: row;
-    overflow-x: auto;
-    padding: 8px;
-    gap: 4px;
-  }
-  .yrow {
-    flex-shrink: 0;
-    width: auto;
-    padding: 6px 14px;
-    border-radius: 999.008px;
-  }
-  .yrow .cnt { display: none; }
-  .bear-pad { display: none; }
-  .ygrid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .ar-desktop { display: none; }
+  .ar-mobile { display: block; }
   body { padding-bottom: 64px; }
 }
 </style>
