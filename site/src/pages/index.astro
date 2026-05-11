@@ -2,436 +2,82 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import ReviewCard from '../components/ReviewCard.astro';
-import ReviewImage from '../components/ReviewImage.astro';
-import HeartsRating from '../components/HeartsRating.astro';
-import BearDoodle from '../components/BearDoodle.astro';
-import WashiTape from '../components/WashiTape.astro';
-import Underline from '../components/Underline.astro';
-import Star from '../components/Star.astro';
-import HandGlass from '../components/HandGlass.astro';
-import HandBottle from '../components/HandBottle.astro';
+import HomeDesktop from '../components/home/Desktop.astro';
+import HomeMobile from '../components/home/Mobile.astro';
 import { listReviews } from '../lib/microcms.ts';
 import { CATEGORIES } from '../data/reviews.ts';
 
-const { contents: newReviews } = await listReviews({ orders: '-date', limit: 5 });
-const { contents: top3 } = await listReviews({ orders: '-rating,-date', limit: 3 });
-const { contents: archive } = await listReviews({ orders: '-date', limit: 8 });
+const { contents: allReviews, totalCount: totalReviews } = await listReviews({ orders: '-date', limit: 100 });
+const top3 = [...allReviews].sort((a, b) => (b.rating - a.rating) || b.date.localeCompare(a.date)).slice(0, 3);
+
+// review セクション用：カテゴリごとの件数（chip クリック時の overflow CTA 表示判定に使用）
+const categoryCounts: Record<string, number> = { 'すべて': allReviews.length };
+for (const c of CATEGORIES) if (c !== 'すべて') categoryCounts[c] = 0;
+for (const r of allReviews) {
+  if (categoryCounts[r.cat] != null) categoryCounts[r.cat] += 1;
+}
+// Home review archive は全件を DOM に出し、client-side chip filter で先頭 8 件のみ表示する。
+// 余剰分は overflow CTA を表示して Archive 画面へ誘導する。
+const archive = allReviews;
 const myFavorite = top3[0];
 
-const yearChips = ['すべて', '2024', '2023', '2022', '2021', '2020', 'それ以前'];
-const monthChips = ['すべて', '1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+// Home の review archive セクションは Archive 画面との連携が前提。年バケットラベルと URL 値は
+// ArchiveBrowser の yearList と一致させる（"2024年" 等）。
+const yearChips = ['すべて', '2024年', '2023年', '2022年', '2021年', '2020年', 'それ以前'];
+
+// 年バケット集計：chip クリック時の Overflow CTA 表示判定（>8 件で表示）に使う
+function yearBucketOf(date: string): string {
+  const ny = parseInt(date.slice(0, 4));
+  if (isNaN(ny)) return 'それ以前';
+  if (ny >= 2020 && ny <= 2024) return `${ny}年`;
+  return 'それ以前';
+}
+const archiveBucketCounts: Record<string, number> = {
+  'すべて': allReviews.length,
+  '2024年': 0, '2023年': 0, '2022年': 0, '2021年': 0, '2020年': 0, 'それ以前': 0,
+};
+for (const r of allReviews) {
+  const b = yearBucketOf(r.date);
+  archiveBucketCounts[b] = (archiveBucketCounts[b] ?? 0) + 1;
+}
+
+// mobile aggregates
+const yearCountMap = new Map<string, number>();
+for (const r of allReviews) {
+  const y = r.date.slice(0, 4);
+  yearCountMap.set(y, (yearCountMap.get(y) ?? 0) + 1);
+}
+const mYearCounts = Array.from(yearCountMap.entries()).sort(([a], [b]) => b.localeCompare(a)).slice(0, 3);
+
+const monthDataMap = new Map<string, { count: number; latest: string }>();
+for (const r of allReviews) {
+  const ym = r.date.slice(0, 7).replaceAll('-', '.');
+  if (!monthDataMap.has(ym)) monthDataMap.set(ym, { count: 0, latest: r.name });
+  monthDataMap.get(ym)!.count += 1;
+}
+const mMonthTimeline = Array.from(monthDataMap.entries()).sort(([a], [b]) => b.localeCompare(a)).slice(0, 3);
+
+const mNewReviews = allReviews.slice(0, 6);
 ---
 <BaseLayout title="home" description="エミエルを愛しすぎている個人ファンが運営する架空のレビュー日誌サイト" activeTab="home">
   <Header active="home" />
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-l">
-      <div class="hero-my">my <Star size={10} style="vertical-align:middle;margin-left:4px;" /></div>
-      <div class="hero-jp"><span class="hero-jp-main">エミエル</span><span class="hero-diary">diary</span></div>
-      <div class="hero-rev">review</div>
-      <Underline width={160} style="margin-top:6px;" />
-      <p class="hero-lead">
-        エミエルがだいすきなぼくの<br />
-        エミエルレビュー記録サイト
-      </p>
-      <div class="hero-decor">
-        <Star size={9} color="var(--accent)" />
-        <Star size={11} color="var(--accent-soft)" />
-        <Star size={8} color="var(--accent)" />
-      </div>
-    </div>
-    <div class="hero-c">
-      <div class="hero-photo">
-        <img class="hero-photo-img" src="/images/Emiel-main-image.png" alt="" />
-      </div>
-      <div class="hero-bear"><BearDoodle size={86} /></div>
-    </div>
-    <div class="hero-r">
-      <div class="about-avatar"><img src="/images/about-me.png" alt="" width="110" height="110" style="width:110px;height:110px;object-fit:cover;display:block;border-radius:50%;" /></div>
-      <div class="about-chip">
-        about me
-        <Underline width={70} color="var(--accent-soft)" style="display:block;margin:4px auto 0;" />
-      </div>
-      <p class="about-body">
-        エミエルがだいすきな<br />
-        ごく普通のサラリーマン。<br />
-        新商品から期間限定まで、<br />
-        いろんなエミエルを飲んで<br />
-        正直レビューしてます☺
-      </p>
-      <a href="/about" class="about-cta">view more →</a>
-    </div>
-  </section>
+  <div class="page-desktop">
+    <HomeDesktop {allReviews} {categoryCounts} {top3} {archive} {myFavorite} {yearChips} {archiveBucketCounts} {CATEGORIES} />
+  </div>
 
-  <!-- NEW REVIEW -->
-  <section class="new-review">
-    <div class="section-head">
-      <h2>
-        <Star size={11} color="var(--accent)" style="margin-right:6px;" />
-        new review
-        <Underline width={70} style="display:block;margin-top:2px;" />
-      </h2>
-      <div class="chips">
-        {CATEGORIES.map((c, i) => (
-          <a href={i === 0 ? '/reviews' : `/reviews?cat=${encodeURIComponent(c)}`} class={`chip ${i === 0 ? 'active' : ''}`}>{c}</a>
-        ))}
-      </div>
-      <a class="more" href="/archive">review archive →</a>
-    </div>
-    <div class="card-grid-5">
-      {newReviews.map((r) => <ReviewCard r={r} />)}
-    </div>
-  </section>
-
-  <!-- RANKING -->
-  <section class="ranking">
-    <div class="ranking-l">
-      <h2>
-        <span class="crown">♔</span>
-        ranking
-        <Star size={11} color="var(--accent-soft)" style="margin-left:6px;" />
-      </h2>
-      <div class="rank-grid">
-        {top3.map((r, i) => (
-          <a href={`/reviews/${r.slug}`} class={`rank-card r-${i + 1}`}>
-            <div class="rank-no">No.{i + 1}</div>
-            <ReviewImage r={r} variant="card" height={150} />
-            <div class="rank-rating"><HeartsRating value={r.rating} size={12} /></div>
-            <div class="rank-name">『{r.name}』</div>
-            <p class="rank-oneliner">{r.oneLiner}</p>
-            <div class="rank-tags">
-              {(r.tags ?? []).slice(0, 3).map((t) => (<span>#{t}</span>))}
-            </div>
-          </a>
-        ))}
-      </div>
-    </div>
-    <aside class="fav">
-      <div class="fav-chip">my favorite</div>
-      {myFavorite && <ReviewImage r={myFavorite} variant="card" height={140} />}
-      <p class="fav-body">
-        どんなときもやさしくしてくれる<br />最高の味です。
-      </p>
-      <div class="fav-bear"><BearDoodle size={56} /></div>
-    </aside>
-  </section>
-
-  <!-- ARCHIVE strip -->
-  <section class="arch-strip">
-    <h2>review archive</h2>
-    <div class="chips">
-      {yearChips.map((y, i) => (
-        <a href={i === 0 ? '/archive' : `/archive?year=${encodeURIComponent(y)}`} class={`chip ${i === 0 ? 'active' : ''}`}>{y}</a>
-      ))}
-    </div>
-    <div class="month-chips">
-      {monthChips.map((m, i) => (
-        <a href={i === 0 ? '/archive' : `/archive?month=${i}`} class={`mchip ${i === 0 ? 'mactive' : ''}`}>{m}</a>
-      ))}
-    </div>
-    <div class="card-grid-6">
-      {archive.map((r) => (
-        <a href={`/reviews/${r.slug}`} class="strip-card">
-          <ReviewImage r={r} variant="card" height={140} />
-          <div class="strip-meta">
-            <div class="strip-date">{r.date}</div>
-            <div class="strip-name">『{r.name}』</div>
-            <div class="strip-one">{r.oneLiner}</div>
-          </div>
-        </a>
-      ))}
-    </div>
-  </section>
+  <div class="page-mobile">
+    <HomeMobile {mNewReviews} {mYearCounts} {mMonthTimeline} {top3} {totalReviews} />
+  </div>
 
   <Footer variant="home" />
 </BaseLayout>
 
 <style>
-section { padding: 0 40px 40px; }
-.hero {
-  padding: 20px 40px 48px;
-  display: grid;
-  grid-template-columns: 240px 1fr 260px;
-  gap: 28px;
-  align-items: start;
-  position: relative;
-}
-.hero-l { font-family: var(--font-display); position: relative; }
-.hero-my { font-size: 48px; font-style: italic; color: var(--accent); line-height: 1; margin-left: 14px; }
-.hero-jp {
-  font-family: var(--font-logo);
-  font-weight: 800;
-  font-size: 60px;
-  letter-spacing: -0.2px;
-  color: var(--accent-deeper);
-  line-height: 1;
-  margin-top: 6px;
-  display: inline-block;
-  position: relative;
-}
-.hero-jp-main { white-space: nowrap; }
-.hero-diary {
-  position: absolute;
-  top: calc(100% + 6px);
-  right: 4px;
-  font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 600;
-  font-size: 22px;
-  color: var(--accent);
-  letter-spacing: 0.5px;
-  line-height: 1;
-}
-.hero-rev { font-size: 48px; font-style: italic; color: var(--accent); line-height: 1; margin-top: 8px; margin-left: 14px; }
-.hero-lead { font-size: 12px; margin-top: 18px; line-height: 1.9; color: var(--ink-tertiary); font-family: var(--font-jp); }
-.hero-decor { display: flex; gap: 8px; margin-top: 14px; opacity: 0.7; }
-
-.hero-c { position: relative; padding: 0; display: flex; flex-direction: column; align-items: center; }
-.hero-photo {
-  position: relative;
-  width: 92%;
-  aspect-ratio: 16 / 9;
-  margin: 0 auto;
-  background: var(--bg-card);
-  border: var(--border-card);
-  border-radius: 64px / 48px;
-  padding: 10px;
-  box-shadow: var(--shadow-card);
-  overflow: hidden;
-}
-.hero-photo-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  border-radius: 56px / 40px;
-}
-.hero-bear {
-  position: absolute;
-  left: 50%;
-  bottom: -28px;
-  z-index: 4;
-  transform: translateX(-50%);
-}
-
-.hero-r {
-  background: var(--bg-card);
-  border: var(--border-card);
-  border-radius: 20px;
-  padding: 28px 18px 22px;
-  position: relative;
-  box-shadow: var(--shadow-card);
-  align-self: stretch;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 14px;
-}
-.about-avatar {
-  width: 110px;
-  height: 110px;
-  border-radius: 50%;
-  background: var(--list-active);
-  overflow: hidden;
-  flex-shrink: 0;
-}
-.about-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  display: block;
-}
-.about-chip {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-size: 22px;
-  color: var(--accent);
-  line-height: 1;
-}
-.about-body {
-  font-size: 12px;
-  line-height: 1.9;
-  color: var(--ink-secondary);
-  font-family: var(--font-jp);
-  margin: 0;
-}
-.about-cta {
-  display: inline-block;
-  margin-top: auto;
-  padding: 8px 24px;
-  font-size: 14px;
-  background: transparent;
-  border: 1.2px solid var(--accent);
-  color: var(--accent);
-  border-radius: 999.008px;
-  font-family: var(--font-display);
-  font-style: italic;
-  text-decoration: none;
-}
-.about-cta:hover { background: var(--list-active); }
-
-.section-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 18px;
-  gap: 16px;
-}
-.section-head h2 {
-  font-family: var(--font-display);
-  font-size: 28px;
-  color: var(--accent);
-  font-style: italic;
-  margin: 0;
-  display: inline-flex;
-  align-items: center;
-  flex-direction: column;
-  align-items: flex-start;
-  line-height: 1;
-}
-.chips { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
-.chip {
-  font-size: 11px;
-  padding: 5px 14px;
-  border-radius: 999.008px;
-  border: 1px solid #cfe0f0;
-  background: transparent;
-  color: var(--ink-tertiary);
-  cursor: pointer;
-  font-family: var(--font-jp);
-  text-decoration: none;
-  transition: all 0.15s;
-}
-.chip:hover { border-color: var(--accent); color: var(--accent); }
-.chip.active { background: var(--accent); border-color: var(--accent); color: #fff; }
-.more { font-size: 12px; color: var(--accent); font-family: var(--font-display); font-style: italic; text-decoration: none; }
-.more:hover { text-decoration: underline; }
-
-.card-grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
-
-.ranking { padding: 28px 40px 40px; display: grid; grid-template-columns: 1fr 300px; gap: 28px; }
-.ranking-l h2 {
-  font-family: var(--font-display);
-  font-size: 32px;
-  color: var(--accent);
-  font-style: italic;
-  margin: 0 0 24px;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-.ranking-l h2 .crown { font-size: 22px; margin-right: 6px; color: var(--accent-soft); }
-.rank-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-.rank-card {
-  position: relative;
-  display: block;
-  background: var(--bg-card);
-  border: var(--border-card);
-  border-radius: 18px;
-  padding: 16px;
-  overflow: visible;
-  text-decoration: none;
-  color: inherit;
-  box-shadow: var(--shadow-card);
-  transition: transform 0.18s ease;
-}
-.rank-card:hover { transform: translateY(-3px); }
-.rank-card.r-1 { border: 2px solid var(--accent); }
-.rank-no {
-  position: absolute;
-  top: -26px;
-  left: 12px;
-  z-index: 5;
-  font-family: var(--font-display);
-  font-size: 38px;
-  font-style: italic;
-  color: var(--accent);
-  font-weight: 700;
-  line-height: 1;
-  pointer-events: none;
-  text-shadow: 1px 1px 0 #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
-}
-.rank-rating { margin-top: 10px; }
-.rank-name { font-size: 13px; font-weight: 700; margin-top: 8px; color: var(--ink-primary); font-family: var(--font-jp); }
-.rank-oneliner { font-size: 11px; line-height: 1.6; margin-top: 4px; color: var(--ink-secondary); }
-.rank-tags { display: flex; gap: 4px; margin-top: 8px; flex-wrap: wrap; }
-.rank-tags span { font-size: 10px; color: var(--accent); opacity: 0.8; }
-
-.fav { background: var(--bg-card); border: var(--border-card); border-radius: 20px; padding: 18px; position: relative; box-shadow: var(--shadow-card); }
-.fav-chip {
-  display: inline-block;
-  background: var(--accent);
-  color: #fff;
-  font-family: var(--font-display);
-  font-size: 13px;
-  font-style: italic;
-  padding: 4px 14px;
-  border-radius: 999.008px;
-  margin-bottom: 12px;
-}
-.fav-body { font-size: 11px; line-height: 1.7; margin-top: 14px; color: var(--ink-tertiary); }
-.fav-bear { position: absolute; bottom: 10px; right: 10px; opacity: 0.85; }
-
-.arch-strip h2 { font-family: var(--font-display); font-size: 32px; color: var(--accent); font-style: italic; margin: 0 0 14px; }
-.month-chips { display: flex; gap: 6px; margin: 14px 0; flex-wrap: wrap; justify-content: center; }
-.mchip {
-  font-size: 10px;
-  padding: 4px 10px;
-  border-radius: 999.008px;
-  background: transparent;
-  border: 1px solid #dbeaf7;
-  color: var(--ink-tertiary);
-  font-family: var(--font-jp);
-  text-decoration: none;
-}
-.mchip.mactive { background: var(--badge-bg); }
-
-.card-grid-6 { display: grid; grid-template-columns: repeat(4, minmax(0, 220px)); gap: 20px 20px; justify-content: center; }
-.strip-card {
-  display: block;
-  background: var(--bg-card);
-  border: var(--border-card);
-  border-radius: 14px;
-  overflow: hidden;
-  text-decoration: none;
-  color: inherit;
-  box-shadow: var(--shadow-card);
-  transition: transform 0.18s ease;
-}
-.strip-card:hover { transform: translateY(-2px); }
-.strip-meta { padding: 8px 10px 12px; }
-.strip-date { font-size: 10px; color: var(--ink-tertiary-2); }
-.strip-name { font-size: 11px; font-weight: 600; margin-top: 2px; color: var(--ink-primary); }
-.strip-one { font-size: 10px; color: var(--ink-tertiary-2); margin-top: 1px; line-height: 1.4; }
-
-@media (max-width: 768px) {
-  section { padding: 0 16px 32px; }
-  .hero {
-    grid-template-columns: 1fr;
-    gap: 16px;
-    padding: 16px 16px 32px;
+  .page-mobile { display: none; }
+  @media (max-width: 768px) {
+    .page-desktop { display: none; }
+    .page-mobile { display: block; }
+    body { padding-bottom: 64px; }
   }
-  .hero-l { text-align: center; }
-  .hero-my, .hero-rev { font-size: 32px; margin-left: 0; }
-  .hero-jp { font-size: clamp(36px, 9vw, 52px); }
-  .hero-diary { font-size: 16px; top: calc(100% + 4px); }
-  .hero-photo { height: 200px; }
-  .hero-bubble { right: 16px; top: 30px; }
-  .hero-bear { right: 70px; }
-  .section-head { flex-direction: column; align-items: flex-start; gap: 8px; }
-  .chips { overflow-x: auto; flex-wrap: nowrap; max-width: 100%; padding-bottom: 4px; }
-  .chip { white-space: nowrap; flex-shrink: 0; }
-  .card-grid-5 { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-  .ranking { grid-template-columns: 1fr; gap: 16px; padding: 16px 16px 32px; }
-  .rank-grid { grid-template-columns: 1fr; }
-  .arch-strip h2 { font-size: 22px; }
-  .month-chips { overflow-x: auto; flex-wrap: nowrap; }
-  .mchip { white-space: nowrap; flex-shrink: 0; }
-  .card-grid-6 { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-  body { padding-bottom: 64px; }
-}
 </style>

@@ -2,7 +2,6 @@
 import type { Review } from '../lib/types';
 import HeartsRating from './HeartsRating.astro';
 import ReviewImage from './ReviewImage.astro';
-import LikeButton from './react/LikeButton.tsx';
 
 interface Props { r: Review; }
 const { r } = Astro.props;
@@ -29,7 +28,6 @@ const [yyyy, mm, dd] = r.date.replaceAll('-', '.').split('.');
           <span>#{t}</span>
         ))}
       </div>
-      <LikeButton client:idle slug={r.slug} />
     </div>
   </div>
 </a>

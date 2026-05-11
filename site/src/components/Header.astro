@@ -123,10 +123,21 @@ header {
 .right { display: flex; gap: 12px; align-items: center; }
 
 @media (max-width: 768px) {
-  header { padding: 16px 16px 8px; }
-  .wave { height: 12px; }
+  header { padding: 0px 8px 0 14px; height: 46px; min-height: 0; align-items: flex-start; position: relative; z-index: 50; }
+  .wave { height: 6px; }
   .desktop-nav { display: none; }
-  .logo-jp { font-size: 18px; }
-  .logo-my, .logo-rev { font-size: 11px; }
+  .logo { gap: 6px; align-items: center; margin-top: 4px; }
+  .logo > :global(img) { width: 18px !important; height: auto !important; flex-shrink: 0; }
+  .logo-text { line-height: 1; }
+  .logo-my { font-size: 9px; line-height: 1; }
+  .logo-rev { font-size: 9px; line-height: 1; margin-top: -1px; }
+  .logo-jp {
+    font-size: 14px;
+    line-height: 1;
+    gap: 3px;
+    letter-spacing: 0.2px;
+    align-items: baseline;
+  }
+  .logo-jp span { font-size: 9px; line-height: 1; }
 }
 </style>

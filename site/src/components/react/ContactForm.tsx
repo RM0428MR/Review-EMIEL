@@ -65,7 +65,7 @@ export default function ContactForm() {
   };
 
   return (
-    <form onSubmit={submit}>
+    <form className="cf-form" onSubmit={submit}>
       {sent && (
         <div className="banner success" role="status" aria-live="polite">
           ✓ メッセージを送信しました！ありがとうございます〜♡
@@ -135,21 +135,21 @@ export default function ContactForm() {
       <p className="note">※ 内容を確認後、できるだけ早くお返事させていただきます。</p>
 
       <style>{`
-        form {
+        .cf-form {
           height: 100%;
           display: flex;
           flex-direction: column;
         }
-        .banner {
+        .cf-form .banner {
           padding: 12px;
           border-radius: 10px;
           font-size: 12px;
           margin-bottom: 16px;
           font-family: var(--font-jp);
         }
-        .banner.success { background: #eaf4fc; color: var(--accent); }
-        .banner.err { background: #fde0e6; color: var(--pink-text); }
-        .row {
+        .cf-form .banner.success { background: #eaf4fc; color: var(--accent); }
+        .cf-form .banner.err { background: #fde0e6; color: var(--pink-text); }
+        .cf-form .row {
           display: grid;
           grid-template-columns: 120px 1fr;
           gap: 12px;
@@ -158,14 +158,15 @@ export default function ContactForm() {
           border-bottom: none;
           padding: 0;
         }
-        label {
+        .cf-form label {
           font-size: 12px;
           color: var(--ink-secondary);
           padding-top: 4px;
           font-family: var(--font-jp);
         }
-        .req { color: var(--pink-mid); }
-        input, textarea {
+        .cf-form .req { color: var(--pink-mid); }
+        .cf-form input,
+        .cf-form textarea {
           width: 100%;
           padding: 4px 12px;
           border: 1px solid rgba(122, 169, 217, 0.25);
@@ -177,15 +178,17 @@ export default function ContactForm() {
           outline: none;
           transition: border-color 0.15s, box-shadow 0.15s;
         }
-        input:focus, textarea:focus {
+        .cf-form input:focus,
+        .cf-form textarea:focus {
           border-color: rgba(122, 169, 217, 0.55);
           box-shadow: 0 0 0 2px rgba(168, 200, 232, 0.3);
         }
-        input.err, textarea.err { border-color: var(--pink-mid); }
-        textarea { resize: vertical; min-height: 70px; }
-        .err-msg { font-size: 10px; color: var(--pink-mid); margin-top: 4px; }
-        .actions { text-align: center; margin-top: auto; padding-top: 6px; }
-        button {
+        .cf-form input.err,
+        .cf-form textarea.err { border-color: var(--pink-mid); }
+        .cf-form textarea { resize: vertical; min-height: 70px; }
+        .cf-form .err-msg { font-size: 10px; color: var(--pink-mid); margin-top: 4px; }
+        .cf-form .actions { text-align: center; margin-top: auto; padding-top: 6px; }
+        .cf-form button[type="submit"] {
           padding: 8px 56px;
           font-size: 14px;
           font-family: var(--font-jp);
@@ -196,8 +199,8 @@ export default function ContactForm() {
           cursor: pointer;
           box-shadow: var(--shadow-cta);
         }
-        button:disabled { opacity: 0.6; cursor: not-allowed; }
-        .note { font-size: 10px; margin-top: 8px; color: var(--ink-tertiary-2); text-align: center; }
+        .cf-form button[type="submit"]:disabled { opacity: 0.6; cursor: not-allowed; }
+        .cf-form .note { font-size: 10px; margin-top: 8px; color: var(--ink-tertiary-2); text-align: center; }
       `}</style>
     </form>
   );

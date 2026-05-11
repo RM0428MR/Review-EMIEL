@@ -10,7 +10,9 @@ const items = ['home', 'about', 'review', 'ranking', 'archive', 'contact'];
 const hrefMap: Record<string, string> = {
   home: '/', about: '/about', review: '/reviews', ranking: '/ranking', archive: '/archive', contact: '/contact',
 };
-const isShared = variant !== 'review-detail';
+// shared footer (cloud wave + decorations + nav + copyright) is rendered on every variant.
+// variant-specific footers (review-list pagination, review-detail spacer) are rendered in addition.
+const isShared = true;
 ---
 {variant === 'review-list' && (
   <footer class="rl">
@@ -24,8 +26,11 @@ const isShared = variant !== 'review-detail';
 
 {isShared && (
   <footer class="shared">
-    <div class="wave-wrap" aria-hidden="true">
+    <div class="wave-wrap wave-desktop" aria-hidden="true">
       <CloudWave fill="var(--cloud-soft)" />
+    </div>
+    <div class="wave-wrap wave-mobile" aria-hidden="true">
+      <CloudWave fill="var(--cloud-soft)" step={160} lift={26} />
     </div>
 
     <div class="band">
@@ -101,6 +106,7 @@ footer.rl + footer.shared { margin-top: 60px; }
   z-index: 1;
   pointer-events: none;
 }
+.wave-mobile { display: none; }
 
 .shared .band {
   position: relative;
@@ -261,14 +267,16 @@ footer.rl + footer.shared { margin-top: 60px; }
 }
 
 @media (max-width: 760px) {
-  footer.shared { margin-top: 100px; }
-  .shared .band { padding: 38px 16px 16px; }
-  .bottle    { width: 60px; left: 2%;  top: -22px; }
-  .bubble-l  { width: 110px; left: 9%; top: -10px; }
-  .bear      { width: 150px; top: -22px; }
-  .bubble-r  { width: 110px; right: 9%; top: -10px; }
-  .cup       { width: 60px; right: 2%; top: -16px; }
-  .socials   { top: 56px; gap: 12px; }
+  footer.shared { margin-top: 50px; }
+  .wave-desktop { display: none; }
+  .wave-mobile { display: block; }
+  .shared .band { padding: 44px 16px 18px; margin-top: -8px; }
+  /* hide bottle / cup on mobile — too crowded */
+  .bottle, .cup { display: none; }
+  .bubble-l  { width: 96px; left: 2%; top: 14px; }
+  .bear      { width: 130px; top: 6px; }
+  .bubble-r  { width: 96px; right: 2%; top: 14px; }
+  .socials   { top: 94px; gap: 12px; }
   .socials :global(.si) {
     width: 32px !important; height: 32px !important;
   }
