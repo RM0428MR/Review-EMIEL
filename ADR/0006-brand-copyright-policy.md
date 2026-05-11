@@ -1,8 +1,14 @@
 # 0006. ブランド表記・著作権ポリシー（個人ファンサイトとしての立ち位置）
 
-- **Status**: Accepted
+- **Status**: Superseded by [ADR/0007](0007-emiel-as-fictional-brand.md)
 - **Date**: 2026-05-06
+- **Superseded Date**: 2026-05-11
 - **決定者**: @RM0428MR
+
+> このADRは [ADR/0007](0007-emiel-as-fictional-brand.md) によって置換されました。
+> 当初は実在ブランドのファンサイトとしての立ち位置で IP リスクを管理する設計でしたが、
+> サイト全体を独立した架空ブランド「EMIEL」として再構築する方針へ転換しました。
+> 当該経緯の記録として本 ADR は残します。
 
 ## Context
 
