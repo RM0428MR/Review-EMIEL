@@ -52,6 +52,9 @@ const isShared = true;
         ))}
       </nav>
       <div class="copy">© 2026 my EMIEL diary review</div>
+      <p class="disclaimer">
+        本サイトは個人運営のファンサイトであり、アサヒ飲料株式会社およびその関連会社とは一切関係ありません。
+      </p>
     </div>
 
     {/* art layer: rendered above wave + band so nothing is clipped */}
@@ -221,6 +224,21 @@ footer.shared {
   color: var(--accent-deeper);
   margin-top: 10px;
   opacity: 0.85;
+}
+
+/* non-official disclaimer required by ADR 0006 — shown on every page */
+.disclaimer {
+  position: relative;
+  z-index: 4;
+  text-align: center;
+  font-family: var(--font-jp);
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--ink-secondary, var(--accent-deeper));
+  opacity: 0.7;
+  margin: 8px auto 0;
+  max-width: 720px;
+  padding: 0 16px;
 }
 
 /* ============ desktop large ============ */
