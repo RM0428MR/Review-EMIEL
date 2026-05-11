@@ -84,7 +84,10 @@ export default function DrinkMethodPicker({ picked, note }: Props) {
       </div>
       <p className="note">{displayNote}</p>
 
-      <style>{`
+      {/* hydration mismatch 回避: <style> 内の特殊文字は React が SSR で
+          escape するが <style> は RAW_TEXT で browser が decode しない。
+          dangerouslySetInnerHTML で escape を回避する。 */}
+      <style dangerouslySetInnerHTML={{ __html: `
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; justify-items: center; }
         .item {
           font-size: 10px;
@@ -116,7 +119,7 @@ export default function DrinkMethodPicker({ picked, note }: Props) {
           overflow-wrap: anywhere;
           line-height: 1.5;
         }
-      `}</style>
+      ` }} />
     </div>
   );
 }

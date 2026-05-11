@@ -185,7 +185,10 @@ export default function ReviewFilters({
         paginationTarget,
       )}
 
-      <style>{`
+      {/* hydration mismatch 回避: <style> 内の特殊文字は React が SSR で
+          escape するが <style> は RAW_TEXT で browser が decode しない。
+          dangerouslySetInnerHTML で escape を回避する。 */}
+      <style dangerouslySetInnerHTML={{ __html: `
         .rf { display: flex; flex-direction: column; gap: 18px; font-family: var(--font-jp); }
         .rf .group {
           background: #fff;
@@ -211,7 +214,7 @@ export default function ReviewFilters({
         }
         .rf .box.checked { background: #7aa9d9; border-color: #7aa9d9; }
         .rf .cnt { font-size: 10px; opacity: 0.7; }
-      `}</style>
+      ` }} />
     </div>
   );
 }
@@ -259,7 +262,8 @@ function Pagination({ page, totalPages, onChange }: { page: number; totalPages: 
       >
         ›
       </button>
-      <style>{`
+      {/* hydration mismatch 回避: 同上 */}
+      <style dangerouslySetInnerHTML={{ __html: `
         .pg {
           display: flex;
           justify-content: center;
@@ -295,7 +299,7 @@ function Pagination({ page, totalPages, onChange }: { page: number; totalPages: 
           opacity: 0.35;
           cursor: not-allowed;
         }
-      `}</style>
+      ` }} />
     </nav>
   );
 }
