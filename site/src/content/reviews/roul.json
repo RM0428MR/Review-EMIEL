@@ -1,0 +1,30 @@
+{
+  "id": "roul",
+  "slug": "roul",
+  "date": "2021.07.01",
+  "name": "ルレモン",
+  "variant": "pet",
+  "tint": "#fdf4d0",
+  "accent": "#c8a838",
+  "rating": 4,
+  "oneLiner": "レモンの爽やかさ",
+  "tags": [
+    "期間限定"
+  ],
+  "cat": "期間限定",
+  "mood": [
+    "さっぱり"
+  ],
+  "season": "夏",
+  "body": "レモンの爽やかさが鼻に抜ける〜！<br>甘さはおさえめで、後味スッキリ。<br>夏の暑い日のリフレッシュに最高♪<br>限定でも毎年出てほしい！",
+  "subTaste": 3,
+  "subEasy": 3,
+  "subSpecial": 5,
+  "subAftertaste": 3,
+  "subRepeat": 4,
+  "infoReleased": "2021年7月1日",
+  "infoVolume": "470ml",
+  "infoType": "乳酸飲料",
+  "recommendedDrink": "氷を入れて",
+  "recommendedDrinkNote": "氷たっぷりでキンキンに！"
+}

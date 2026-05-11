@@ -6,11 +6,23 @@ import type { Review } from '../../lib/types';
 
 interface Props {
   all: Review[];
-  initialCat?: string;
+  initialCats?: string[];
+  initialMoods?: string[];
+  initialSeasons?: string[];
+  initialPage?: number;
 }
 
-const { all, initialCat = 'すべて' } = Astro.props;
+const {
+  all,
+  initialCats = [],
+  initialMoods = [],
+  initialSeasons = [],
+  initialPage = 1,
+} = Astro.props;
 ---
+<!-- data-rf-scope="reviews-mobile": ReviewFilters の DOM 操作スコープ。
+     desktop 側 ([data-rf-scope="reviews-desktop"]) とは独立した DOM ツリーとして扱う。 -->
+<div data-rf-scope="reviews-mobile">
 <section class="mr-head">
   <div class="title-deco mr-title-deco">
     <img class="dec petal" src="/images/decor-petals.png" alt="" aria-hidden="true"
@@ -54,7 +66,14 @@ const { all, initialCat = 'すべて' } = Astro.props;
       <button type="button" class="mr-fsheet-close" data-mr-filter-close aria-label="閉じる">✕</button>
     </div>
     <div class="mr-fsheet-body">
-      <ReviewFilters client:load reviews={all} initialCat={initialCat} />
+      <ReviewFilters
+        client:load
+        reviews={all}
+        initialCats={initialCats}
+        initialMoods={initialMoods}
+        initialSeasons={initialSeasons}
+        initialPage={initialPage}
+      />
     </div>
     <div class="mr-fsheet-footer">
       <button type="button" class="mr-fsheet-apply" data-mr-filter-close>この条件でみる</button>
@@ -84,6 +103,11 @@ const { all, initialCat = 'すべて' } = Astro.props;
       </div>
     </a>
   ))}
+</div>
+
+<!-- ReviewFilters の Pagination はこの要素を portal target として使う。
+     scope ([data-rf-scope="reviews-mobile"]) 内に置くこと。 -->
+<div class="mr-pagination" data-pagination></div>
 </div>
 
 <script>
@@ -363,4 +387,10 @@ const { all, initialCat = 'すべて' } = Astro.props;
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.mr-pagination {
+  display: flex;
+  justify-content: center;
+  padding: 8px 16px 12px;
+}
+.mr-pagination :global(.pg) { margin-top: 0; }
 </style>

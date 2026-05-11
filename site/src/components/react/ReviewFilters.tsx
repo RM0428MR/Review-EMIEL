@@ -1,102 +1,159 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import type { Review, Cat, Mood, Season } from '../../lib/types';
+import { CATEGORIES, CAT_VALUES, MOODS, SEASONS } from '../../data/reviews';
+
+// ──────────────────────────────────────────────────────────────────────────────
+// 設計メモ
+// - desktop / mobile で同時 hydrate されても DOM 操作が衝突しないよう、
+//   各インスタンスは「自分の祖先要素 [data-rf-scope]」配下しか触らない。
+//   global な document.querySelectorAll は使わない。
+// - cat は mood / season と同様に「複数選択」可能な配列で持つ。
+//   - URL は `cat=コラボ,期間限定` のようにカンマ区切り。
+//   - 「すべて」chip はリセット用（cats=[]）として動作。
+//   - 0 件選択 = フィルタなし（= 全件）として扱う。
+// - URL 同期は cat / mood / season / page の 4 種を対象にする。
+// ──────────────────────────────────────────────────────────────────────────────
 
 interface Props {
   reviews: Review[];
-  initialCat?: string;
+  initialCats?: string[];
   initialMoods?: string[];
   initialSeasons?: string[];
+  initialPage?: number;
+  pageSize?: number;
 }
 
-const CATEGORIES = ['すべて', '定番', '期間限定', 'コラボ', 'その他'];
-const MOODS: Mood[] = ['さっぱり', '濃厚', 'フルーティー', '甘め', 'すっきり'];
-const SEASONS: Season[] = ['春', '夏', '秋', '冬', '通年'];
-const PAGE_SIZE = 15; // 5 cols × 3 rows
+const DEFAULT_PAGE_SIZE = 15; // 5 cols × 3 rows
 
 export default function ReviewFilters({
   reviews,
-  initialCat = 'すべて',
+  initialCats = [],
   initialMoods = [],
   initialSeasons = [],
+  initialPage = 1,
+  pageSize = DEFAULT_PAGE_SIZE,
 }: Props) {
-  const [cat, setCat] = useState<string>(initialCat);
+  const [cats, setCats] = useState<string[]>(initialCats);
   const [moods, setMoods] = useState<string[]>(initialMoods);
   const [seasons, setSeasons] = useState<string[]>(initialSeasons);
-  const [page, setPage] = useState<number>(1);
+  const [page, setPage] = useState<number>(Math.max(1, initialPage));
+
+  const rootRef = useRef<HTMLDivElement>(null);
+  const [scopeRoot, setScopeRoot] = useState<HTMLElement | null>(null);
   const [paginationTarget, setPaginationTarget] = useState<HTMLElement | null>(null);
 
-  const counts = (key: keyof Review, val: string) => reviews.filter((r) => r[key] === val).length;
+  // 件数集計はフィルタ前の元データに対して行う。
+  const catCount = (c: Cat) => reviews.filter((r) => r.cat === c).length;
   const moodCount = (m: Mood) => reviews.filter((r) => r.mood?.includes(m)).length;
   const seasonCount = (s: Season) => reviews.filter((r) => r.season === s).length;
+
   const toggle = (arr: string[], set: (v: string[]) => void, v: string) =>
     set(arr.includes(v) ? arr.filter((x) => x !== v) : [...arr, v]);
 
   const filtered = useMemo(() => {
-    let list = reviews.filter((r) => cat === 'すべて' || r.cat === (cat as Cat));
+    let list = reviews;
+    if (cats.length) list = list.filter((r) => cats.includes(r.cat));
     if (moods.length) list = list.filter((r) => r.mood?.some((m) => moods.includes(m)));
     if (seasons.length) list = list.filter((r) => seasons.includes(r.season));
     return list;
-  }, [reviews, cat, moods, seasons]);
+  }, [reviews, cats, moods, seasons]);
 
-  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
 
-  // フィルタ変更時はページを 1 に戻す
+  // フィルタ変更時はページを 1 に戻す。
+  // ただし initialPage（URL 復元）は最初のレンダで適用済みなので、
+  // フィルタ変化が無ければここで上書きはしない。
+  const isFirstFilterEffect = useRef(true);
   useEffect(() => {
+    if (isFirstFilterEffect.current) {
+      isFirstFilterEffect.current = false;
+      return;
+    }
     setPage(1);
-  }, [cat, moods, seasons]);
+  }, [cats, moods, seasons]);
 
   // ページ番号がはみ出たら丸める
   useEffect(() => {
     if (page > totalPages) setPage(totalPages);
   }, [page, totalPages]);
 
-  // ページネーション描画先 DOM の取得
+  // scope ルート（祖先 data-rf-scope）と pagination target を解決する。
+  // 1 インスタンスにつき 1 つの scope。複数 ReviewFilters が同時 hydrate しても、
+  // 別 scope ならお互いの DOM を書き換えない。
   useEffect(() => {
-    setPaginationTarget(document.querySelector<HTMLElement>('[data-pagination]'));
+    const scope = rootRef.current?.closest<HTMLElement>('[data-rf-scope]') ?? null;
+    setScopeRoot(scope);
+    setPaginationTarget(scope?.querySelector<HTMLElement>('[data-pagination]') ?? null);
   }, []);
 
   // URL 同期（hydration 後）
   useEffect(() => {
-    const sp = new URLSearchParams();
-    if (cat !== 'すべて') sp.set('cat', cat);
+    const sp = new URLSearchParams(window.location.search);
+    if (cats.length) sp.set('cat', cats.join(','));
+    else sp.delete('cat');
     if (moods.length) sp.set('mood', moods.join(','));
+    else sp.delete('mood');
     if (seasons.length) sp.set('season', seasons.join(','));
-    if (page !== 1) sp.set('page', String(page));
+    else sp.delete('season');
+    if (page > 1) sp.set('page', String(page));
+    else sp.delete('page');
     const qs = sp.toString();
     const url = qs ? `?${qs}` : window.location.pathname;
     window.history.replaceState({}, '', url);
-  }, [cat, moods, seasons, page]);
+  }, [cats, moods, seasons, page]);
 
-  // カードリスト（DOM の data-attr で表示制御）— フィルタ × ページ
+  // カードリスト（DOM の data-attr で表示制御）— scope 内のみ操作。
   useEffect(() => {
-    const start = (page - 1) * PAGE_SIZE;
-    const pageSlugs = new Set(filtered.slice(start, start + PAGE_SIZE).map((r) => r.slug));
-    document.querySelectorAll<HTMLElement>('[data-review-slug]').forEach((el) => {
+    if (!scopeRoot) return;
+    const start = (page - 1) * pageSize;
+    const pageSlugs = new Set(filtered.slice(start, start + pageSize).map((r) => r.slug));
+    scopeRoot.querySelectorAll<HTMLElement>('[data-review-slug]').forEach((el) => {
       el.style.display = pageSlugs.has(el.dataset.reviewSlug ?? '') ? '' : 'none';
     });
-    document.querySelectorAll<HTMLElement>('[data-result-count]').forEach((meta) => {
+    scopeRoot.querySelectorAll<HTMLElement>('[data-result-count]').forEach((meta) => {
       meta.textContent = `${filtered.length}件の商品`;
     });
-  }, [filtered, page]);
+  }, [filtered, page, scopeRoot, pageSize]);
+
+  const isAllActive = cats.length === 0;
 
   return (
-    <div className="rf">
+    <div ref={rootRef} className="rf">
       <FilterGroup title="カテゴリ">
-        {CATEGORIES.map((c) => (
-          <button
-            key={c}
-            className={`row ${cat === c ? 'active' : ''}`}
-            onClick={() => setCat(c)}
-          >
-            <span>{cat === c ? '✓ ' : ''}{c}</span>
-            <span className="cnt">({c === 'すべて' ? reviews.length : counts('cat', c)})</span>
-          </button>
-        ))}
+        {CATEGORIES.map((c) => {
+          const active = c === 'すべて' ? isAllActive : cats.includes(c);
+          const onClick = () => {
+            if (c === 'すべて') {
+              setCats([]);
+            } else {
+              toggle(cats, setCats, c);
+            }
+          };
+          const cnt = c === 'すべて' ? reviews.length : catCount(c as Cat);
+          return (
+            <button
+              key={c}
+              type="button"
+              className={`row ${active ? 'active' : ''}`}
+              onClick={onClick}
+              aria-pressed={active}
+            >
+              <span>{active ? '✓ ' : ''}{c}</span>
+              <span className="cnt">({cnt})</span>
+            </button>
+          );
+        })}
       </FilterGroup>
       <FilterGroup title="味のタイプ">
         {MOODS.map((m) => (
-          <button key={m} className="row" onClick={() => toggle(moods, setMoods, m)}>
+          <button
+            key={m}
+            type="button"
+            className="row"
+            onClick={() => toggle(moods, setMoods, m)}
+            aria-pressed={moods.includes(m)}
+          >
             <span className="check">
               <span className={`box ${moods.includes(m) ? 'checked' : ''}`}>{moods.includes(m) ? '✓' : ''}</span>
               {m}
@@ -107,7 +164,13 @@ export default function ReviewFilters({
       </FilterGroup>
       <FilterGroup title="季節">
         {SEASONS.map((s) => (
-          <button key={s} className="row" onClick={() => toggle(seasons, setSeasons, s)}>
+          <button
+            key={s}
+            type="button"
+            className="row"
+            onClick={() => toggle(seasons, setSeasons, s)}
+            aria-pressed={seasons.includes(s)}
+          >
             <span className="check">
               <span className={`box ${seasons.includes(s) ? 'checked' : ''}`}>{seasons.includes(s) ? '✓' : ''}</span>
               {s}
@@ -152,6 +215,9 @@ export default function ReviewFilters({
     </div>
   );
 }
+
+// CAT_VALUES 経由でランタイム検証可能にしておく（pages 側で URL → state に変換するときに参照）。
+export { CAT_VALUES };
 
 function FilterGroup({ title, children }: { title: string; children: React.ReactNode }) {
   return (

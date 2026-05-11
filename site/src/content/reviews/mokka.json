@@ -1,0 +1,30 @@
+{
+  "id": "mokka",
+  "slug": "mokka",
+  "date": "2024.09.10",
+  "name": "モカ",
+  "variant": "pet",
+  "tint": "#e0d0c0",
+  "accent": "#8a6848",
+  "rating": 4,
+  "oneLiner": "コーヒーラテっぽい〜",
+  "tags": [
+    "コラボ"
+  ],
+  "cat": "コラボ",
+  "mood": [
+    "濃厚"
+  ],
+  "season": "秋",
+  "body": "モカらしいコクのある甘さがしっかり〜♪<br>カフェラテみたいでミルク感もたっぷり。<br>仕事の合間のひと息にぴったりの味…<br>コラボの中でもお気に入り！",
+  "subTaste": 3.5,
+  "subEasy": 4.5,
+  "subSpecial": 2.5,
+  "subAftertaste": 4.5,
+  "subRepeat": 4,
+  "infoReleased": "2024年9月10日",
+  "infoVolume": "470ml",
+  "infoType": "乳製品",
+  "recommendedDrink": "牛乳で割って",
+  "recommendedDrinkNote": "牛乳で割ってカフェモカ風に〜♪"
+}

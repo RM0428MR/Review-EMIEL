@@ -1,0 +1,31 @@
+{
+  "id": "ichilem",
+  "slug": "ichilem",
+  "date": "2023.04.03",
+  "name": "いちご檸檬",
+  "variant": "pet",
+  "tint": "#fde8d8",
+  "accent": "#e88a78",
+  "rating": 4,
+  "oneLiner": "甘酸っぱくてさっぱり",
+  "tags": [
+    "期間限定"
+  ],
+  "cat": "期間限定",
+  "mood": [
+    "さっぱり",
+    "フルーティー"
+  ],
+  "season": "春",
+  "body": "いちごの甘さに檸檬のさっぱり感がプラス〜！<br>春の陽気にぴったりな軽やかな味わい。<br>お外に出かける日のお供にしたい♪<br>限定なのが惜しい…！",
+  "subTaste": 3.5,
+  "subEasy": 3.5,
+  "subSpecial": 4.5,
+  "subAftertaste": 3.5,
+  "subRepeat": 4,
+  "infoReleased": "2023年4月3日",
+  "infoVolume": "470ml",
+  "infoType": "乳酸飲料",
+  "recommendedDrink": "氷を入れて",
+  "recommendedDrinkNote": "氷を入れて檸檬感をシャープに！"
+}

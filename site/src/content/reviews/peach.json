@@ -1,0 +1,33 @@
+{
+  "id": "peach",
+  "slug": "peach",
+  "date": "2024.04.10",
+  "name": "白桃",
+  "variant": "pet",
+  "tint": "#fde8ec",
+  "accent": "#e8a8b8",
+  "rating": 4.5,
+  "oneLiner": "白桃の香りがふわぁ〜と広がる！",
+  "tags": [
+    "期間限定",
+    "白桃",
+    "さっぱり"
+  ],
+  "cat": "期間限定",
+  "mood": [
+    "さっぱり",
+    "フルーティー"
+  ],
+  "season": "春",
+  "body": "白桃の上品な香りがふわっと広がる〜！<br>甘さはおさえめで、後味はとってもさっぱり。<br>暖かい春の日にぴったりな飲みごこち♪<br>毎年これが出るのを待っちゃう…！",
+  "subTaste": 4,
+  "subEasy": 3.5,
+  "subSpecial": 4.5,
+  "subAftertaste": 3.5,
+  "subRepeat": 4.5,
+  "infoReleased": "2024年4月10日",
+  "infoVolume": "470ml",
+  "infoType": "乳酸飲料",
+  "recommendedDrink": "そのまま",
+  "recommendedDrinkNote": "白桃の上品な香りはそのままが◎"
+}

@@ -1,0 +1,31 @@
+{
+  "id": "classic",
+  "slug": "classic",
+  "date": "2024.01.05",
+  "name": "濃いめ Classic",
+  "variant": "carton",
+  "tint": "#fefaf0",
+  "accent": "#c89a6a",
+  "rating": 4,
+  "oneLiner": "濃いめの満足感がご褒美！",
+  "tags": [
+    "ロング",
+    "定番"
+  ],
+  "cat": "定番",
+  "mood": [
+    "濃厚"
+  ],
+  "season": "通年",
+  "body": "クラシックの名にふさわしいまろやかさ〜！<br>濃いめのミルク感がたっぷりで満足感◎<br>ロングセラーなのも納得の安定感…<br>常備したくなる一本♪",
+  "subTaste": 4,
+  "subEasy": 5,
+  "subSpecial": 2.5,
+  "subAftertaste": 5,
+  "subRepeat": 4,
+  "infoReleased": "2024年1月5日",
+  "infoVolume": "500ml",
+  "infoType": "乳酸飲料",
+  "recommendedDrink": "牛乳で割って",
+  "recommendedDrinkNote": "牛乳で割るとご褒美感UP！"
+}

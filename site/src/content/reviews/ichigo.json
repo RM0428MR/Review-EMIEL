@@ -1,0 +1,32 @@
+{
+  "id": "ichigo",
+  "slug": "ichigo",
+  "date": "2024.01.15",
+  "name": "いちご",
+  "variant": "pet",
+  "tint": "#fde0e6",
+  "accent": "#d878a0",
+  "rating": 4.5,
+  "oneLiner": "いちごミルクみたいで幸せ〜",
+  "tags": [
+    "期間限定",
+    "いちご"
+  ],
+  "cat": "期間限定",
+  "mood": [
+    "甘め",
+    "フルーティー"
+  ],
+  "season": "冬",
+  "body": "まさにいちごミルクのような甘さでしあわせ〜♪<br>果肉感はないけど、香りがしっかりいちご。<br>寒い日にあったかくして飲んでも美味しい…<br>毎年待ち遠しい！",
+  "subTaste": 5,
+  "subEasy": 4,
+  "subSpecial": 3,
+  "subAftertaste": 4.5,
+  "subRepeat": 4.5,
+  "infoReleased": "2024年1月15日",
+  "infoVolume": "470ml",
+  "infoType": "乳酸飲料",
+  "recommendedDrink": "牛乳で割って",
+  "recommendedDrinkNote": "ミルクで割るといちごミルクの完成♪"
+}
