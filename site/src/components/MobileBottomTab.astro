@@ -65,5 +65,8 @@ const items = [
 .lbl { font-size: 10px; }
 @media (max-width: 768px) {
   .mtab { display: flex; }
+  /* ナビゲーション選択画面（NavDrawer）が開いている間は固定タブを隠す。
+     NavDrawer.tsx の useEffect が body.nav-open を付与/除去する。 */
+  :global(body.nav-open) .mtab { display: none; }
 }
 </style>

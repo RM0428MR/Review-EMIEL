@@ -25,9 +25,14 @@ export default function NavDrawer() {
     };
     document.addEventListener('keydown', onKey);
     document.body.style.overflow = 'hidden';
+    // ナビ選択画面（このドロワー）が開いている間は、モバイル下部の
+    // 固定タブ (nav.mtab) を隠す。MobileBottomTab.astro 側の
+    // `body.nav-open .mtab { display: none; }` と連動。
+    document.body.classList.add('nav-open');
     return () => {
       document.removeEventListener('keydown', onKey);
       document.body.style.overflow = '';
+      document.body.classList.remove('nav-open');
     };
   }, [open]);
 
@@ -240,6 +245,10 @@ export default function NavDrawer() {
           width: min(430px, 100vw);
           max-width: 430px;
           height: 100vh;
+          /* 動的ビューポート対応: iOS Safari / Chrome の URL バー表示時に
+             100vh がレイアウトビューポートを指して下端がずれるのを回避。
+             サポートされる環境ではこちらが優先される。 */
+          height: 100dvh;
           background: #ffffff;
           box-shadow: -12px 0 40px rgba(60, 100, 150, 0.22);
           display: flex;
@@ -617,7 +626,11 @@ export default function NavDrawer() {
           position: relative;
           z-index: 2;
           margin-top: 28px;
-          padding-bottom: 20px;
+          /* padding-bottom を持たせると cloud-svg (120px) の下に drawer 背景
+             (#f4f8fc) が露出し、band-content (bottom: 18px) との間に淡色帯が
+             できる。cloud-svg を最下端まで密着させて、band-content の下を
+             cloud color で埋める。 */
+          padding-bottom: 0;
           flex-shrink: 0;
         }
         #nav-drawer .cloud-svg { display: block; }
