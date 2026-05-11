@@ -75,8 +75,9 @@ export default function ReviewFilters({
     document.querySelectorAll<HTMLElement>('[data-review-slug]').forEach((el) => {
       el.style.display = pageSlugs.has(el.dataset.reviewSlug ?? '') ? '' : 'none';
     });
-    const meta = document.querySelector('[data-result-count]');
-    if (meta) meta.textContent = `${filtered.length}件の商品`;
+    document.querySelectorAll<HTMLElement>('[data-result-count]').forEach((meta) => {
+      meta.textContent = `${filtered.length}件の商品`;
+    });
   }, [filtered, page]);
 
   return (
@@ -123,30 +124,30 @@ export default function ReviewFilters({
 
       <style>{`
         .rf { display: flex; flex-direction: column; gap: 18px; font-family: var(--font-jp); }
-        .group {
+        .rf .group {
           background: #fff;
           border: 1px solid rgba(168, 200, 232, 0.3);
           border-radius: 14px;
           padding: 12px;
         }
-        .group h4 { font-size: 12px; font-weight: 600; color: #3a5a82; margin: 0 0 8px; }
-        .group .body { display: flex; flex-direction: column; gap: 4px; }
-        .row {
+        .rf .group h4 { font-size: 12px; font-weight: 600; color: #3a5a82; margin: 0 0 8px; }
+        .rf .group .body { display: flex; flex-direction: column; gap: 4px; }
+        .rf .row {
           display: flex; justify-content: space-between; align-items: center;
           padding: 4px 8px; font-size: 12px; border-radius: 8px;
           border: none; background: transparent;
           color: #5a7a98; cursor: pointer; text-align: left; font-family: inherit;
         }
-        .row.active { background: #eaf2f9; color: #7aa9d9; }
-        .check { display: inline-flex; align-items: center; gap: 6px; }
-        .box {
+        .rf .row.active { background: #eaf2f9; color: #7aa9d9; }
+        .rf .check { display: inline-flex; align-items: center; gap: 6px; }
+        .rf .box {
           width: 12px; height: 12px; border-radius: 3px;
           border: 1.5px solid #cfe0f0;
           display: inline-flex; align-items: center; justify-content: center;
           color: #fff; font-size: 9px;
         }
-        .box.checked { background: #7aa9d9; border-color: #7aa9d9; }
-        .cnt { font-size: 10px; opacity: 0.7; }
+        .rf .box.checked { background: #7aa9d9; border-color: #7aa9d9; }
+        .rf .cnt { font-size: 10px; opacity: 0.7; }
       `}</style>
     </div>
   );
