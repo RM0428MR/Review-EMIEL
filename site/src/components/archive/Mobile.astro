@@ -44,17 +44,19 @@ const yearCount = (y: string) => (y === 'すべての年代' ? all.length : buck
   <span class="ar-m-bar-sort">新しい順</span>
 </div>
 
-<!-- year-grouped list (mobile is year-only — month toggle omitted for simplicity) -->
+<!-- year-grouped list (mobile is year-only — month toggle omitted for simplicity).
+     data-archive-section / data-archive-section-count を付けて ArchiveBrowser から
+     desktop と同じ規約で扱えるようにする（年フィルタ時の空セクション抑止と件数更新）。 -->
 <div class="ar-m-list">
   {yearOrder.map((y) => (
-    <div class="ar-m-ysec">
+    <div class="ar-m-ysec" data-archive-section>
       <div class="ar-m-ysec-head">
         {y === 'それ以前' ? (
           <span class="ar-m-ysec-prev">それ以前</span>
         ) : (
           <span class="ar-m-ysec-year">{y.replace('年', '')}</span>
         )}
-        <span class="ar-m-ysec-cnt">{(buckets.get(y) ?? []).length}件</span>
+        <span class="ar-m-ysec-cnt" data-archive-section-count>{(buckets.get(y) ?? []).length}件</span>
       </div>
       <div class="ar-m-cards">
         {(buckets.get(y) ?? []).map((r) => (

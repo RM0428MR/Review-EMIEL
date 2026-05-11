@@ -1,5 +1,5 @@
 // FE/デザイン/共通/04_データスキーマ.md と同期。
-// microCMS Review API + ローカルモックデータの両方が満たす型。
+// Astro Content Collections の reviews データが満たす型。
 
 export type Variant = 'pet' | 'carton' | 'cup' | 'plastic';
 export type Cat = '定番' | '期間限定' | 'コラボ' | 'その他' | '新商品';

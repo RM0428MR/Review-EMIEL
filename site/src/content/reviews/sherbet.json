@@ -1,0 +1,31 @@
+{
+  "id": "sherbet",
+  "slug": "sherbet",
+  "date": "2023.08.07",
+  "name": "シャーベット",
+  "variant": "cup",
+  "tint": "#f0f6fc",
+  "accent": "#7aa9d9",
+  "rating": 4.5,
+  "oneLiner": "シャリシャリ夏の幸せ",
+  "tags": [
+    "夏限定",
+    "アイス"
+  ],
+  "cat": "その他",
+  "mood": [
+    "さっぱり"
+  ],
+  "season": "夏",
+  "body": "シャリシャリ食感が涼しくて夏にぴったり〜！<br>甘さは控えめで、後味はとてもすっきり。<br>夏の昼下がりにぴったりなご褒美…<br>毎年出てほしい！",
+  "subTaste": 3.5,
+  "subEasy": 3.5,
+  "subSpecial": 5,
+  "subAftertaste": 3.5,
+  "subRepeat": 4.5,
+  "infoReleased": "2023年8月7日",
+  "infoVolume": "150ml",
+  "infoType": "氷菓",
+  "recommendedDrink": "そのまま",
+  "recommendedDrinkNote": "シャリシャリのまま召し上がれ♪"
+}

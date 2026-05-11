@@ -1,0 +1,33 @@
+{
+  "id": "frozen",
+  "slug": "frozen",
+  "date": "2024.04.01",
+  "name": "フローズン",
+  "variant": "cup",
+  "tint": "#f0f6fc",
+  "accent": "#7aa9d9",
+  "rating": 4.5,
+  "oneLiner": "シャリシャリで最高〜！",
+  "tags": [
+    "フローズン",
+    "アイス",
+    "おすすめ"
+  ],
+  "cat": "その他",
+  "mood": [
+    "さっぱり",
+    "すっきり"
+  ],
+  "season": "夏",
+  "body": "シャリシャリ食感が暑い日にぴったり〜！<br>口に入れるとふわっと溶けて、後味はすっきり。<br>夏の午後、お風呂上がり、いつでも食べたい！<br>今シーズンも常備したい一品♪",
+  "subTaste": 4,
+  "subEasy": 4,
+  "subSpecial": 5,
+  "subAftertaste": 4,
+  "subRepeat": 4.5,
+  "infoReleased": "2024年4月1日",
+  "infoVolume": "150ml",
+  "infoType": "氷菓",
+  "recommendedDrink": "そのまま",
+  "recommendedDrinkNote": "シャリシャリのまま召し上がれ！"
+}

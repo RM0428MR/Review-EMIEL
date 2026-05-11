@@ -65,8 +65,11 @@ const yearCount = (y: string) => (y === 'すべての年代' ? all.length : buck
             )}
             <span class="ycnt" data-archive-section-count>{(buckets.get(y) ?? []).length}件のレビュー</span>
           </div>
+          <!-- 旧実装は .slice(0, 12) で打ち切っていたため、各年/各月の 13 件目以降が
+               一覧から完全に消えていた（archive ページが「全件」を約束しているのに矛盾）。
+               アーカイブの目的は「データに到達できること」なので全件出す。 -->
           <div class="ygrid">
-            {(buckets.get(y) ?? []).slice(0, 12).map((r) => (
+            {(buckets.get(y) ?? []).map((r) => (
               <a class="acard" href={`/reviews/${r.slug}`} data-archive-card data-year={archiveYearBucket(r.date)}>
                 <div class="mbadge">{getMonth(r.date)}月</div>
                 <ReviewImage r={r} variant="card" height={70} />
@@ -92,7 +95,7 @@ const yearCount = (y: string) => (y === 'すべての年代' ? all.length : buck
             <span class="ycnt" data-archive-section-count>{(monthBuckets.get(m) ?? []).length}件のレビュー</span>
           </div>
           <div class="ygrid">
-            {(monthBuckets.get(m) ?? []).slice(0, 12).map((r) => (
+            {(monthBuckets.get(m) ?? []).map((r) => (
               <a class="acard" href={`/reviews/${r.slug}`} data-archive-card data-year={archiveYearBucket(r.date)}>
                 <div class="mbadge">{archiveYearBucket(r.date)}</div>
                 <ReviewImage r={r} variant="card" height={70} />

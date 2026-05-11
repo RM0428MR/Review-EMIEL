@@ -5,27 +5,57 @@ import Footer from '../../components/Footer.astro';
 import Desktop from '../../components/reviews-list/Desktop.astro';
 import Mobile from '../../components/reviews-list/Mobile.astro';
 import { listReviews } from '../../lib/microcms.ts';
-import { CATEGORIES } from '../../data/reviews.ts';
+import { CAT_VALUES, MOODS, SEASONS } from '../../data/reviews.ts';
 
 const { contents: all, totalCount } = await listReviews({ orders: '-date', limit: 100 });
 
-// initial filter state from URL (mobile pills navigate via ?cat=)
-const urlCat = Astro.url.searchParams.get('cat') ?? 'すべて';
-const initialCat = (CATEGORIES as readonly string[]).includes(urlCat) ? urlCat : 'すべて';
+// URL パラメータを多値で復元する。
+// - cat / mood / season はカンマ区切りの複数値
+// - page は整数（1 以上）
+// - 不正値は静かに切り落とす（壊さない方針）
+function parseList<T extends string>(raw: string | null, allowed: readonly T[]): T[] {
+  if (!raw) return [];
+  return raw
+    .split(',')
+    .map((s) => s.trim())
+    .filter((s): s is T => (allowed as readonly string[]).includes(s));
+}
+function parsePage(raw: string | null): number {
+  const n = parseInt(raw ?? '', 10);
+  return Number.isFinite(n) && n >= 1 ? n : 1;
+}
+
+const initialCats = parseList(Astro.url.searchParams.get('cat'), CAT_VALUES);
+const initialMoods = parseList(Astro.url.searchParams.get('mood'), MOODS);
+const initialSeasons = parseList(Astro.url.searchParams.get('season'), SEASONS);
+const initialPage = parsePage(Astro.url.searchParams.get('page'));
 ---
 <BaseLayout title="review" activeTab="review">
   <Header active="review" />
 
   <div class="reviews-desktop">
-    <Desktop all={all} totalCount={totalCount} initialCat={initialCat} />
+    <Desktop
+      all={all}
+      totalCount={totalCount}
+      initialCats={initialCats}
+      initialMoods={initialMoods}
+      initialSeasons={initialSeasons}
+      initialPage={initialPage}
+    />
   </div>
 
   <!-- ============== MOBILE ============== -->
   <div class="reviews-mobile">
-    <Mobile all={all} initialCat={initialCat} />
+    <Mobile
+      all={all}
+      initialCats={initialCats}
+      initialMoods={initialMoods}
+      initialSeasons={initialSeasons}
+      initialPage={initialPage}
+    />
   </div>
 
-  <Footer variant="review-list" />
+  <Footer />
 </BaseLayout>
 
 <style>

@@ -1,0 +1,31 @@
+{
+  "id": "yogurt",
+  "slug": "yogurt",
+  "date": "2024.02.20",
+  "name": "ヨーグルト味",
+  "variant": "pet",
+  "tint": "#fdf4e0",
+  "accent": "#d8b878",
+  "rating": 4,
+  "oneLiner": "ヨーグルト感が強い！",
+  "tags": [
+    "期間限定",
+    "ヨーグルト"
+  ],
+  "cat": "期間限定",
+  "mood": [
+    "濃厚"
+  ],
+  "season": "通年",
+  "body": "ひと口目からヨーグルト感がしっかり〜！<br>濃いめのミルキーさで、満足感がすごい。<br>朝ごはんのおともにぴったりな飲みごこち♪<br>意外と何にでも合う…！",
+  "subTaste": 4,
+  "subEasy": 4.5,
+  "subSpecial": 3,
+  "subAftertaste": 5,
+  "subRepeat": 4,
+  "infoReleased": "2024年2月20日",
+  "infoVolume": "470ml",
+  "infoType": "乳酸菌飲料",
+  "recommendedDrink": "牛乳で割って",
+  "recommendedDrinkNote": "牛乳で割るとさらにまろやか〜！"
+}

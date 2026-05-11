@@ -1,0 +1,33 @@
+{
+  "id": "melon",
+  "slug": "melon",
+  "date": "2024.05.01",
+  "name": "MELON",
+  "variant": "pet",
+  "tint": "#e8f4e0",
+  "accent": "#88b878",
+  "rating": 4.5,
+  "oneLiner": "メロンの香りが贅沢〜！",
+  "tags": [
+    "期間限定",
+    "メロン",
+    "フルーティー"
+  ],
+  "cat": "期間限定",
+  "mood": [
+    "フルーティー",
+    "甘め"
+  ],
+  "season": "春",
+  "body": "開けた瞬間、メロンの甘い香りがふわっと広がる〜！<br>果肉感はないけど、まろやかなミルク感とよく合う。<br>春の夜にゆったり楽しむと幸せになる味…<br>期間限定なのが惜しい…！",
+  "subTaste": 4.5,
+  "subEasy": 4,
+  "subSpecial": 3.5,
+  "subAftertaste": 4,
+  "subRepeat": 4.5,
+  "infoReleased": "2024年5月1日",
+  "infoVolume": "470ml",
+  "infoType": "乳酸飲料",
+  "recommendedDrink": "そのまま",
+  "recommendedDrinkNote": "メロンの香りはそのままで楽しむのが一番◎"
+}

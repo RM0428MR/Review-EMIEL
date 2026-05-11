@@ -1,0 +1,32 @@
+{
+  "id": "koime",
+  "slug": "koime",
+  "date": "2024.02.05",
+  "name": "濃いめ",
+  "variant": "carton",
+  "tint": "#fff8ec",
+  "accent": "#c8a878",
+  "rating": 4,
+  "oneLiner": "濃いめの満足度がすごい！",
+  "tags": [
+    "定番",
+    "濃いめ",
+    "リピート"
+  ],
+  "cat": "定番",
+  "mood": [
+    "濃厚"
+  ],
+  "season": "通年",
+  "body": "いつもよりぐっと濃いめで満足感が違う〜！<br>ひと口で口の中いっぱいにミルク感が広がる。<br>ご褒美モードのときに飲みたくなる…<br>おうちカフェの定番に♪",
+  "subTaste": 4,
+  "subEasy": 5,
+  "subSpecial": 2.5,
+  "subAftertaste": 5,
+  "subRepeat": 4,
+  "infoReleased": "2024年2月5日",
+  "infoVolume": "500ml",
+  "infoType": "乳酸飲料",
+  "recommendedDrink": "牛乳で割って",
+  "recommendedDrinkNote": "もっと濃厚にしたい時はミルクで！"
+}

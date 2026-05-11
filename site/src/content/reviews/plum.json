@@ -1,0 +1,31 @@
+{
+  "id": "plum",
+  "slug": "plum",
+  "date": "2021.04.15",
+  "name": "梅",
+  "variant": "pet",
+  "tint": "#ffe0e8",
+  "accent": "#d878a0",
+  "rating": 4,
+  "oneLiner": "梅の和風な味わい",
+  "tags": [
+    "期間限定",
+    "和"
+  ],
+  "cat": "期間限定",
+  "mood": [
+    "さっぱり"
+  ],
+  "season": "春",
+  "body": "梅のすっきりとした酸味が和風で◎<br>甘さもおさえめで、お食事のおともにも合う。<br>春の陽気の中でゆったり飲みたい味…<br>和の限定シリーズ最高！",
+  "subTaste": 3,
+  "subEasy": 3,
+  "subSpecial": 4.5,
+  "subAftertaste": 3,
+  "subRepeat": 4,
+  "infoReleased": "2021年4月15日",
+  "infoVolume": "470ml",
+  "infoType": "乳酸飲料",
+  "recommendedDrink": "そのまま",
+  "recommendedDrinkNote": "梅のすっきり感はそのままで〜"
+}

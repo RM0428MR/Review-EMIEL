@@ -1,0 +1,31 @@
+{
+  "id": "yoshi",
+  "slug": "yoshi",
+  "date": "2023.12.20",
+  "name": "ほうじ茶",
+  "variant": "pet",
+  "tint": "#f0e0c8",
+  "accent": "#a87858",
+  "rating": 4,
+  "oneLiner": "ほっとする味わい〜",
+  "tags": [
+    "コラボ",
+    "和風"
+  ],
+  "cat": "コラボ",
+  "mood": [
+    "濃厚"
+  ],
+  "season": "冬",
+  "body": "ほうじ茶の香ばしさにふんわり包まれる〜♪<br>ミルク感とよく合って、ほっとするおいしさ。<br>寒い夜にホットで飲んでもすごく美味しい…<br>和風コラボの中でも特に好き！",
+  "subTaste": 3.5,
+  "subEasy": 4.5,
+  "subSpecial": 3,
+  "subAftertaste": 4,
+  "subRepeat": 4,
+  "infoReleased": "2023年12月20日",
+  "infoVolume": "470ml",
+  "infoType": "乳酸飲料",
+  "recommendedDrink": "牛乳で割って",
+  "recommendedDrinkNote": "牛乳で割ってほうじ茶ラテ風に〜"
+}

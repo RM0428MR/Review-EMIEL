@@ -1,0 +1,33 @@
+{
+  "id": "cafe",
+  "slug": "cafe",
+  "date": "2024.03.18",
+  "name": "カフェ",
+  "variant": "plastic",
+  "tint": "#e8d8c8",
+  "accent": "#9a7858",
+  "rating": 4,
+  "oneLiner": "甘さ控えめで大人な味わい",
+  "tags": [
+    "コラボ",
+    "カフェ",
+    "大人向け"
+  ],
+  "cat": "コラボ",
+  "mood": [
+    "濃厚",
+    "甘め"
+  ],
+  "season": "冬",
+  "body": "カフェオレみたいなまろやかさにびっくり〜！<br>甘さがほどよく抑えられていて大人っぽい仕上がり。<br>お仕事の合間のリフレッシュにぴったり…<br>コラボ商品、また出てほしい！",
+  "subTaste": 3,
+  "subEasy": 4.5,
+  "subSpecial": 2.5,
+  "subAftertaste": 4.5,
+  "subRepeat": 4,
+  "infoReleased": "2024年3月18日",
+  "infoVolume": "270ml",
+  "infoType": "乳製品",
+  "recommendedDrink": "牛乳で割って",
+  "recommendedDrinkNote": "牛乳で割ってカフェラテ風に〜♪"
+}

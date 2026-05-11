@@ -7,11 +7,24 @@ import type { Review } from '../../lib/types';
 interface Props {
   all: Review[];
   totalCount: number;
-  initialCat?: string;
+  initialCats?: string[];
+  initialMoods?: string[];
+  initialSeasons?: string[];
+  initialPage?: number;
 }
 
-const { all, totalCount, initialCat = 'すべて' } = Astro.props;
+const {
+  all,
+  totalCount,
+  initialCats = [],
+  initialMoods = [],
+  initialSeasons = [],
+  initialPage = 1,
+} = Astro.props;
 ---
+<!-- data-rf-scope="reviews-desktop": ReviewFilters の DOM 操作スコープ。
+     ここから外の data-* 属性は触らない。mobile 側と競合しない保証。 -->
+<div data-rf-scope="reviews-desktop">
 <section class="page-head">
   <div class="bc">home <span>›</span> review</div>
   <div class="title-block">
@@ -51,7 +64,14 @@ const { all, totalCount, initialCat = 'すべて' } = Astro.props;
 
 <section class="main">
   <aside class="sidebar">
-    <ReviewFilters client:load reviews={all} initialCat={initialCat} />
+    <ReviewFilters
+      client:load
+      reviews={all}
+      initialCats={initialCats}
+      initialMoods={initialMoods}
+      initialSeasons={initialSeasons}
+      initialPage={initialPage}
+    />
     <div class="sidebar-bubble">
       <BearDoodle size={56} />
       <img class="sidebar-bubble-img" src="/images/review-bubble-bottom.png" alt="どれもおいしいよ〜！" />
@@ -66,8 +86,12 @@ const { all, totalCount, initialCat = 'すべて' } = Astro.props;
         </div>
       ))}
     </div>
+    <!-- ReviewFilters の Pagination はこの要素を portal target として使う。
+         同じ scope ([data-rf-scope]) 配下にあることが必須。 -->
+    <div class="rl-pagination" data-pagination></div>
   </div>
 </section>
+</div>
 
 <style>
 .bc {
@@ -168,4 +192,10 @@ const { all, totalCount, initialCat = 'すべて' } = Astro.props;
   grid-template-columns: repeat(5, 1fr);
   gap: 12px;
 }
+.rl-pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+}
+.rl-pagination :global(.pg) { margin-top: 0; }
 </style>

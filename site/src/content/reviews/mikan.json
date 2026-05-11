@@ -1,0 +1,32 @@
+{
+  "id": "mikan",
+  "slug": "mikan",
+  "date": "2024.03.03",
+  "name": "みかん",
+  "variant": "pet",
+  "tint": "#ffe8c8",
+  "accent": "#e8a858",
+  "rating": 4,
+  "oneLiner": "みかんのやさしさ〜",
+  "tags": [
+    "定番",
+    "みかん"
+  ],
+  "cat": "定番",
+  "mood": [
+    "フルーティー",
+    "甘め"
+  ],
+  "season": "冬",
+  "body": "みかんのやさしい甘さがじゅわっと〜！<br>果汁感はそこそこあって、後味はまろやか。<br>こたつでのんびり飲みたくなるホッとする味…<br>定番化してくれて感謝♪",
+  "subTaste": 4,
+  "subEasy": 3.5,
+  "subSpecial": 4,
+  "subAftertaste": 3.5,
+  "subRepeat": 4,
+  "infoReleased": "2024年3月3日",
+  "infoVolume": "470ml",
+  "infoType": "乳酸飲料",
+  "recommendedDrink": "そのまま",
+  "recommendedDrinkNote": "みかんのやさしさはそのままで〜"
+}
