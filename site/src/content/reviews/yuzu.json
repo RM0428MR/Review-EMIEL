@@ -1,0 +1,31 @@
+{
+  "id": "yuzu",
+  "slug": "yuzu",
+  "date": "2023.01.09",
+  "name": "ゆず",
+  "variant": "pet",
+  "tint": "#fdf4d0",
+  "accent": "#c8a838",
+  "rating": 4,
+  "oneLiner": "ゆずの香りが気持ちいい〜",
+  "tags": [
+    "期間限定",
+    "ゆず"
+  ],
+  "cat": "期間限定",
+  "mood": [
+    "さっぱり"
+  ],
+  "season": "冬",
+  "body": "ゆずの爽やかな香りが鼻に抜ける〜！<br>甘さはおさえめで、すっきりとした後味。<br>冬の冷えた夜にあったかくして飲みたい…<br>香りに癒される一本♪",
+  "subTaste": 3.5,
+  "subEasy": 3,
+  "subSpecial": 4.5,
+  "subAftertaste": 3,
+  "subRepeat": 4,
+  "infoReleased": "2023年1月9日",
+  "infoVolume": "470ml",
+  "infoType": "乳酸飲料",
+  "recommendedDrink": "そのまま",
+  "recommendedDrinkNote": "ゆずの香りはそのままで楽しんで〜"
+}

@@ -1,0 +1,30 @@
+{
+  "id": "oden",
+  "slug": "oden",
+  "date": "2022.03.10",
+  "name": "オレンジ",
+  "variant": "pet",
+  "tint": "#ffe0a8",
+  "accent": "#e89838",
+  "rating": 4,
+  "oneLiner": "オレンジ感たっぷり",
+  "tags": [
+    "定番"
+  ],
+  "cat": "定番",
+  "mood": [
+    "フルーティー"
+  ],
+  "season": "春",
+  "body": "オレンジの果実感がしっかり〜！<br>甘さも酸味もちょうどよくて飲みやすい。<br>朝ごはんのおともにぴったりな仕上がり♪<br>定番化してて嬉しい！",
+  "subTaste": 4,
+  "subEasy": 3.5,
+  "subSpecial": 4,
+  "subAftertaste": 3.5,
+  "subRepeat": 4,
+  "infoReleased": "2022年3月10日",
+  "infoVolume": "470ml",
+  "infoType": "乳酸飲料",
+  "recommendedDrink": "氷を入れて",
+  "recommendedDrinkNote": "氷で果実感がさわやかに〜"
+}

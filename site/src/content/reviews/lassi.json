@@ -1,0 +1,30 @@
+{
+  "id": "lassi",
+  "slug": "lassi",
+  "date": "2024.10.02",
+  "name": "ラッシー",
+  "variant": "pet",
+  "tint": "#fefaee",
+  "accent": "#c8b878",
+  "rating": 4,
+  "oneLiner": "異国の味わい〜",
+  "tags": [
+    "コラボ"
+  ],
+  "cat": "コラボ",
+  "mood": [
+    "濃厚"
+  ],
+  "season": "通年",
+  "body": "インド気分になれる本格ラッシー〜♪<br>ヨーグルトのような酸味とミルク感が絶妙。<br>カレーと合わせて飲んでみたい味…<br>コラボ商品、また出てほしい！",
+  "subTaste": 4,
+  "subEasy": 4.5,
+  "subSpecial": 3,
+  "subAftertaste": 4.5,
+  "subRepeat": 4,
+  "infoReleased": "2024年10月2日",
+  "infoVolume": "470ml",
+  "infoType": "乳酸菌飲料",
+  "recommendedDrink": "牛乳で割って",
+  "recommendedDrinkNote": "牛乳で割って本格ラッシーに♪"
+}

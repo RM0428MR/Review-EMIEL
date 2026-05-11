@@ -1,0 +1,30 @@
+{
+  "id": "kucchi",
+  "slug": "kucchi",
+  "date": "2023.02.14",
+  "name": "エミエルキッス",
+  "variant": "pet",
+  "tint": "#fde0e6",
+  "accent": "#d878a0",
+  "rating": 4,
+  "oneLiner": "バレンタインっぽい甘さ◎",
+  "tags": [
+    "期間限定"
+  ],
+  "cat": "期間限定",
+  "mood": [
+    "甘め"
+  ],
+  "season": "冬",
+  "body": "バレンタインらしい甘さでときめく〜♪<br>ミルキーで甘めだけど、後味はしつこくない。<br>ほっこり気分のときにぴったりの味…<br>季節限定で逃せない！",
+  "subTaste": 4.5,
+  "subEasy": 4,
+  "subSpecial": 3,
+  "subAftertaste": 4,
+  "subRepeat": 4,
+  "infoReleased": "2023年2月14日",
+  "infoVolume": "470ml",
+  "infoType": "乳酸飲料",
+  "recommendedDrink": "牛乳で割って",
+  "recommendedDrinkNote": "牛乳で割ってミルキーに♪"
+}

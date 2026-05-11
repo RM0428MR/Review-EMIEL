@@ -1,0 +1,30 @@
+{
+  "id": "kinako",
+  "slug": "kinako",
+  "date": "2022.10.05",
+  "name": "きなこ",
+  "variant": "pet",
+  "tint": "#f0e0c8",
+  "accent": "#a87858",
+  "rating": 3.5,
+  "oneLiner": "香ばしくて和風",
+  "tags": [
+    "コラボ"
+  ],
+  "cat": "コラボ",
+  "mood": [
+    "濃厚"
+  ],
+  "season": "秋",
+  "body": "きなこの香ばしさがふわっと広がる〜♪<br>和風な味わいで、ミルク感ともよく合う。<br>お茶のお供にもなりそうなおいしさ…<br>意外なコラボでびっくり！",
+  "subTaste": 3.5,
+  "subEasy": 4,
+  "subSpecial": 2.5,
+  "subAftertaste": 4,
+  "subRepeat": 3.5,
+  "infoReleased": "2022年10月5日",
+  "infoVolume": "470ml",
+  "infoType": "乳酸飲料",
+  "recommendedDrink": "牛乳で割って",
+  "recommendedDrinkNote": "牛乳できなこミルク風に♪"
+}

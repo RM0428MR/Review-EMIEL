@@ -1,0 +1,34 @@
+{
+  "id": "rich",
+  "slug": "rich",
+  "date": "2024.05.20",
+  "name": "THE RICH",
+  "variant": "pet",
+  "tint": "#fff5e8",
+  "accent": "#c89a6a",
+  "rating": 5,
+  "badge": "NEW",
+  "oneLiner": "濃くてまろやかで幸せ…！",
+  "tags": [
+    "新商品",
+    "濃厚",
+    "ご褒美"
+  ],
+  "cat": "新商品",
+  "mood": [
+    "濃厚",
+    "甘め"
+  ],
+  "season": "通年",
+  "body": "ひと口目からいつものエミエルよりも濃厚で、しっかりミルク感があってびっくり！<br>甘さもやさしくて、後味はすっきり。<br>お風呂上がりに飲むと、最高にしあわせな気持ちになれます。<br>これはリピ確定です…！！",
+  "subTaste": 4.5,
+  "subEasy": 5,
+  "subSpecial": 3.5,
+  "subAftertaste": 5,
+  "subRepeat": 5,
+  "infoReleased": "2024年4月16日",
+  "infoVolume": "470ml",
+  "infoType": "乳酸飲料",
+  "recommendedDrink": "牛乳で割って",
+  "recommendedDrinkNote": "牛乳で割るとさらに濃厚で幸せ…！"
+}

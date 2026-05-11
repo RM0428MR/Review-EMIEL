@@ -1,0 +1,31 @@
+{
+  "id": "mintc",
+  "slug": "mintc",
+  "date": "2024.08.14",
+  "name": "ミントチョコ",
+  "variant": "cup",
+  "tint": "#dceee0",
+  "accent": "#7ab898",
+  "rating": 4.5,
+  "oneLiner": "ミントが涼しい〜",
+  "tags": [
+    "夏限定",
+    "コラボ"
+  ],
+  "cat": "コラボ",
+  "mood": [
+    "さっぱり"
+  ],
+  "season": "夏",
+  "body": "ミントの清涼感とチョコの甘さが絶妙〜！<br>夏でもさっぱり飲める意外な組み合わせ◎<br>暑い日のリフレッシュにぴったり♪<br>夏限定で楽しめるのが嬉しい！",
+  "subTaste": 4,
+  "subEasy": 4,
+  "subSpecial": 4.5,
+  "subAftertaste": 4,
+  "subRepeat": 4.5,
+  "infoReleased": "2024年8月14日",
+  "infoVolume": "150ml",
+  "infoType": "氷菓",
+  "recommendedDrink": "そのまま",
+  "recommendedDrinkNote": "カチコチのまま召し上がれ♪"
+}
