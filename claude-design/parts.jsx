@@ -8,7 +8,7 @@ function BearDoodle({ size = 80, pose = 'hold', style = {}, color }) {
   // Source PNG is 129×123, ratio ~1.05:1 (essentially square)
   return (
     <img
-      src="assets/calpis_bear.png"
+      src="assets/bear-doodle.png"
       alt=""
       width={size}
       height={size * (123 / 129)}
@@ -367,7 +367,7 @@ function ScatterDecor({ accent = '#a8c8e8', count = 8, style = {} }) {
 // ─── HAND-DRAWN BOTTLE — uses the transparent PNG asset
 function HandBottle({ size = 80, color = '#3b6cb8', accent = '#a8c8e8', opacity = 0.6, style = {} }) {
   return (
-    <img src="assets/calpis_bottle.png" alt=""
+    <img src="assets/hand-bottle.png" alt=""
       width={size * 0.48} height={size}
       style={{ display: 'block', opacity, ...style }}
       aria-hidden="true" />
@@ -377,7 +377,7 @@ function HandBottle({ size = 80, color = '#3b6cb8', accent = '#a8c8e8', opacity 
 // ─── HAND-DRAWN GLASS — uses the transparent PNG asset
 function HandGlass({ size = 70, color = '#3b6cb8', accent = '#a8c8e8', opacity = 0.6, style = {} }) {
   return (
-    <img src="assets/calpis_cup.png" alt=""
+    <img src="assets/hand-cup.png" alt=""
       width={size} height={size * (88 / 62)}
       style={{ display: 'block', opacity, ...style }}
       aria-hidden="true" />
