@@ -1,11 +1,19 @@
-// Cloudflare Workers Static Assets configuration.
-// Deploys the Astro static build (./dist) as the assets to be served.
+// Cloudflare Workers Static Assets + custom fetch handler.
+// Worker entry: ./worker.ts handles /api/contact POST and delegates
+// all other paths to the ASSETS binding (= Astro static build under ./dist).
 // See: https://developers.cloudflare.com/workers/static-assets/
 {
   "name": "review-emiel",
+  "main": "./worker.ts",
   "compatibility_date": "2026-05-11",
   "assets": {
     "directory": "./dist",
+    "binding": "ASSETS",
     "not_found_handling": "404-page"
+  },
+  "observability": {
+    "logs": {
+      "enabled": true
+    }
   }
 }
