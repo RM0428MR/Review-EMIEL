@@ -16,8 +16,8 @@ for (const c of CATEGORIES) if (c !== 'すべて') categoryCounts[c] = 0;
 for (const r of allReviews) {
   if (categoryCounts[r.cat] != null) categoryCounts[r.cat] += 1;
 }
-// Home review archive は全件を DOM に出し、client-side chip filter で先頭 8 件のみ表示する。
-// 余剰分は overflow CTA を表示して Archive 画面へ誘導する。
+// Home review archive は全件を DOM に出し、client-side chip filter で先頭 10 件 (5 列 × 2 行) のみ表示する。
+// 余剰分は「すべて見る →」リンク経由で Archive 画面へ誘導する (overflow CTA は廃止済)。
 const archive = allReviews;
 const myFavorite = top3[0];
 
@@ -25,7 +25,7 @@ const myFavorite = top3[0];
 // ArchiveBrowser の yearList と一致させる（"2024年" 等）。
 const yearChips = ['すべて', '2024年', '2023年', '2022年', '2021年', '2020年', 'それ以前'];
 
-// 年バケット集計：chip クリック時の Overflow CTA 表示判定（>8 件で表示）に使う
+// 年バケット集計：将来の overflow 判定用 (現状は cap 10 を超えた件数把握のメタ情報として保持)
 function yearBucketOf(date: string): string {
   const ny = parseInt(date.slice(0, 4));
   if (isNaN(ny)) return 'それ以前';

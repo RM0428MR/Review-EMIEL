@@ -193,7 +193,7 @@ function yearBucketOf(date: string): string {
       apply('すべて');
     })();
 
-    // Home archive section: chip-driven year filter (cap 8)
+    // Home archive section: chip-driven year filter (cap 10 = 5 cols × 2 rows)
     (function () {
       const chipsRoot = document.querySelector('[data-arch-chips]') as HTMLElement | null;
       const grid = document.querySelector('[data-archive-grid]') as HTMLElement | null;
@@ -208,7 +208,7 @@ function yearBucketOf(date: string): string {
         cards.forEach((c) => {
           const bs = (c.dataset.buckets || '').split(/\s+/);
           const matches = bs.includes(active);
-          if (matches && visible < 8) {
+          if (matches && visible < 10) {
             c.style.display = '';
             visible++;
           } else {
@@ -276,7 +276,8 @@ section { padding: 0 40px 40px; }
 .hero-c { position: relative; padding: 0; display: flex; flex-direction: column; align-items: center; }
 .hero-photo {
   position: relative;
-  width: 92%;
+  /* width: 92% → 80% にして hero photo を縮小 (中央列 1fr の 80% 幅) */
+  width: 80%;
   aspect-ratio: 16 / 9;
   margin: 0 auto;
   background: var(--bg-card);
@@ -468,15 +469,15 @@ section { padding: 0 40px 40px; }
 .arch-strip h2 { font-family: var(--font-display); font-size: 32px; color: var(--accent); font-style: italic; margin: 0; }
 
 /* arch-head: title + filter chips + "すべて見る →" 誘導リンク。
-   card-grid-6 と同じ最大幅 (4col × 220px + 3gap × 20px = 940px) でセンター揃えし、
-   "すべて見る →" がグリッド右端の最上行カード（top-right）の真上に並ぶようにする。 */
+   review / ranking セクションと同じ配置 (h2 をセクション左端揃え) に統一する。
+   h2 はセクション左端、chips は中央、"すべて見る →" はセクション右端。 */
 .arch-head {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 16px;
   flex-wrap: wrap;
-  max-width: 940px;
-  margin: 0 auto 18px;
+  margin: 0 0 18px;
 }
 .arch-head .chips {
   flex: 1 1 auto;
@@ -484,7 +485,9 @@ section { padding: 0 40px 40px; }
   margin: 0;
 }
 
-.card-grid-6 { display: grid; grid-template-columns: repeat(4, minmax(0, 220px)); gap: 20px 20px; justify-content: center; }
+/* archive teaser grid: review (.card-grid-5) と同じ 5 列構造で揃え、2 行 (cap 10) を表示する。
+   h2/arch-head と左端を一致させるため左揃え (justify-content 指定なし = start)。 */
+.card-grid-6 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px 20px; }
 .strip-card {
   display: block;
   background: var(--bg-card);

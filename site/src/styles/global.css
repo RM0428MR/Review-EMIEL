@@ -8,8 +8,32 @@ html {
   background-color: #ffffff;
 }
 
-@media (min-width: 769px) {
+/* === Viewport-adaptive zoom (B-Lite responsive strategy) ===
+   設計基準幅: 1280px CSS effective。
+   各 viewport 範囲で zoom = viewport / 1280 にキャリブレーションし、
+   レイアウト崩壊を防ぎつつ 1920px 以上では従来通り zoom 1.5 を維持する。
+
+   - >=1920px : zoom 1.5  (= 1920/1280, 従来挙動を完全保持)
+   - 1600-1919: zoom 1.25 (= 1600/1280)
+   - 1280-1599: zoom 1    (= 1280/1280, ポートフォリオ 1280×800 でデザイン native)
+   - 1024-1279: zoom 0.8  (= 1024/1280)
+   - 769-1023 : zoom 0.6  (≈ 769/1280, 余裕を持って overflow 回避)
+   -   <=768  : zoom なし (Mobile.astro が別レイアウトで担当)
+*/
+@media (min-width: 1920px) {
   html { zoom: 1.5; }
+}
+@media (min-width: 1600px) and (max-width: 1919px) {
+  html { zoom: 1.25; }
+}
+@media (min-width: 1280px) and (max-width: 1599px) {
+  html { zoom: 1; }
+}
+@media (min-width: 1024px) and (max-width: 1279px) {
+  html { zoom: 0.8; }
+}
+@media (min-width: 769px) and (max-width: 1023px) {
+  html { zoom: 0.6; }
 }
 
 @media (max-width: 768px) {
