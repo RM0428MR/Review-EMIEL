@@ -18,8 +18,15 @@ interface Props {
   CATEGORIES: readonly string[] | string[];
 }
 
-// categoryCounts / archiveBucketCounts は overflow CTA 削除に伴い未使用。Props 型の契約は維持。
-const { allReviews, top3, archive, myFavorite, yearChips, CATEGORIES } = Astro.props;
+// archiveBucketCounts: chip ボタンを 0 件のバケット (e.g., "それ以前" が現状 0 件)
+// で表示しないために使用。categoryCounts は overflow CTA 削除に伴い未使用 (Props 型の契約は維持)。
+const { allReviews, top3, archive, myFavorite, yearChips, archiveBucketCounts, CATEGORIES } = Astro.props;
+
+// 「それ以前」のように該当 0 件の chip は click しても空表示になるのでフィルタで除外。
+// "すべて" は常に表示する。
+const visibleYearChips = yearChips.filter(
+  (y) => y === 'すべて' || (archiveBucketCounts[y] ?? 0) > 0,
+);
 
 function yearBucketOf(date: string): string {
   const ny = parseInt(date.slice(0, 4));
@@ -130,7 +137,7 @@ function yearBucketOf(date: string): string {
     <div class="arch-head">
       <h2>archive</h2>
       <div class="chips" data-arch-chips>
-        {yearChips.map((y, i) => (
+        {visibleYearChips.map((y, i) => (
           <button type="button" data-bucket={y} class={`chip ${i === 0 ? 'active' : ''}`}>{y}</button>
         ))}
       </div>
