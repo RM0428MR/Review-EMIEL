@@ -107,8 +107,12 @@ const { tips } = Astro.props;
   position: relative;
   display: inline-block;
   padding-left: 240px;
-  /* 吹き出しを tip-col の上方向にさらに右寄せ */
-  transform: translateX(calc(-31.25vw + 440px));
+  /* 旧 formula calc(-31.25vw + 440px) は vw_eff<1500 で約 +40px の右シフトを生み、
+     bottle (right edge ≈ x=1115) と about-side (left edge x=980) が overlap していた。
+     adaptive zoom 配下では vw_eff が常に >=1280 となるため、
+     no-overlap 条件 transform ≤ 0.25*vw_eff - 415 の最厳値 (vw_eff=1280 で -95) に
+     5px の余裕を加えて static -100px に固定。これにより全 viewport で重なりを回避。 */
+  transform: translateX(-100px);
 }
 .head-bubble {
   position: absolute;

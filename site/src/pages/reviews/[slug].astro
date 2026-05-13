@@ -271,7 +271,9 @@ const info = [
 .bc a { color: inherit; text-decoration: underline; }
 
 .main {
-  padding: 0 40px 40px;
+  /* padding-bottom: 40 → 60 で .main 底辺と footer.shared 装飾 (bottle top:-38px + rotate -30deg
+     で実効的に約 -54px) のクリアランスを増やし、back-link overflow 時の安全マージンを確保。 */
+  padding: 0 40px 60px;
   display: flex;
   flex-direction: column;
   gap: 28px;
@@ -287,6 +289,13 @@ const info = [
 .bottom-row {
   position: relative;
   width: 100%;
+  /* .bottom-left-overlay は position:absolute + top:0/bottom:0 で .bottom-row の高さに依存する。
+     似ているかもグリッドが短い product (e.g., THE RICH のように similar 候補の
+     oneLiner が短くカードが 1 行で収まる場合) では .bottom-row 高さが
+     bear-area(≈120px) + back-link(≈30px) の合計を下回り、overlay の content が
+     下方向にオーバーフローして footer の bottle 装飾と重なる問題があった。
+     min-height で .bottom-row の最小高さを確保し overflow を防ぐ。 */
+  min-height: 200px;
 }
 .similar-area {
   width: 100%;
