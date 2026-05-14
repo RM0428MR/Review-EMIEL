@@ -9,12 +9,6 @@ const NAV_ITEMS = [
   { id: 'contact', label: 'Contact', sub: 'お問い合わせ・ご依頼', href: '/contact' },
 ];
 
-const SOCIALS = [
-  { k: 'ig', label: 'Instagram', href: '#' },
-  { k: 'x', label: 'X (旧Twitter)', href: '#' },
-  { k: 'note', label: 'Drink Log', href: '#' },
-];
-
 export default function NavDrawer() {
   const [open, setOpen] = useState(false);
 
@@ -94,40 +88,12 @@ export default function NavDrawer() {
                 ))}
               </nav>
 
-              <div className="socials">
-                {SOCIALS.map((s) => (
-                  <a key={s.k} href={s.href} className="social" aria-label={s.label}>
-                    <span className="bubble">
-                      {s.k === 'ig' && (
-                        <svg width={20} height={20} viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.4">
-                          <rect x="2" y="2" width="10" height="10" rx="2.5" />
-                          <circle cx="7" cy="7" r="2.2" />
-                          <circle cx="10" cy="4" r="0.6" fill="currentColor" />
-                        </svg>
-                      )}
-                      {s.k === 'x' && <span className="x-mark">𝕏</span>}
-                      {s.k === 'note' && (
-                        <svg width={20} height={20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M3 6c2-1 4-1 6 0v12c-2-1-4-1-6 0z" />
-                          <path d="M9 18c4-1 8-1 12 0V6c-4-1-8-1-12 0" />
-                        </svg>
-                      )}
-                    </span>
-                    <span className="social-label">{s.label}</span>
-                  </a>
-                ))}
-              </div>
-
-              <div className="cloud-band">
-                <svg width="100%" height="100" viewBox="0 0 430 100" preserveAspectRatio="none" aria-hidden="true">
-                  <path d="M0 60 Q60 30 120 40 T240 36 T340 44 T430 36 L430 100 L0 100 Z" fill="#dceaf6" opacity="0.9" />
-                  <path d="M0 76 Q80 50 160 60 T300 56 T430 62 L430 100 L0 100 Z" fill="#bcd8ee" opacity="0.7" />
-                </svg>
-                <div className="bear-wrap">
-                  <span className="bear-heart" aria-hidden="true">♥</span>
-                  <img className="bear" src="/images/bear-doodle.png" alt="" width={86} height={86 * (123 / 129)} />
-                </div>
-              </div>
+              {/* socials / cloud-band は desktop drawer から撤去。
+                  理由: viewport 毎に adaptive zoom で dvh CSS 値が変動 (1920→720, 1280→800)
+                  → 装飾を含む 870 CSS の content が viewport によって flex shrink 度合いに差を
+                  生み、Chrome/Comet 等の browser 間で表示差を起こしていた。
+                  Mobile drawer (≤768px) は bottom-band として bear+heart を保持。
+                  socials も外したため、SOCIALS 定数も削除済。 */}
             </div>
 
             {/* ───────────────── MOBILE LAYOUT ───────────────── */}
@@ -423,72 +389,8 @@ export default function NavDrawer() {
           font-family: var(--font-jp);
         }
 
-        /* socials row */
-        #nav-drawer .socials {
-          position: relative;
-          z-index: 2;
-          padding: 24px 32px 0;
-          display: flex;
-          justify-content: space-around;
-        }
-        #nav-drawer .social {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 6px;
-          text-decoration: none;
-          color: inherit;
-        }
-        #nav-drawer .social:focus-visible {
-          outline: 2px solid #7aa9d9;
-          outline-offset: 4px;
-          border-radius: 50%;
-        }
-        #nav-drawer .bubble {
-          width: 44px;
-          height: 44px;
-          border-radius: 50%;
-          background: #eaf4fc;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          color: #1f5fa8;
-          transition: background 0.15s ease, transform 0.15s ease;
-        }
-        #nav-drawer .social:hover .bubble {
-          background: #d8e9f7;
-          transform: translateY(-1px);
-        }
-        #nav-drawer .x-mark { font-size: 17px; font-weight: 700; }
-        #nav-drawer .social-label {
-          font-size: 10px;
-          color: #3a5a82;
-          font-family: var(--font-jp);
-        }
-
-        /* cloud band + bear */
-        #nav-drawer .cloud-band {
-          position: relative;
-          z-index: 2;
-          margin-top: 24px;
-          flex-shrink: 0;
-        }
-        #nav-drawer .cloud-band > svg { display: block; }
-        #nav-drawer .bear-wrap {
-          position: absolute;
-          right: 24px;
-          bottom: 8px;
-          display: flex;
-          align-items: flex-end;
-        }
-        #nav-drawer .bear-heart {
-          position: absolute;
-          left: -18px;
-          top: 4px;
-          color: #e88ca0;
-          font-size: 16px;
-        }
-        #nav-drawer .bear { display: block; }
+        /* socials / cloud-band の CSS は撤去 (JSX 削除に伴い不要)。
+           Mobile drawer の bottom-band 系 CSS は MOBILE STYLES セクションに残置。 */
 
         /* ═════════════════════════════════════════════════════ */
         /* ─────────────── MOBILE STYLES ───────────────────── */
