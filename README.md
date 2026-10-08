@@ -47,16 +47,18 @@
 
 ## デザイン
 
-[claude-design](claude-design/)（Claude Code Design 出力）を実装ソースの真とする。
+[claude-design](claude-design/)（Claude Code Design 出力）をデザインの出発点とし、現在の画面は [`site/`](site/) の実装を参照してください。
 
-| 画面 | URL | モック |
+以下の6画面は、現在の実装をローカルで表示して作成した画面モックです（2026-10-08 更新、デスクトップ幅 1440px）。商品は架空ブランド **EMIEL** のイラストとサンプルデータで表示しています。画像をクリックすると全体を確認できます。
+
+| 画面 | URL | 現行画面モック |
 |---|---|---|
-| Home | `/` | [`uploads/01-home.png`](claude-design/uploads/01-home.png) |
-| Review 一覧 | `/reviews` | [`uploads/02-review.png`](claude-design/uploads/02-review.png) |
-| Review 詳細 | `/reviews/[slug]` | [`uploads/03-review-detail.png`](claude-design/uploads/03-review-detail.png) |
-| Ranking | `/ranking` | [`uploads/04-ranking.png`](claude-design/uploads/04-ranking.png) |
-| Archive | `/archive` | [`uploads/05-archive.png`](claude-design/uploads/05-archive.png) |
-| Contact | `/contact` | [`uploads/06-contact.png`](claude-design/uploads/06-contact.png) |
+| Home | `/` | [<img src="claude-design/uploads/01-home.png" alt="EMIELのHome画面モック" width="180">](claude-design/uploads/01-home.png) |
+| Review 一覧 | `/reviews` | [<img src="claude-design/uploads/02-review.png" alt="EMIELのレビュー一覧画面モック" width="180">](claude-design/uploads/02-review.png) |
+| Review 詳細 | `/reviews/[slug]`（サンプル: `/reviews/rich`） | [<img src="claude-design/uploads/03-review-detail.png" alt="EMIEL THE RICHのレビュー詳細画面モック" width="180">](claude-design/uploads/03-review-detail.png) |
+| Ranking | `/ranking` | [<img src="claude-design/uploads/04-ranking.png" alt="EMIELのランキング画面モック" width="180">](claude-design/uploads/04-ranking.png) |
+| Archive | `/archive` | [<img src="claude-design/uploads/05-archive.png" alt="EMIELのアーカイブ画面モック" width="180">](claude-design/uploads/05-archive.png) |
+| Contact | `/contact` | [<img src="claude-design/uploads/06-contact.png" alt="EMIELのお問い合わせ画面モック" width="180">](claude-design/uploads/06-contact.png) |
 | About / 404 / 検索結果 | – | モックなし、設計書で起こす |
 
 ## ディレクトリ
@@ -70,7 +72,7 @@ Review-EMIEL/
 ├── docs/
 │   └── devlog/              ← 開発週報
 ├── FE/デザイン/             ← 画面設計書（共通 5 本 + 画面別 9 × 2 本）
-├── claude-design/           ← Claude Code Design モック（実装ソースの真）
+├── claude-design/           ← 初期デザイン + 現行6画面モック（uploads/01〜06）
 ├── design/pencil/           ← Pencil 学習用 .epgz（本番非依存）
 └── site/                    ← Astro 実装（Phase 3 進行中）
 ```
